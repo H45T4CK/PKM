@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMA SDIT - Portal Wali Murid</title>
+
+    <!-- Bootstrap 5.3 & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        :root {
+            --primary: #059669;
+            --primary-dark: #065f46;
+            --primary-light: #10b981;
+            --bg-body: #f8fafc;
+            --card-bg: #ffffff;
+            --border-subtle: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --shadow-subtle: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+            --shadow-hover: 0 12px 30px -4px rgba(15, 23, 42, 0.12);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .anim-fade-in { animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .delay-1 { animation-delay: 0.06s; }
+        .delay-2 { animation-delay: 0.12s; }
+        .delay-3 { animation-delay: 0.18s; }
+
+        .navbar-custom {
+            background: linear-gradient(135deg, #064e3b 0%, #059669 65%, #10b981 100%);
+            box-shadow: 0 8px 24px -4px rgba(5, 150, 105, 0.35);
+        }
+
+        .hero-banner {
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: var(--radius-lg);
+            padding: 24px 28px;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .card-modern {
+            background: var(--card-bg);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-subtle);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .card-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* STATUS BADGE */
+        .status-badge-lg {
+            padding: 10px 22px;
+            border-radius: 50rem;
+            font-weight: 800;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: 0.5px;
+        }
+        .status-badge-pass {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3);
+        }
+        .status-badge-fail {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(220, 38, 38, 0.3);
+        }
+
+        /* TIMELINE STYLES */
+        .timeline-container {
+            position: relative;
+            padding-left: 28px;
+        }
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 10px;
+            bottom: 10px;
+            width: 2px;
+            background: #e2e8f0;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 24px;
+        }
+        .timeline-dot {
+            position: absolute;
+            left: -28px;
+            top: 4px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 3px solid var(--primary);
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2);
+        }
+        .timeline-dot.fail {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+        }
+
+        .progress-bar-custom {
+            height: 10px;
+            border-radius: 50rem;
+            background: #e2e8f0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 50rem;
+            transition: width 0.8s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR RESMI WALI MURID -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top py-2 mb-4">
+        <div class="container-fluid px-3 px-lg-4">
+            <a class="navbar-brand d-flex align-items-center gap-3 fw-bold" href="#">
+                <img src="{{ url_for('static', filename='img/logo-sdit.png') }}" height="40" class="bg-white p-1 rounded-3 shadow-sm" alt="Logo SDIT" onerror="this.src='https://placehold.co/80x80/059669/ffffff?text=SDIT'">
+                <div>
+                    <div class="fs-5 lh-1 text-white fw-extrabold tracking-tight">SIMA SDIT</div>
+                    <small class="text-white-50" style="font-size: 0.72rem; letter-spacing: 0.3px;">Portal Rapor & Evaluasi Wali Murid</small>
+                </div>
+            </a>
+
+            <div class="d-flex align-items-center gap-3">
+                <div class="text-white text-end d-none d-sm-block">
+                    <div class="fw-bold fs-6 lh-1">{{ session.get('user', 'Wali Murid') }}</div>
+                    <small class="text-white-50" style="font-size: 0.7rem;">Orang Tua / Wali</small>
+                </div>
+                <a href="/logout" class="btn btn-light btn-sm rounded-pill px-3 py-2 fw-bold text-success shadow-sm">
+                    <i class="bi bi-box-arrow-right"></i> Keluar
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid px-3 px-lg-4 mb-5">
+
+        <!-- NOTIFIKASI TOAST -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <script>
+                        Swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            icon: '{{ "success" if category == "success" else "error" }}',
+                            title: '{{ message }}',
+                            showConfirmButton: false,
+                            timer: 3500
+                        });
+                    </script>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if siswa %}
+        <!-- HERO INFORMASI MURID -->
+        <div class="hero-banner mb-4 anim-fade-in">
+            <div class="row align-items-center g-3">
+                <div class="col-12 col-md-7">
+                    <span class="badge bg-success bg-opacity-10 text-success fw-bold px-3 py-1 rounded-pill mb-2">
+                        <i class="bi bi-patch-check-fill me-1"></i> Data Murid Terhubung
+                    </span>
+                    <h3 class="fw-bold text-dark mb-1">{{ siswa.nama }}</h3>
+                    <p class="text-muted mb-0 small">
+                        NISN / ID: <strong class="text-dark">{{ siswa.id }}</strong> • Kelas: <strong class="text-dark">{{ siswa.kelas }}</strong> • Status: <strong class="text-success">{{ siswa.status_clean }}</strong>
+                    </p>
+                </div>
+                <div class="col-12 col-md-5 text-md-end">
+                    <div class="d-flex flex-wrap gap-2 justify-content-md-end align-items-center">
+                        <!-- Fitur 6: Cetak Rapor Tahsin & Tahfidz Digital Langsung -->
+                        <a href="{{ url_for('export.cetak_hafalan_siswa', id_siswa=siswa.id) }}" target="_blank" class="btn btn-success btn-sm rounded-pill px-3 py-2 fw-bold shadow-sm">
+                            <i class="bi bi-printer-fill me-1"></i> Cetak Rapor Digital PDF
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FITUR 1: KARTU STATUS KELULUSAN & GRADE TERAKHIR -->
+        {% set latest = siswa.latest_setoran %}
+        <div class="card-modern p-4 mb-4 anim-fade-in delay-1 border-2 {{ 'border-success' if latest and (latest.grade in ['A', 'B']) else 'border-danger' }} border-opacity-50">
+            <div class="row align-items-center g-3">
+                <div class="col-12 col-lg-8">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <span class="badge {{ 'bg-info' if latest and latest.jenis == 'Tahsin' else 'bg-success' }} text-white fw-bold px-3 py-1 rounded-pill">
+                            <i class="bi bi-journal-bookmark me-1"></i> Setoran Terbaru: {{ latest.jenis if latest else 'Belum Ada' }}
+                        </span>
+                        <span class="text-muted small">• {{ latest.tanggal if latest else '-' }}</span>
+                    </div>
+                    {% if latest %}
+                        <h4 class="fw-bold text-dark mb-1">{{ latest.materi }}</h4>
+                        <p class="text-muted small mb-2">
+                            Penilai: <strong class="text-dark">{{ latest.penilai or 'Musyrif' }}</strong> • Evaluasi: <em>"{{ latest.catatan or 'Tajwid fasih dan mutqin.' }}"</em>
+                        </p>
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="fs-5 fw-extrabold text-dark">
+                                Skor Nilai: <span class="{{ 'text-success' if latest.grade in ['A', 'B'] else 'text-danger' }}">{{ latest.nilai }} (Grade {{ latest.grade }})</span>
+                            </span>
+                        </div>
+                    {% else %}
+                        <h5 class="fw-bold text-dark mb-1">Belum Ada Riwayat Setoran</h5>
+                        <p class="text-muted small mb-0">Ustadz / Musyrif kelas belum menginputkan setoran Tahsin atau Tahfidz terbaru.</p>
+                    {% endif %}
+                </div>
+
+                <div class="col-12 col-lg-4 text-lg-end">
+                    {% if latest %}
+                        {% if latest.grade in ['A', 'B'] %}
+                            <div class="status-badge-lg status-badge-pass">
+                                <i class="bi bi-check-circle-fill fs-5"></i> STATUS: LULUS
+                            </div>
+                            <small class="d-block text-success fw-bold mt-1">
+                                <i class="bi bi-stars me-1"></i>Grade {{ latest.grade }} Memenuhi Standar
+                            </small>
+                        {% else %}
+                            <div class="status-badge-lg status-badge-fail">
+                                <i class="bi bi-exclamation-triangle-fill fs-5"></i> BELUM LULUS
+                            </div>
+                            <small class="d-block text-danger fw-bold mt-1">
+                                <i class="bi bi-info-circle me-1"></i>Grade {{ latest.grade }} Perlu Bimbingan di Rumah
+                            </small>
+                        {% endif %}
+                    {% else %}
+                        <span class="badge bg-light text-secondary border px-3 py-2 rounded-pill">Menunggu Evaluasi</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- FITUR 2 & FITUR 3: INDIKATOR RATA-RATA RAPOR & PROGRES TARGET HAFALAN -->
+        <div class="row g-4 mb-4">
+            
+            <!-- FITUR 2: INDIKATOR RATA-RATA NILAI RAPOR -->
+            <div class="col-12 col-lg-5 anim-fade-in delay-2">
+                <div class="card-modern p-4 h-100">
+                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                        <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+                            <i class="bi bi-award-fill text-warning"></i> Rata-Rata Nilai Rapor Digital
+                        </h6>
+                        <span class="badge {{ 'bg-success' if siswa.status_kelulusan_rata_rata == 'Lulus' else 'bg-danger' }} text-white rounded-pill">
+                            {{ siswa.status_kelulusan_rata_rata }}
+                        </span>
+                    </div>
+
+                    <div class="text-center py-3 bg-light rounded-4 mb-3 border">
+                        <span class="text-muted small fw-bold text-uppercase">Akumulasi Rata-Rata Nilai</span>
+                        <div class="d-flex align-items-baseline justify-content-center gap-2 mt-1">
+                            <h1 class="display-5 fw-extrabold {{ 'text-success' if siswa.status_kelulusan_rata_rata == 'Lulus' else 'text-danger' }} mb-0">
+                                {{ siswa.rata_rata_nilai }}
+                            </h1>
+                            <span class="badge {{ 'bg-success' if siswa.status_kelulusan_rata_rata == 'Lulus' else 'bg-danger' }} text-white fs-6 rounded-pill fw-bold">
+                                Grade {{ siswa.grade_rata_rata }}
+                            </span>
+                        </div>
+                        <small class="text-muted d-block mt-1">Diperbarui otomatis setiap kali guru menginput nilai baru</small>
+                    </div>
+
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <div class="p-3 bg-white rounded-3 border text-center h-100">
+                                <small class="text-muted fw-bold d-block">Rata-rata Tahsin</small>
+                                <span class="fs-5 fw-bold text-info">{{ siswa.rata_rata_tahsin or '-' }}</span>
+                                <small class="d-block text-muted" style="font-size: 0.72rem;">{{ siswa.tahsin|length }} Setoran</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 bg-white rounded-3 border text-center h-100">
+                                <small class="text-muted fw-bold d-block">Rata-rata Tahfidz</small>
+                                <span class="fs-5 fw-bold text-success">{{ siswa.rata_rata_tahfidz or '-' }}</span>
+                                <small class="d-block text-muted" style="font-size: 0.72rem;">{{ siswa.tahfidz|length }} Setoran</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FITUR 3: PROGRES TARGET HAFALAN (VISUAL BAR) -->
+            {% set p_tahsin = siswa.progress_tahsin_info %}
+            {% set p_tahfidz = siswa.progress_tahfidz_info %}
+            <div class="col-12 col-lg-7 anim-fade-in delay-2">
+                <div class="card-modern p-4 h-100 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                            <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+                                <i class="bi bi-bar-chart-steps text-primary"></i> Progres Target Hafalan & Tahsin
+                            </h6>
+                            <span class="badge bg-light text-secondary border">Target Semester</span>
+                        </div>
+
+                        <!-- Bar Tahsin -->
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="fw-bold small text-dark"><i class="bi bi-book text-info me-1"></i>Tahsin Wafa: <strong>{{ p_tahsin.label }}</strong></span>
+                                <span class="badge bg-info bg-opacity-10 text-info fw-bold">{{ p_tahsin.percent }}%</span>
+                            </div>
+                            <div class="progress-bar-custom">
+                                <div class="progress-fill bg-info" style="width: {{ p_tahsin.percent }}%;"></div>
+                            </div>
+                            <small class="text-muted" style="font-size: 0.73rem;">{{ p_tahsin.deskripsi }}</small>
+                        </div>
+
+                        <!-- Bar Tahfidz -->
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="fw-bold small text-dark"><i class="bi bi-journal-bookmark-fill text-success me-1"></i>Tahfidz Qur'an: <strong>{{ p_tahfidz.label }}</strong></span>
+                                <span class="badge bg-success bg-opacity-10 text-success fw-bold">{{ p_tahfidz.percent }}%</span>
+                            </div>
+                            <div class="progress-bar-custom">
+                                <div class="progress-fill bg-success" style="width: {{ p_tahfidz.percent }}%;"></div>
+                            </div>
+                            <small class="text-muted" style="font-size: 0.73rem;">{{ p_tahfidz.deskripsi }}</small>
+                        </div>
+                    </div>
+
+                    <div class="p-2.5 bg-light rounded-3 border d-flex align-items-center gap-2 mt-2">
+                        <i class="bi bi-shield-check text-success fs-5"></i>
+                        <small class="text-muted" style="font-size: 0.75rem;">
+                            Setiap muroja'ah yang dikonfirmasi oleh wali murid akan tercatat di sistem pemantauan musyrif.
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- FITUR 4 & FITUR 5: LINIMASA CATATAN TAJWID & FITUR PARAF MUROJA'AH RUMAH -->
+        <div class="row g-4">
+            
+            <!-- LINIMASA TAHSIN -->
+            <div class="col-12 col-lg-6 anim-fade-in delay-3">
+                <div class="card-modern p-4 h-100">
+                    <div class="d-flex align-items-center justify-content-between mb-4 pb-2 border-bottom">
+                        <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+                            <i class="bi bi-book text-info"></i> Linimasa Catatan & Evaluasi Tahsin
+                        </h6>
+                        <span class="badge bg-info bg-opacity-10 text-info rounded-pill fw-bold">{{ siswa.tahsin|length }} Catatan</span>
+                    </div>
+
+                    {% if siswa.tahsin %}
+                    <div class="timeline-container">
+                        {% for t in siswa.tahsin|reverse %}
+                        {% set t_pass = (t.grade in ['A', 'B'] or (t.nilai and t.nilai >= 80)) %}
+                        <div class="timeline-item">
+                            <div class="timeline-dot {{ 'fail' if not t_pass else '' }}"></div>
+                            <div class="p-3 bg-light rounded-3 border">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="fw-bold text-dark small"><i class="bi bi-calendar3 me-1"></i>{{ t.tanggal }}</span>
+                                    <div class="d-flex align-items-center gap-1">
+                                        <span class="badge {{ 'bg-success' if t_pass else 'bg-danger' }} text-white px-2 py-0.5 rounded-pill" style="font-size: 0.7rem;">
+                                            Grade {{ t.grade or 'A' }} ({{ t.nilai or 100 }})
+                                        </span>
+                                        <span class="badge {{ 'bg-success bg-opacity-10 text-success' if t_pass else 'bg-danger bg-opacity-10 text-danger' }} rounded-pill" style="font-size: 0.7rem;">
+                                            {{ 'LULUS' if t_pass else 'BELUM LULUS' }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="fw-bold text-dark mb-1" style="font-size: 0.88rem;">{{ t.halaman_akhir }}</div>
+                                
+                                <!-- Catatan Tajwid Guru -->
+                                <div class="p-2 bg-white rounded-2 border small text-muted mb-2">
+                                    <strong class="text-dark"><i class="bi bi-chat-quote me-1"></i>Evaluasi Tajwid Guru:</strong>
+                                    {{ t.catatan or 'Fasih, panjang mad dan makhraj huruf sangat baik.' }}
+                                </div>
+
+                                <!-- Fitur 5: Fitur Paraf & Catatan Muroja'ah Rumah -->
+                                {% if not t.ceklist_ortu %}
+                                <form action="{{ url_for('ortu.ortu_ceklis', jenis='tahsin', rec_id=t.id) }}" method="POST" class="mt-2 pt-2 border-top">
+                                    <div class="mb-2">
+                                        <input type="text" name="catatan_ortu" class="form-control form-control-sm rounded-3 bg-white border" placeholder="Tuliskan catatan pendampingan dari rumah (opsional)...">
+                                    </div>
+                                    <button type="submit" class="btn btn-info text-white btn-sm rounded-pill w-100 fw-bold shadow-sm">
+                                        <i class="bi bi-check2-square me-1"></i> Paraf & Konfirmasi Muroja'ah Rumah
+                                    </button>
+                                </form>
+                                {% else %}
+                                <div class="d-flex align-items-center justify-content-between mt-2 pt-2 border-top">
+                                    <span class="badge bg-success rounded-pill" style="font-size: 0.72rem;">
+                                        <i class="bi bi-check-circle-fill me-1"></i> Sudah Diparaf Orang Tua
+                                    </span>
+                                </div>
+                                {% if t.catatan_ortu %}
+                                    <div class="small text-success mt-1">
+                                        <i class="bi bi-chat-heart me-1"></i><strong>Catatan Anda:</strong> {{ t.catatan_ortu }}
+                                    </div>
+                                {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5 text-muted">
+                        <i class="bi bi-inbox fs-1 d-block mb-2 opacity-50"></i>
+                        <p class="small mb-0">Belum ada riwayat catatan Tahsin dari Guru/Musyrif.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- LINIMASA TAHFIDZ -->
+            <div class="col-12 col-lg-6 anim-fade-in delay-3">
+                <div class="card-modern p-4 h-100">
+                    <div class="d-flex align-items-center justify-content-between mb-4 pb-2 border-bottom">
+                        <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+                            <i class="bi bi-journal-check text-success"></i> Linimasa Catatan & Evaluasi Tahfidz
+                        </h6>
+                        <span class="badge bg-success bg-opacity-10 text-success rounded-pill fw-bold">{{ siswa.tahfidz|length }} Setoran</span>
+                    </div>
+
+                    {% if siswa.tahfidz %}
+                    <div class="timeline-container">
+                        {% for f in siswa.tahfidz|reverse %}
+                        {% set f_pass = (f.grade in ['A', 'B'] or (f.nilai and f.nilai >= 80)) %}
+                        <div class="timeline-item">
+                            <div class="timeline-dot {{ 'fail' if not f_pass else '' }}"></div>
+                            <div class="p-3 bg-light rounded-3 border">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="fw-bold text-dark small"><i class="bi bi-calendar3 me-1"></i>{{ f.tanggal }}</span>
+                                    <div class="d-flex align-items-center gap-1">
+                                        <span class="badge {{ 'bg-success' if f_pass else 'bg-danger' }} text-white px-2 py-0.5 rounded-pill" style="font-size: 0.7rem;">
+                                            Grade {{ f.grade or 'A' }} ({{ f.nilai or 100 }})
+                                        </span>
+                                        <span class="badge {{ 'bg-success bg-opacity-10 text-success' if f_pass else 'bg-danger bg-opacity-10 text-danger' }} rounded-pill" style="font-size: 0.7rem;">
+                                            {{ 'LULUS' if f_pass else 'BELUM LULUS' }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="fw-bold text-dark mb-1" style="font-size: 0.88rem;">{{ f.hafalan_terakhir }}</div>
+                                
+                                <!-- Catatan Mutqin & Evaluasi Guru -->
+                                <div class="p-2 bg-white rounded-2 border small text-muted mb-2">
+                                    <strong class="text-dark"><i class="bi bi-chat-quote me-1"></i>Evaluasi Kelancaran Guru:</strong>
+                                    {{ f.catatan or 'Hafalan lancar, mutqin, dan tajwid sesuai kaidah.' }}
+                                </div>
+
+                                <!-- Fitur 5: Fitur Paraf & Catatan Muroja'ah Rumah -->
+                                {% if not f.ceklist_ortu %}
+                                <form action="{{ url_for('ortu.ortu_ceklis', jenis='tahfidz', rec_id=f.id) }}" method="POST" class="mt-2 pt-2 border-top">
+                                    <div class="mb-2">
+                                        <input type="text" name="catatan_ortu" class="form-control form-control-sm rounded-3 bg-white border" placeholder="Tuliskan catatan pendampingan dari rumah (opsional)...">
+                                    </div>
+                                    <button type="submit" class="btn btn-success text-white btn-sm rounded-pill w-100 fw-bold shadow-sm">
+                                        <i class="bi bi-check2-square me-1"></i> Paraf & Konfirmasi Muroja'ah Rumah
+                                    </button>
+                                </form>
+                                {% else %}
+                                <div class="d-flex align-items-center justify-content-between mt-2 pt-2 border-top">
+                                    <span class="badge bg-success rounded-pill" style="font-size: 0.72rem;">
+                                        <i class="bi bi-check-circle-fill me-1"></i> Sudah Diparaf Orang Tua
+                                    </span>
+                                </div>
+                                {% if f.catatan_ortu %}
+                                    <div class="small text-success mt-1">
+                                        <i class="bi bi-chat-heart me-1"></i><strong>Catatan Anda:</strong> {{ f.catatan_ortu }}
+                                    </div>
+                                {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5 text-muted">
+                        <i class="bi bi-inbox fs-1 d-block mb-2 opacity-50"></i>
+                        <p class="small mb-0">Belum ada riwayat setoran Tahfidz dari Guru/Musyrif.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+
+        {% else %}
+        <div class="card-modern p-5 text-center my-5">
+            <i class="bi bi-exclamation-circle text-warning fs-1 d-block mb-3"></i>
+            <h4 class="fw-bold text-dark">Data Murid Belum Terhubung</h4>
+            <p class="text-muted small mb-0">Akun Anda belum terhubung dengan data murid mana pun. Silakan hubungi Administrator SDIT atau Guru Kelas.</p>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

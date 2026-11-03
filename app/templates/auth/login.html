@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SIMA SDIT</title>
+    <!-- Bootstrap 5.3 & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #064e3b 0%, #059669 50%, #0f172a 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+            width: 100%;
+            max-width: 420px;
+            padding: 40px 32px;
+        }
+
+        .btn-success-custom {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 12px;
+            font-weight: 700;
+            color: #ffffff;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3);
+        }
+
+        .btn-success-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(5, 150, 105, 0.4);
+            color: #ffffff;
+        }
+
+        .form-control-custom {
+            border-radius: 12px;
+            padding: 12px 16px;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-control-custom:focus {
+            background-color: #ffffff;
+            border-color: #059669;
+            box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.15);
+        }
+
+        .clear-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 1.15rem;
+            line-height: 1;
+            padding: 4px 8px;
+            cursor: pointer;
+            z-index: 5;
+            transition: color 0.15s ease;
+            display: none;
+        }
+        .clear-btn:hover {
+            color: #ef4444;
+        }
+
+        .btn-eye-toggle {
+            cursor: pointer;
+            z-index: 10;
+            border: none;
+            background: none;
+            padding: 4px 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card text-center">
+        <!-- Logo SDIT -->
+        <div class="mb-3">
+            <img src="{{ url_for('static', filename='img/logo-sdit.png') }}" alt="Logo SDIT" height="70" class="p-2 bg-white rounded-4 shadow-sm" onerror="this.src='https://placehold.co/80x80/059669/ffffff?text=SDIT'">
+        </div>
+
+        <h4 class="fw-bold text-dark mb-1">SDIT SIMA</h4>
+        <p class="text-muted small mb-4">Sistem Presensi, Karakter & Tahfizh Digital</p>
+
+        <!-- Flash Message Notification -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} p-2.5 rounded-3 text-start small mb-3 border-0 shadow-sm d-flex align-items-center gap-2">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        <div>{{ message }}</div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Form Login -->
+        <form method="POST" action="/login" class="text-start" autocomplete="off">
+            <div class="mb-3">
+                <label class="form-label fw-semibold small text-secondary">Username / NISN</label>
+                <div class="position-relative">
+                    <input type="text" id="inputUsername" name="username" class="form-control form-control-custom pe-5" placeholder="Masukkan username atau NISN" required autofocus>
+                    <!-- Tombol Hapus Semua (×) -->
+                    <button type="button" id="clearUsernameBtn" class="clear-btn end-0 me-2" title="Hapus semua teks" onclick="clearField('inputUsername', 'clearUsernameBtn')">
+                        <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <label class="form-label fw-semibold small text-secondary mb-0">Password</label>
+                    <a href="#" onclick="showLupaPasswordInfo(event)" class="small text-decoration-none text-success fw-semibold">Lupa Password?</a>
+                </div>
+                <div class="position-relative">
+                    <input type="password" id="inputPassword" name="password" class="form-control form-control-custom" style="padding-right: 70px;" placeholder="Masukkan password" required>
+                    <!-- Tombol Hapus Semua (×) untuk Password -->
+                    <button type="button" id="clearPasswordBtn" class="clear-btn" style="right: 36px;" title="Hapus semua password" onclick="clearField('inputPassword', 'clearPasswordBtn')">
+                        <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                    <!-- Tombol Show / Hide Password -->
+                    <button type="button" class="btn-eye-toggle position-absolute top-50 end-0 translate-middle-y text-muted pe-3 text-decoration-none" title="Lihat / Sembunyikan Password" onclick="togglePasswordVisibility()">
+                        <i class="bi bi-eye-slash-fill" id="toggleIcon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-success-custom w-100">
+                <i class="bi bi-box-arrow-in-right me-1"></i> Masuk ke Sistem
+            </button>
+        </form>
+
+        <div class="mt-4 pt-3 border-top text-center">
+            <small class="text-muted" style="font-size: 0.75rem;">&copy; 2026 SDIT Kedisiplinan & Tahfizh</small>
+        </div>
+    </div>
+
+    <script>
+        // Setup listener untuk tombol hapus semua (×)
+        const usernameInput = document.getElementById('inputUsername');
+        const usernameClearBtn = document.getElementById('clearUsernameBtn');
+        const passwordInput = document.getElementById('inputPassword');
+        const passwordClearBtn = document.getElementById('clearPasswordBtn');
+
+        function updateClearBtn(input, btn) {
+            if (input.value.trim().length > 0) {
+                btn.style.display = 'block';
+            } else {
+                btn.style.display = 'none';
+            }
+        }
+
+        usernameInput.addEventListener('input', () => updateClearBtn(usernameInput, usernameClearBtn));
+        passwordInput.addEventListener('input', () => updateClearBtn(passwordInput, passwordClearBtn));
+
+        function clearField(inputId, btnId) {
+            const input = document.getElementById(inputId);
+            const btn = document.getElementById(btnId);
+            input.value = '';
+            btn.style.display = 'none';
+            input.focus();
+        }
+
+        // Toggle Show / Hide Password
+        function togglePasswordVisibility() {
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('bi-eye-slash-fill');
+                toggleIcon.classList.add('bi-eye-fill');
+                toggleIcon.classList.remove('text-muted');
+                toggleIcon.classList.add('text-success');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('bi-eye-fill');
+                toggleIcon.classList.add('bi-eye-slash-fill');
+                toggleIcon.classList.remove('text-success');
+                toggleIcon.classList.add('text-muted');
+            }
+        }
+
+        // Pop-up Informasi Lupa Password via WhatsApp Admin
+        function showLupaPasswordInfo(event) {
+            event.preventDefault();
+            Swal.fire({
+                title: 'Lupa Password?',
+                html: `Untuk menjaga keamanan akun, reset password dilakukan melalui <strong>Administrator SDIT</strong> atau <strong>Musyrif Kelas</strong>.<br><br>
+                       <a href="https://api.whatsapp.com/send?phone=6281234567890&text=Assalamu'alaikum%20Admin,%20saya%20lupa%20password%20akun%20SIMA%20SDIT" target="_blank" class="btn btn-success btn-sm rounded-pill px-3 py-2 fw-bold text-decoration-none shadow-sm">
+                           <i class="bi bi-whatsapp me-1"></i> Hubungi Admin via WhatsApp
+                       </a>`,
+                icon: 'info',
+                confirmButtonColor: '#059669',
+                confirmButtonText: 'Tutup'
+            });
+        }
+    </script>
+</body>
+</html>

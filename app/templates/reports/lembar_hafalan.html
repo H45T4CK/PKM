@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Laporan Capaian Tahsin & Tahfidz - {{ siswa.nama }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        @media print { .no-print { display: none; } }
+        body { font-family: 'Georgia', serif; background: #fff; }
+        .cetak-box { border: 2px solid #059669; padding: 30px; margin: 20px auto; max-width: 880px; border-radius: 8px; }
+        .table thead th { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; }
+        .badge-lulus { color: #059669; font-weight: bold; }
+        .badge-belum { color: #dc2626; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container text-center mt-3 no-print">
+        <button onclick="window.print()" class="btn btn-success me-2 fw-bold"><i class="bi bi-printer"></i> Cetak / Simpan PDF</button>
+        <button onclick="window.close()" class="btn btn-secondary">Tutup</button>
+    </div>
+
+    <div class="cetak-box">
+        <!-- HEADER KOP LAPORAN DENGAN LOGO SDIT RESMI -->
+        <div class="d-flex align-items-center justify-content-center gap-3 border-bottom border-2 border-success pb-3 mb-3 text-center">
+            <img src="{{ url_for('static', filename='img/logo-sdit.png') }}" height="70" alt="Logo SDIT" onerror="this.src='https://placehold.co/80x80/059669/ffffff?text=SDIT'">
+            <div>
+                <h4 class="fw-bold text-success mb-0" style="letter-spacing: 0.5px;">SD ISLAM TERPADU (SDIT) SIMA</h4>
+                <h5 class="fw-bold text-dark mb-0">LEMBAR LAPORAN CAPAIAN TAHSIN & TAHFIDZ</h5>
+                <small class="text-muted">Tahun Ajaran 2026/2027 • Sistem Pemantauan Karakter & Qur'an Digital</small>
+            </div>
+        </div>
+
+        <table class="table table-borderless mb-3 small">
+            <tr>
+                <td width="16%"><strong>Nama Murid</strong></td>
+                <td width="2%">:</td>
+                <td width="32%"><strong>{{ siswa.nama }}</strong></td>
+                <td width="20%"><strong>Rata-Rata Tahsin</strong></td>
+                <td width="2%">:</td>
+                <td width="28%">{{ siswa.rata_rata_tahsin or '-' }} (Grade {{ siswa.grade_tahsin }})</td>
+            </tr>
+            <tr>
+                <td><strong>NISN / ID</strong></td>
+                <td>:</td>
+                <td>{{ siswa.id }}</td>
+                <td><strong>Rata-Rata Tahfidz</strong></td>
+                <td>:</td>
+                <td>{{ siswa.rata_rata_tahfidz or '-' }} (Grade {{ siswa.grade_tahfidz }})</td>
+            </tr>
+            <tr>
+                <td><strong>Kelas Binaan</strong></td>
+                <td>:</td>
+                <td>Kelas {{ siswa.kelas }}</td>
+                <td><strong>Akumulasi Nilai Qur'an</strong></td>
+                <td>:</td>
+                <td>
+                    <strong class="{{ 'text-success' if siswa.status_kelulusan_rata_rata == 'Lulus' else 'text-danger' }}">
+                        {{ siswa.rata_rata_nilai or '-' }} (Grade {{ siswa.grade_rata_rata }} - {{ siswa.status_kelulusan_rata_rata }})
+                    </strong>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Tabel Tahsin -->
+        <h6 class="fw-bold text-info border-bottom pb-1 mb-2">1. Capaian & Evaluasi Tahsin:</h6>
+        <table class="table table-bordered align-middle text-center mb-4 small">
+            <thead class="table-info">
+                <tr>
+                    <th width="14%">Tanggal</th>
+                    <th width="28%">Halaman Akhir / Jilid</th>
+                    <th width="14%">Grade & Nilai</th>
+                    <th width="14%">Status</th>
+                    <th width="30%">Catatan Tajwid Guru</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in siswa.tahsin|default([]) %}
+                {% set is_lulus = (t.grade in ['A', 'B'] or (t.nilai and t.nilai >= 80)) %}
+                <tr>
+                    <td>{{ t.tanggal }}</td>
+                    <td class="text-start">{{ t.halaman_akhir }}</td>
+                    <td><strong>Grade {{ t.grade or 'A' }}</strong> ({{ t.nilai or 100 }})</td>
+                    <td>
+                        <span class="{{ 'badge-lulus' if is_lulus else 'badge-belum' }}">
+                            {{ 'LULUS' if is_lulus else 'BELUM LULUS' }}
+                        </span>
+                    </td>
+                    <td class="text-start">{{ t.catatan or 'Fasih dan mutqin.' }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5" class="text-muted">Belum ada catatan nilai Tahsin.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Tabel Tahfidz -->
+        <h6 class="fw-bold text-success border-bottom pb-1 mb-2">2. Capaian & Setoran Tahfidz:</h6>
+        <table class="table table-bordered align-middle text-center mb-4 small">
+            <thead class="table-success">
+                <tr>
+                    <th width="14%">Tanggal</th>
+                    <th width="28%">Hafalan Terakhir (Surah/Ayat)</th>
+                    <th width="14%">Grade & Nilai</th>
+                    <th width="14%">Status</th>
+                    <th width="30%">Catatan Kelancaran Guru</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for f in siswa.tahfidz|default([]) %}
+                {% set is_lulus = (f.grade in ['A', 'B'] or (f.nilai and f.nilai >= 80)) %}
+                <tr>
+                    <td>{{ f.tanggal }}</td>
+                    <td class="text-start">{{ f.hafalan_terakhir }}</td>
+                    <td><strong>Grade {{ f.grade or 'A' }}</strong> ({{ f.nilai or 100 }})</td>
+                    <td>
+                        <span class="{{ 'badge-lulus' if is_lulus else 'badge-belum' }}">
+                            {{ 'LULUS' if is_lulus else 'BELUM LULUS' }}
+                        </span>
+                    </td>
+                    <td class="text-start">{{ f.catatan or 'Hafalan lancar dan mutqin.' }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5" class="text-muted">Belum ada catatan setoran Tahfidz.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="row mt-5 text-center">
+            <div class="col-6">
+                <p>Mengetahui,<br>Orang Tua / Wali Murid</p>
+                <br><br>
+                <p>( ________________________ )</p>
+            </div>
+            <div class="col-6">
+                <p>Guru Tahfidz / Musyrif Kelas</p>
+                <br><br>
+                <p>( ________________________ )</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
