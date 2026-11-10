@@ -9,7 +9,16 @@ import pandas as pd
 import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
-import io, re
+from openpyxl.drawing.image import Image as ExcelImage
+import io, os, re
+
+def extract_nama_depan(nama):
+    if not nama:
+        return 'murid'
+    words = [re.sub(r'[^a-zA-Z0-9]', '', w) for w in str(nama).split() if re.sub(r'[^a-zA-Z0-9]', '', w)]
+    if words:
+        return words[0].lower()
+    return 'murid'
 
 guru_bp = Blueprint('guru', __name__)
 
@@ -300,10 +309,45 @@ def hapus_tahfidz(rec_id):
 def template_murid():
     wb = openpyxl.Workbook()
     ws = wb.active
-    ws.title = "Data_Murid_SDIT"
+    ws.title = "Template_Murid"
+
+    guru_kelas_str = session.get('kelas', '1A').strip()
+    first_kelas = [c.strip().upper() for c in guru_kelas_str.replace('/', ',').replace(';', ',').split(',') if c.strip() and c.strip() != '-']
+    default_kelas = first_kelas[0] if first_kelas else '1A'
+
+    img_path = os.path.join('app', 'static', 'img', 'logo-sdit-sm.png')
+    if not os.path.exists(img_path):
+        img_path = os.path.join('PKM-main', 'app', 'static', 'img', 'logo-sdit-sm.png')
+    if os.path.exists(img_path):
+        try:
+            img = ExcelImage(img_path)
+            img.width = 52
+            img.height = 52
+            ws.add_image(img, 'A1')
+        except Exception:
+            pass
+
+    ws.merge_cells('B1:F1')
+    ws['B1'] = "SDIT BINA MULIA"
+    ws['B1'].font = Font(name="Arial", size=14, bold=True, color="059669")
+
+    ws.merge_cells('B2:F2')
+    ws['B2'] = "FORMAT RESMI IMPORT DATA MURID / SISWA"
+    ws['B2'].font = Font(name="Arial", size=10, bold=True, color="1E293B")
+
+    ws['B3'] = "Tahun Ajaran: 2026/2027"
+    ws['B3'].font = Font(name="Arial", size=9, bold=True, color="475569")
+    ws['D3'] = f"Kelas: {default_kelas}"
+    ws['D3'].font = Font(name="Arial", size=9, bold=True, color="475569")
+
+    ws.merge_cells('B4:F4')
+    ws['B4'] = "Catatan: Username login wali/murid otomatis dibuat dari nama depan, password default adalah NISN."
+    ws['B4'].font = Font(name="Arial", size=8, italic=True, color="64748B")
+
+    ws.append([]) # row 5 blank
 
     header_fill = PatternFill(start_color="059669", end_color="059669", fill_type="solid")
-    header_font = Font(name="Arial", size=11, bold=True, color="FFFFFF")
+    header_font = Font(name="Arial", size=10, bold=True, color="FFFFFF")
     data_font = Font(name="Arial", size=10)
     center_align = Alignment(horizontal="center", vertical="center")
     left_align = Alignment(horizontal="left", vertical="center")
@@ -314,35 +358,33 @@ def template_murid():
         bottom=Side(style='thin', color='D1D5DB')
     )
 
-    headers = ["No", "NISN", "Nama Murid", "Kelas", "Status"]
-    ws.append(headers)
+    headers = ["No", "NISN", "Nama Murid", "Kelas", "Jenis Kelamin", "Status"]
+    ws.append(headers) # row 6
 
     for col_idx in range(1, len(headers) + 1):
-        cell = ws.cell(row=1, column=col_idx)
+        cell = ws.cell(row=6, column=col_idx)
         cell.fill = header_fill
         cell.font = header_font
         cell.alignment = center_align
         cell.border = thin_border
-    ws.row_dimensions[1].height = 28
+    ws.row_dimensions[6].height = 26
 
-    sample_data = [
-        [1, "S001", "Aisyah Humaira", "1A", "Aktif"],
-        [2, "S002", "Muhammad Fatih", "1A", "Aktif"],
-        [3, "S003", "Zaid bin Haritsah", "2B", "Aktif"]
-    ]
-
-    for row_data in sample_data:
-        ws.append(row_data)
-
-    for row_idx in range(2, len(sample_data) + 2):
+    # Kosongan: Buat baris kosong rapi siap diinput tanpa data dummy
+    for row_idx in range(7, 26):
         ws.row_dimensions[row_idx].height = 22
         for col_idx in range(1, len(headers) + 1):
             cell = ws.cell(row=row_idx, column=col_idx)
             cell.font = data_font
             cell.border = thin_border
-            cell.alignment = center_align if col_idx in [1, 2, 4, 5] else left_align
+            if col_idx == 1:
+                cell.value = row_idx - 6
+                cell.alignment = center_align
+            elif col_idx in [2, 4, 5, 6]:
+                cell.alignment = center_align
+            else:
+                cell.alignment = left_align
 
-    widths = [6, 16, 32, 14, 14]
+    widths = [6, 18, 34, 12, 16, 14]
     for i, w in enumerate(widths, start=1):
         ws.column_dimensions[get_column_letter(i)].width = w
 
@@ -352,7 +394,7 @@ def template_murid():
     return send_file(
         output,
         as_attachment=True,
-        download_name="Template_Resmi_Import_Murid_SDIT.xlsx",
+        download_name="Template_Resmi_Import_Murid_SDIT_Bina_Mulia.xlsx",
         mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
 
@@ -362,7 +404,17 @@ def import_excel():
     file = request.files.get('file_excel')
     if file and file.filename.endswith(('.xlsx', '.xls')):
         try:
-            df = pd.read_excel(file)
+            # Deteksi baris header secara fleksibel
+            df_raw = pd.read_excel(file, header=None)
+            header_idx = 0
+            for idx, r in df_raw.iterrows():
+                row_str = " ".join([str(v).lower() for v in r.values if pd.notna(v)])
+                if any(kw in row_str for kw in ['nama', 'murid', 'siswa', 'nisn', 'nis']):
+                    header_idx = idx
+                    break
+
+            file.seek(0)
+            df = pd.read_excel(file, skiprows=header_idx)
             imported_count = 0
             
             guru_kelas_str = session.get('kelas', '1A').strip()
@@ -393,37 +445,57 @@ def import_excel():
                 raw_kelas = find_val(row, ['kelas', 'rombel', 'class'], default_kelas)
                 kelas = re.sub(r'\s+', '', raw_kelas).upper() if raw_kelas else default_kelas
                 
-                custom_id = find_val(row, ['nisn', 'nis', 'id murid', 'id siswa', 'id'])
+                raw_custom_id = find_val(row, ['nisn', 'nis', 'id murid', 'id siswa', 'id'])
+                if raw_custom_id and raw_custom_id.lower() != 'nan':
+                    custom_id = re.sub(r'\.0$', '', raw_custom_id)
+                else:
+                    count = Siswa.query.count() + imported_count + 1
+                    custom_id = f"S{count:03d}"
+                    while Siswa.query.get(custom_id):
+                        count += 1
+                        custom_id = f"S{count:03d}"
+
                 raw_status = find_val(row, ['status', 'keaktifan'], 'Aktif')
                 status = 'Tidak Aktif' if 'tidak' in raw_status.lower() else 'Aktif'
 
-                if not custom_id or custom_id.lower() == 'nan':
-                    count = Siswa.query.count()
-                    custom_id = f"S{count + 1:03d}"
-                    idx = count + 1
-                    while Siswa.query.get(custom_id):
-                        idx += 1
-                        custom_id = f"S{idx:03d}"
+                # Logika pembuatan username & pass murid: username = nama depan, pass = NISN
+                nama_depan = extract_nama_depan(nama)
+                base_username = re.sub(r'[^a-zA-Z0-9_]', '', nama_depan).lower()
+                password_siswa = custom_id
 
                 existing_siswa = Siswa.query.get(custom_id)
                 if existing_siswa:
                     existing_siswa.nama = nama
                     existing_siswa.kelas = kelas
                     existing_siswa.status = status
+                    if existing_siswa.ortu:
+                        existing_siswa.ortu.nama = f"Wali {nama}"
+                        existing_siswa.ortu.kelas = kelas
+                        existing_siswa.ortu.status = status
+                        existing_siswa.ortu.set_password(password_siswa)
                 else:
-                    ortu = User.query.filter_by(username=nama, role='ortu').first()
-                    if not ortu:
-                        ortu = User(username=nama, role='ortu', nama=f"Wali {nama}", kelas=kelas, status=status)
-                        ortu.set_password('1234')
-                        db.session.add(ortu)
-                        db.session.flush()
+                    # Cari akun User ortu atau buat baru
+                    ortu = None
+                    # Cek username candidate
+                    user_cand = base_username
+                    conflict_user = User.query.filter(db.func.lower(User.username) == user_cand.lower()).first()
+                    if conflict_user:
+                        clean_id_suffix = re.sub(r'[^a-zA-Z0-9]', '', custom_id).lower()
+                        user_cand = f"{base_username}_{clean_id_suffix[-3:]}" if len(clean_id_suffix) >= 3 else f"{base_username}_{clean_id_suffix}"
+                        if User.query.filter(db.func.lower(User.username) == user_cand.lower()).first():
+                            user_cand = f"{base_username}_{Siswa.query.count() + imported_count + 1}"
+
+                    ortu = User(username=user_cand, role='ortu', nama=f"Wali {nama}", kelas=kelas, status=status)
+                    ortu.set_password(password_siswa)
+                    db.session.add(ortu)
+                    db.session.flush()
 
                     new_siswa = Siswa(id=custom_id, nama=nama, kelas=kelas, poin=0, status=status, user_id_ortu=ortu.id)
                     db.session.add(new_siswa)
                 imported_count += 1
 
             db.session.commit()
-            flash(f'Alhamdulillah, berhasil mengimpor {imported_count} data murid ke dalam sistem!', 'success')
+            flash(f'Alhamdulillah, berhasil mengimpor {imported_count} data murid! (Username login: nama depan murid, Password: NISN)', 'success')
         except Exception as e:
             flash(f'Gagal memproses file Excel: {str(e)}', 'danger')
     else:

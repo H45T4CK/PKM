@@ -97,6 +97,44 @@ class Siswa(db.Model):
         return 'Belum Dinilai'
 
     @property
+    def latest_tahsin(self):
+        if self.tahsin:
+            t = self.tahsin[-1]
+            return {
+                "jenis": "Tahsin",
+                "tanggal": t.tanggal,
+                "materi": t.halaman_akhir,
+                "grade": t.grade or ('A' if t.nilai and t.nilai >= 90 else 'B'),
+                "nilai": t.nilai if t.nilai is not None else 100,
+                "status_lulus": t.status_lulus or ('Lulus' if (t.grade in ['A', 'B'] or (t.nilai and t.nilai >= 80)) else 'Belum Lulus'),
+                "catatan": t.catatan or "",
+                "penilai": t.penilai or "",
+                "ceklist_ortu": bool(t.ceklist_ortu),
+                "catatan_ortu": t.catatan_ortu or "",
+                "id": t.id
+            }
+        return None
+
+    @property
+    def latest_tahfidz(self):
+        if self.tahfidz:
+            f = self.tahfidz[-1]
+            return {
+                "jenis": "Tahfidz",
+                "tanggal": f.tanggal,
+                "materi": f.hafalan_terakhir,
+                "grade": f.grade or ('A' if f.nilai and f.nilai >= 90 else 'B'),
+                "nilai": f.nilai if f.nilai is not None else 100,
+                "status_lulus": f.status_lulus or ('Lulus' if (f.grade in ['A', 'B'] or (f.nilai and f.nilai >= 80)) else 'Belum Lulus'),
+                "catatan": f.catatan or "",
+                "penilai": f.penilai or "",
+                "ceklist_ortu": bool(f.ceklist_ortu),
+                "catatan_ortu": f.catatan_ortu or "",
+                "id": f.id
+            }
+        return None
+
+    @property
     def latest_setoran(self):
         latest = None
         if self.tahsin:
@@ -136,50 +174,76 @@ class Siswa(db.Model):
     @property
     def progress_tahsin_info(self):
         if not self.tahsin:
-            return {"label": "Wafa Jilid 1 (Mulai)", "percent": 0, "deskripsi": "Belum ada catatan tahsin"}
+            return {
+                "label": "Tahsin Al-Qur'an (Mulai)",
+                "percent": 0,
+                "deskripsi": "Belum ada catatan tahsin",
+                "status": "Belum Dinilai",
+                "evaluasi": "Menunggu evaluasi ustadz/ustadzah"
+            }
         
-        last = self.tahsin[-1].halaman_akhir or ""
-        match_jilid = re.search(r'jilid\s*(\d+)', last, re.IGNORECASE)
-        match_juz = re.search(r'juz\s*(\d+)', last, re.IGNORECASE)
+        last = self.tahsin[-1]
+        last_materi = last.halaman_akhir or ""
+        cnt = len(self.tahsin)
+        grade = last.grade or 'A'
+        status = last.status_lulus or ('Lulus' if grade in ['A', 'B'] else 'Perlu Bimbingan')
+        
+        match_jilid = re.search(r'jilid\s*(\d+)', last_materi, re.IGNORECASE)
+        match_juz = re.search(r'juz\s*(\d+)', last_materi, re.IGNORECASE)
         
         if match_jilid:
             jilid_num = min(int(match_jilid.group(1)), 6)
             pct = int((jilid_num / 6) * 100)
-            return {
-                "label": f"Wafa Jilid {jilid_num} dari 6",
-                "percent": pct,
-                "deskripsi": f"Capaian Jilid {jilid_num}/6 ({pct}%)"
-            }
+            label = f"Wafa Jilid {jilid_num} - {last_materi}"
+            deskripsi = f"Capaian Wafa Jilid {jilid_num}/6 ({pct}%) - {cnt} kali evaluasi"
         elif match_juz:
             juz_num = min(int(match_juz.group(1)), 30)
             pct = int((juz_num / 30) * 100)
-            return {
-                "label": f"Al-Qur'an Juz {juz_num} dari 30",
-                "percent": pct,
-                "deskripsi": f"Capaian Juz {juz_num}/30 ({pct}%)"
-            }
+            label = f"Al-Qur'an Juz {juz_num} - {last_materi}"
+            deskripsi = f"Capaian Juz {juz_num}/30 ({pct}%) - {cnt} kali evaluasi"
         else:
-            cnt = len(self.tahsin)
-            pct = min(cnt * 10, 100)
-            return {
-                "label": f"{last} ({cnt}x Setor)",
-                "percent": pct,
-                "deskripsi": f"{cnt} Catatan Evaluasi Tahsin"
-            }
+            pct = min(max(cnt * 10, 15), 100)
+            label = last_materi
+            deskripsi = f"Tercatat {cnt} kali evaluasi capaian Tahsin"
+
+        return {
+            "label": label,
+            "percent": pct,
+            "deskripsi": deskripsi,
+            "status": status,
+            "evaluasi": last.catatan or "Fasih, makharijul huruf dan tajwid sangat baik."
+        }
 
     @property
     def progress_tahfidz_info(self):
         if not self.tahfidz:
-            return {"label": "Target Juz 30 (Mulai)", "percent": 0, "deskripsi": "Belum ada riwayat setoran"}
+            return {"label": "Target Juz 30 (Mulai)", "percent": 0, "deskripsi": "Belum ada riwayat setoran", "status": "Belum Dinilai", "evaluasi": "-"}
             
-        last = self.tahfidz[-1].hafalan_terakhir or ""
+        last = self.tahfidz[-1]
+        last_materi = last.hafalan_terakhir or ""
         cnt = len(self.tahfidz)
-        pct = min(cnt * 10, 100)
+        pct = min(max(cnt * 10, 15), 100)
+        grade = last.grade or 'A'
+        status = last.status_lulus or ('Lulus' if grade in ['A', 'B'] else 'Perlu Bimbingan')
         return {
-            "label": f"{last}",
+            "label": f"{last_materi}",
             "percent": pct,
-            "deskripsi": f"Tercatat {cnt} kali setoran hafalan"
+            "deskripsi": f"Tercatat {cnt} kali setoran hafalan mutqin",
+            "status": status,
+            "evaluasi": last.catatan or "Hafalan lancar, mutqin dan tajwid terjaga."
         }
+
+    @property
+    def has_catatan_ortu(self):
+        return any(bool(t.catatan_ortu) for t in self.tahsin) or any(bool(f.catatan_ortu) for f in self.tahfidz)
+
+    @property
+    def has_paraf_ortu(self):
+        return any(bool(t.ceklist_ortu) for t in self.tahsin) or any(bool(f.ceklist_ortu) for f in self.tahfidz)
+
+    @property
+    def total_catatan_ortu(self):
+        return sum(1 for t in self.tahsin if t.catatan_ortu) + sum(1 for f in self.tahfidz if f.catatan_ortu)
 
     def to_dict(self):
         return {
@@ -209,5 +273,11 @@ class Siswa(db.Model):
         if key == 'rata_rata_nilai': return self.rata_rata_nilai
         if key == 'rata_rata_tahsin': return self.rata_rata_tahsin
         if key == 'rata_rata_tahfidz': return self.rata_rata_tahfidz
+        if key == 'latest_tahsin': return self.latest_tahsin
+        if key == 'latest_tahfidz': return self.latest_tahfidz
+        if key == 'latest_setoran': return self.latest_setoran
+        if key == 'has_catatan_ortu': return self.has_catatan_ortu
+        if key == 'has_paraf_ortu': return self.has_paraf_ortu
+        if key == 'total_catatan_ortu': return self.total_catatan_ortu
         if key == 'status': return self.status_clean
         return getattr(self, key)

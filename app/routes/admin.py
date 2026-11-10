@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, send_file
-from app.models.user import User
+from app.models.user import User, AppSetting
 from app.models.siswa import Siswa
 from app import db
 from app.utils.decorators import role_required
@@ -7,7 +7,8 @@ import pandas as pd
 import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
-import io
+from openpyxl.drawing.image import Image as ExcelImage
+import io, os, re
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -34,12 +35,43 @@ def get_assigned_classes_map(exclude_guru_id=None):
             assigned[c] = g.nama or g.username
     return assigned
 
-@admin_bp.route('/dashboard')
+@admin_bp.route('/dashboard', endpoint='dashboard')
+@admin_bp.route('/dashboard', endpoint='dashboard_admin')
 @role_required('admin')
-def dashboard():
+def dashboard_admin():
+    # 1. AMBIL TAHUN AJARAN & SEMESTER TERBARU DARI DATABASE
+    tahun_ajaran = AppSetting.get_val('tahun_ajaran', '2026/2027')
+    semester = AppSetting.get_val('semester', 'Ganjil')
+    tahun_ajaran_full = f"Tahun Ajaran {tahun_ajaran} – Semester {semester}"
+
+    # 2. QUERY DATA GURU (User dengan role='guru') & SISWA
     guru_list = User.query.filter_by(role='guru').all()
     siswa_list = Siswa.query.all()
-    return render_template('admin/dashboard_admin.html', guru_list=guru_list, siswa_list=siswa_list)
+
+    # 3. KIRIMKAN VARIABEL KE TEMPLATE HTML
+    return render_template(
+        'admin/dashboard_admin.html',
+        guru_list=guru_list,
+        siswa_list=siswa_list,
+        tahun_ajaran=tahun_ajaran,
+        semester=semester,
+        tahun_ajaran_full=tahun_ajaran_full
+    )
+
+@admin_bp.route('/update_tahun_ajaran', methods=['POST'])
+@role_required('admin')
+def update_tahun_ajaran():
+    ta = request.form.get('tahun_ajaran')
+    sem = request.form.get('semester')
+
+    if ta and sem:
+        AppSetting.set_val('tahun_ajaran', ta)
+        AppSetting.set_val('semester', sem)
+        flash(f'Tahun Ajaran berhasil diperbarui menjadi {ta} (Semester {sem})!', 'success')
+    else:
+        flash('Data Tahun Ajaran atau Semester tidak boleh kosong!', 'danger')
+
+    return redirect(url_for('admin.dashboard_admin'))
 
 @admin_bp.route('/template_guru')
 @role_required('admin')
@@ -48,47 +80,79 @@ def template_guru():
     ws = wb.active
     ws.title = "Template_Guru_SDIT"
 
-    header_fill = PatternFill(start_color="0f172a", end_color="0f172a", fill_type="solid")
+    # Ambil Tahun Ajaran & Semester dari Setting Admin
+    ta_str = AppSetting.get_val('tahun_ajaran', '2026/2027')
+    sem_str = AppSetting.get_val('semester', 'Ganjil')
+
+    # Style Formatting
+    title_font = Font(name="Arial", size=13, bold=True, color="059669")
+    subtitle_font = Font(name="Arial", size=10, bold=True, color="1E293B")
+    info_font = Font(name="Arial", size=9, italic=True, color="64748B")
+    
+    header_fill = PatternFill(start_color="059669", end_color="059669", fill_type="solid")
     header_font = Font(name="Arial", size=11, bold=True, color="FFFFFF")
     data_font = Font(name="Arial", size=10)
     center_align = Alignment(horizontal="center", vertical="center")
-    left_align = Alignment(horizontal="left", vertical="center")
+    
     thin_border = Border(
-        left=Side(style='thin', color='D1D5DB'),
-        right=Side(style='thin', color='D1D5DB'),
-        top=Side(style='thin', color='D1D5DB'),
-        bottom=Side(style='thin', color='D1D5DB')
+        left=Side(style='thin', color='CBD5E1'),
+        right=Side(style='thin', color='CBD5E1'),
+        top=Side(style='thin', color='CBD5E1'),
+        bottom=Side(style='thin', color='CBD5E1')
     )
 
-    headers = ["No", "Nama Lengkap", "Username", "Password", "Kelas Binaan"]
-    ws.append(headers)
+    # 1. SISIPKAN LOGO SDIT DI SEL A1
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    logo_path = os.path.join(base_dir, 'static', 'img', 'logo-sdit.png')
+    
+    if os.path.exists(logo_path):
+        try:
+            img = ExcelImage(logo_path)
+            img.width = 46
+            img.height = 46
+            ws.add_image(img, 'A1')
+        except Exception:
+            pass
 
-    for col_idx in range(1, len(headers) + 1):
-        cell = ws.cell(row=1, column=col_idx)
+    # 2. TEKS KOP DI KOLOM B (Sebelah Logo)
+    ws['B1'] = "SDIT BINA MULIA"
+    ws['B1'].font = title_font
+    
+    ws['B2'] = "FORMAT RESMI IMPORT DATA GURU & MUSYRIF"
+    ws['B2'].font = subtitle_font
+    
+    ws['B3'] = f"Tahun Ajaran: {ta_str} (Semester {sem_str})  |  Format Kelas Binaan: 1A, 2B (Dipisah koma jika > 1)"
+    ws['B3'].font = info_font
+
+    ws['B4'] = "Catatan: Username & Password Initial wajib diisi. Jangan mengubah nama kolom di baris 6!"
+    ws['B4'].font = Font(name="Arial", size=9, italic=True, color="DC2626")
+
+    ws.row_dimensions[1].height = 20
+    ws.row_dimensions[2].height = 18
+
+    # 3. HEADER TABEL (Baris 6)
+    headers = ["No", "Nama Lengkap", "Username", "Password Initial", "Kelas Binaan"]
+    for col_idx, header_text in enumerate(headers, start=1):
+        cell = ws.cell(row=6, column=col_idx, value=header_text)
         cell.fill = header_fill
         cell.font = header_font
         cell.alignment = center_align
         cell.border = thin_border
-    ws.row_dimensions[1].height = 28
+    ws.row_dimensions[6].height = 28
 
-    sample_data = [
-        [1, "Ustadz Abdullah, S.Pd.I", "abdullah", "123456", "1A, 2B"],
-        [2, "Ustadzah Fatimah Azzahra, S.Pd", "fatimah", "123456", "3A"],
-        [3, "Ustadz Ridwan Syah, M.Pd", "ridwan", "123456", "4B, 5A"]
-    ]
-
-    for row_data in sample_data:
-        ws.append(row_data)
-
-    for row_idx in range(2, len(sample_data) + 2):
+    # 4. BARIS ISIAN KOSONG 25 BARIS (Baris 7 s/d 31 -> No 1 s/d 25)
+    for row_idx in range(7, 32):
         ws.row_dimensions[row_idx].height = 22
+        ws.cell(row=row_idx, column=1, value=row_idx - 6).alignment = center_align
         for col_idx in range(1, len(headers) + 1):
             cell = ws.cell(row=row_idx, column=col_idx)
             cell.font = data_font
             cell.border = thin_border
-            cell.alignment = center_align if col_idx in [1, 3, 4, 5] else left_align
+            if col_idx in [1, 3, 4, 5]:
+                cell.alignment = center_align
 
-    widths = [6, 32, 22, 18, 20]
+    # Lebar Kolom
+    widths = [8, 36, 22, 20, 24]
     for i, w in enumerate(widths, start=1):
         ws.column_dimensions[get_column_letter(i)].width = w
 
@@ -113,11 +177,11 @@ def tambah_guru():
 
     if not nama or not username or not password:
         flash('Semua kolom wajib diisi!', 'danger')
-        return redirect(url_for('admin.dashboard'))
+        return redirect(url_for('admin.dashboard_admin'))
 
     if User.query.filter(db.func.lower(User.username) == username.lower()).first():
         flash(f'Username "{username}" sudah digunakan oleh akun lain!', 'danger')
-        return redirect(url_for('admin.dashboard'))
+        return redirect(url_for('admin.dashboard_admin'))
 
     kelas_list = parse_kelas_list(kelas_input)
     if status == 'Aktif' and kelas_list:
@@ -129,7 +193,7 @@ def tambah_guru():
         
         if conflict:
             flash(f'Gagal menambahkan guru! {", ".join(conflict)}. Setiap kelas binaan hanya boleh dibina oleh 1 guru!', 'danger')
-            return redirect(url_for('admin.dashboard'))
+            return redirect(url_for('admin.dashboard_admin'))
 
     formatted_kelas = ", ".join(kelas_list) if kelas_list else '-'
     new_guru = User(nama=nama, username=username, role='guru', kelas=formatted_kelas, status=status)
@@ -138,7 +202,7 @@ def tambah_guru():
     db.session.commit()
     flash(f'Guru {nama} dengan kelas {formatted_kelas} berhasil ditambahkan!', 'success')
 
-    return redirect(url_for('admin.dashboard'))
+    return redirect(url_for('admin.dashboard_admin'))
 
 @admin_bp.route('/edit_guru/<int:guru_id>', methods=['POST'])
 @role_required('admin')
@@ -155,7 +219,7 @@ def edit_guru(guru_id):
     ).first()
     if existing_user:
         flash(f'Username "{username}" sudah digunakan guru lain!', 'danger')
-        return redirect(url_for('admin.dashboard'))
+        return redirect(url_for('admin.dashboard_admin'))
 
     kelas_list = parse_kelas_list(kelas_input)
     if status == 'Aktif' and kelas_list:
@@ -167,7 +231,7 @@ def edit_guru(guru_id):
         
         if conflict:
             flash(f'Gagal mengubah data guru! {", ".join(conflict)}. Setiap kelas binaan hanya boleh dibina oleh 1 guru!', 'danger')
-            return redirect(url_for('admin.dashboard'))
+            return redirect(url_for('admin.dashboard_admin'))
 
     guru.nama = nama
     guru.username = username
@@ -180,7 +244,7 @@ def edit_guru(guru_id):
 
     db.session.commit()
     flash(f'Data guru {guru.nama} berhasil diperbarui!', 'success')
-    return redirect(url_for('admin.dashboard'))
+    return redirect(url_for('admin.dashboard_admin'))
 
 @admin_bp.route('/hapus_guru/<int:guru_id>')
 @role_required('admin')
@@ -190,7 +254,7 @@ def hapus_guru(guru_id):
     db.session.delete(guru)
     db.session.commit()
     flash(f'Akun guru {nama} berhasil dihapus dari sistem!', 'success')
-    return redirect(url_for('admin.dashboard'))
+    return redirect(url_for('admin.dashboard_admin'))
 
 @admin_bp.route('/edit_siswa/<id_siswa>', methods=['POST'])
 @role_required('admin')
@@ -203,7 +267,7 @@ def edit_siswa(id_siswa):
 
     if not nama or not username:
         flash('Nama dan Username murid tidak boleh kosong!', 'danger')
-        return redirect(url_for('admin.dashboard'))
+        return redirect(url_for('admin.dashboard_admin'))
 
     ortu = None
     if siswa.user_id_ortu:
@@ -211,14 +275,13 @@ def edit_siswa(id_siswa):
     if not ortu:
         ortu = User.query.filter_by(username=siswa.nama, role='ortu').first()
 
-    # Cek username conflict
     conflict_user = User.query.filter(
         (db.func.lower(User.username) == username.lower()) &
         (User.id != (ortu.id if ortu else 0))
     ).first()
     if conflict_user:
         flash(f'Username "{username}" sudah digunakan pengguna lain!', 'danger')
-        return redirect(url_for('admin.dashboard'))
+        return redirect(url_for('admin.dashboard_admin'))
 
     siswa.nama = nama
     siswa.kelas = kelas
@@ -238,7 +301,7 @@ def edit_siswa(id_siswa):
 
     db.session.commit()
     flash(f'Data murid {nama} (Username: {username}) berhasil diperbarui!', 'success')
-    return redirect(url_for('admin.dashboard'))
+    return redirect(url_for('admin.dashboard_admin'))
 
 @admin_bp.route('/edit_password_siswa/<id_siswa>', methods=['POST'])
 @role_required('admin')
@@ -248,7 +311,7 @@ def edit_password_siswa(id_siswa):
 
     if not password_baru:
         flash('Password baru tidak boleh kosong!', 'danger')
-        return redirect(url_for('admin.dashboard'))
+        return redirect(url_for('admin.dashboard_admin'))
 
     ortu = None
     if siswa.user_id_ortu:
@@ -267,31 +330,43 @@ def edit_password_siswa(id_siswa):
 
     db.session.commit()
     flash(f'Password akun murid/wali untuk {siswa.nama} berhasil diperbarui!', 'success')
-    return redirect(url_for('admin.dashboard'))
+    return redirect(url_for('admin.dashboard_admin'))
 
 @admin_bp.route('/import_guru', methods=['POST'])
-@role_required('admin')
 def import_guru():
     file = request.files.get('file_excel_guru')
     if file and file.filename.endswith(('.xlsx', '.xls')):
         try:
-            df = pd.read_excel(file)
+            df_raw = pd.read_excel(file, header=None)
+            header_row_idx = 0
+            
+            # PERBAIKAN: Pencarian persis nama kolom (Exact Match)
+            for idx, row in df_raw.iterrows():
+                row_vals = [str(v).strip().lower() for v in row.values if pd.notna(v)]
+                is_has_nama = any(v in ['nama', 'nama lengkap'] for v in row_vals)
+                is_has_username = any(v == 'username' for v in row_vals)
+                
+                if is_has_nama and is_has_username:
+                    header_row_idx = idx
+                    break
+
+            df = pd.read_excel(file, skiprows=header_row_idx)
+            
             imported_count = 0
             skipped = []
-            
             assigned_map = get_assigned_classes_map()
 
             for _, row in df.iterrows():
                 nama = str(row.get('Nama Lengkap', row.get('Nama', ''))).strip()
                 username = str(row.get('Username', '')).strip()
-                password = str(row.get('Password', '123456')).strip()
+                password = str(row.get('Password Initial', row.get('Password', '123456'))).strip()
                 raw_kelas = str(row.get('Kelas Binaan', row.get('Kelas', '-'))).strip()
 
-                if not nama or nama.lower() == 'nan' or not username or username.lower() == 'nan':
+                if not nama or nama.lower() in ['nan', 'none', ''] or not username or username.lower() in ['nan', 'none', '']:
                     continue
 
                 if User.query.filter(db.func.lower(User.username) == username.lower()).first():
-                    skipped.append(f"{nama} (Username {username} sudah ada)")
+                    skipped.append(f"{nama} (Username '{username}' sudah ada)")
                     continue
 
                 kelas_list = parse_kelas_list(raw_kelas)
@@ -307,7 +382,7 @@ def import_guru():
 
                 formatted_kelas = ", ".join(kelas_list) if kelas_list else '-'
                 new_guru = User(nama=nama, username=username, role='guru', kelas=formatted_kelas, status='Aktif')
-                new_guru.set_password(password)
+                new_guru.set_password(password if password and password.lower() != 'nan' else '123456')
                 db.session.add(new_guru)
                 
                 for c in kelas_list:
@@ -315,12 +390,12 @@ def import_guru():
                 imported_count += 1
 
             db.session.commit()
-            msg = f'Berhasil mengimpor {imported_count} data guru!'
+            msg = f'Alhamdulillah, berhasil mengimpor {imported_count} data guru!'
             if skipped:
-                msg += f' Dilewati: {", ".join(skipped)}'
+                msg += f' Dilewati: {"; ".join(skipped)}'
             flash(msg, 'success' if imported_count > 0 else 'warning')
         except Exception as e:
             flash(f'Gagal mengimpor file Excel: {str(e)}', 'danger')
     else:
         flash('Format file tidak valid! Harap unggah file .xlsx atau .xls', 'danger')
-    return redirect(url_for('admin.dashboard'))
+    return redirect(url_for('admin.dashboard_admin'))

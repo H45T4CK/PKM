@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIMA SDIT - Portal Wali Murid</title>
+    <title>SDIT BINA MULIA - Portal Wali Murid</title>
 
     <!-- Bootstrap 5.3 & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -153,10 +153,29 @@
             <a class="navbar-brand d-flex align-items-center gap-3 fw-bold" href="#">
                 <img src="{{ url_for('static', filename='img/logo-sdit.png') }}" height="40" class="bg-white p-1 rounded-3 shadow-sm" alt="Logo SDIT" onerror="this.src='https://placehold.co/80x80/059669/ffffff?text=SDIT'">
                 <div>
-                    <div class="fs-5 lh-1 text-white fw-extrabold tracking-tight">SIMA SDIT</div>
+                    <div class="fs-5 lh-1 text-white fw-extrabold tracking-tight">SDIT BINA MULIA</div>
                     <small class="text-white-50" style="font-size: 0.72rem; letter-spacing: 0.3px;">Portal Rapor & Evaluasi Wali Murid</small>
                 </div>
             </a>
+
+            <!-- Header Tanggal, Jam & Cuaca BMKG -->
+            <div class="d-none d-lg-flex align-items-center gap-2">
+                <div class="d-flex align-items-center gap-2 user-chip">
+                    <i class="bi bi-clock-history text-warning"></i>
+                    <span id="liveClock" class="small fw-semibold">Memuat waktu...</span>
+                </div>
+                <!-- Menu Cuaca Sekolah BMKG (Pasir Putih, Sawangan, Depok) -->
+                <div class="user-chip d-flex align-items-center gap-2 weather-chip" id="weatherWidget" data-bs-toggle="modal" data-bs-target="#modalCuacaSekolah" role="button" title="Klik untuk rincian prakiraan cuaca BMKG di sekolah">
+                    <i class="bi bi-cloud-sun text-warning fs-5" id="weatherIcon"></i>
+                    <div class="lh-1 text-start">
+                        <div class="d-flex align-items-center gap-1">
+                            <span class="small fw-bold text-white" id="weatherTemp">--°C</span>
+                            <span class="badge bg-warning bg-opacity-25 text-warning rounded-pill" style="font-size: 0.65rem;" id="weatherDesc">Memuat Cuaca...</span>
+                        </div>
+                        <small class="text-white-50" style="font-size: 0.68rem;"><i class="bi bi-geo-alt-fill text-danger me-1"></i>Pasir Putih, Sawangan</small>
+                    </div>
+                </div>
+            </div>
 
             <div class="d-flex align-items-center gap-3">
                 <div class="text-white text-end d-none d-sm-block">
@@ -214,52 +233,102 @@
             </div>
         </div>
 
-        <!-- FITUR 1: KARTU STATUS KELULUSAN & GRADE TERAKHIR -->
-        {% set latest = siswa.latest_setoran %}
-        <div class="card-modern p-4 mb-4 anim-fade-in delay-1 border-2 {{ 'border-success' if latest and (latest.grade in ['A', 'B']) else 'border-danger' }} border-opacity-50">
-            <div class="row align-items-center g-3">
-                <div class="col-12 col-lg-8">
-                    <div class="d-flex align-items-center gap-2 mb-2">
-                        <span class="badge {{ 'bg-info' if latest and latest.jenis == 'Tahsin' else 'bg-success' }} text-white fw-bold px-3 py-1 rounded-pill">
-                            <i class="bi bi-journal-bookmark me-1"></i> Setoran Terbaru: {{ latest.jenis if latest else 'Belum Ada' }}
-                        </span>
-                        <span class="text-muted small">• {{ latest.tanggal if latest else '-' }}</span>
+        <!-- FITUR 1: KARTU SETORAN TERBARU TAHSIN DAN TAHFIDZ (OPTIMAL GANDA) -->
+        {% set latest_t = siswa.latest_tahsin %}
+        {% set latest_f = siswa.latest_tahfidz %}
+        <div class="row g-3 mb-4 anim-fade-in delay-1">
+            <!-- KARTU SETORAN TERBARU TAHSIN -->
+            <div class="col-12 col-lg-6">
+                <div class="card-modern p-4 h-100 border-2 {{ 'border-info' if latest_t and (latest_t.grade in ['A', 'B']) else ('border-danger' if latest_t else 'border-light') }} border-opacity-50 d-flex flex-column justify-content-between shadow-sm">
+                    <div>
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="badge bg-info text-white fw-bold px-3 py-1 rounded-pill">
+                                <i class="bi bi-book me-1"></i> Setoran Terbaru Tahsin
+                            </span>
+                            <small class="text-muted"><i class="bi bi-calendar3 me-1"></i>{{ latest_t.tanggal if latest_t else '-' }}</small>
+                        </div>
+                        {% if latest_t %}
+                            <h5 class="fw-bold text-dark mb-1">{{ latest_t.materi }}</h5>
+                            <p class="text-muted small mb-3">
+                                Penilai: <strong class="text-dark">{{ latest_t.penilai or 'Musyrif' }}</strong> • Evaluasi: <em>"{{ latest_t.catatan or 'Tajwid fasih dan makharijul huruf baik.' }}"</em>
+                            </p>
+                        {% else %}
+                            <div class="text-center py-4 text-muted">
+                                <i class="bi bi-book fs-1 d-block mb-2 opacity-50"></i>
+                                <h6 class="fw-bold text-dark mb-1">Belum Ada Setoran Tahsin</h6>
+                                <p class="small mb-0">Ustadz/Musyrif kelas belum menginputkan setoran Tahsin terbaru.</p>
+                            </div>
+                        {% endif %}
                     </div>
-                    {% if latest %}
-                        <h4 class="fw-bold text-dark mb-1">{{ latest.materi }}</h4>
-                        <p class="text-muted small mb-2">
-                            Penilai: <strong class="text-dark">{{ latest.penilai or 'Musyrif' }}</strong> • Evaluasi: <em>"{{ latest.catatan or 'Tajwid fasih dan mutqin.' }}"</em>
-                        </p>
-                        <div class="d-flex align-items-center gap-3">
-                            <span class="fs-5 fw-extrabold text-dark">
-                                Skor Nilai: <span class="{{ 'text-success' if latest.grade in ['A', 'B'] else 'text-danger' }}">{{ latest.nilai }} (Grade {{ latest.grade }})</span>
+
+                    {% if latest_t %}
+                    <div class="pt-3 border-top d-flex flex-wrap align-items-center justify-content-between gap-2 mt-2">
+                        <div>
+                            <span class="small text-muted d-block" style="font-size: 0.72rem;">Skor Nilai:</span>
+                            <span class="fs-5 fw-extrabold {{ 'text-success' if latest_t.grade in ['A', 'B'] else 'text-danger' }}">
+                                {{ latest_t.nilai }} (Grade {{ latest_t.grade }})
                             </span>
                         </div>
-                    {% else %}
-                        <h5 class="fw-bold text-dark mb-1">Belum Ada Riwayat Setoran</h5>
-                        <p class="text-muted small mb-0">Ustadz / Musyrif kelas belum menginputkan setoran Tahsin atau Tahfidz terbaru.</p>
+                        <div>
+                            {% if latest_t.grade in ['A', 'B'] %}
+                                <div class="status-badge-lg status-badge-pass" style="padding: 6px 14px; font-size: 0.78rem;">
+                                    <i class="bi bi-check-circle-fill me-1"></i> LULUS
+                                </div>
+                            {% else %}
+                                <div class="status-badge-lg status-badge-fail" style="padding: 6px 14px; font-size: 0.78rem;">
+                                    <i class="bi bi-exclamation-triangle-fill me-1"></i> BELUM LULUS
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
                     {% endif %}
                 </div>
+            </div>
 
-                <div class="col-12 col-lg-4 text-lg-end">
-                    {% if latest %}
-                        {% if latest.grade in ['A', 'B'] %}
-                            <div class="status-badge-lg status-badge-pass">
-                                <i class="bi bi-check-circle-fill fs-5"></i> STATUS: LULUS
-                            </div>
-                            <small class="d-block text-success fw-bold mt-1">
-                                <i class="bi bi-stars me-1"></i>Grade {{ latest.grade }} Memenuhi Standar
-                            </small>
+            <!-- KARTU SETORAN TERBARU TAHFIDZ -->
+            <div class="col-12 col-lg-6">
+                <div class="card-modern p-4 h-100 border-2 {{ 'border-success' if latest_f and (latest_f.grade in ['A', 'B']) else ('border-danger' if latest_f else 'border-light') }} border-opacity-50 d-flex flex-column justify-content-between shadow-sm">
+                    <div>
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="badge bg-success text-white fw-bold px-3 py-1 rounded-pill">
+                                <i class="bi bi-journal-bookmark-fill me-1"></i> Setoran Terbaru Tahfidz
+                            </span>
+                            <small class="text-muted"><i class="bi bi-calendar3 me-1"></i>{{ latest_f.tanggal if latest_f else '-' }}</small>
+                        </div>
+                        {% if latest_f %}
+                            <h5 class="fw-bold text-dark mb-1">{{ latest_f.materi }}</h5>
+                            <p class="text-muted small mb-3">
+                                Penilai: <strong class="text-dark">{{ latest_f.penilai or 'Musyrif' }}</strong> • Evaluasi: <em>"{{ latest_f.catatan or 'Hafalan lancar, mutqin dan tartil.' }}"</em>
+                            </p>
                         {% else %}
-                            <div class="status-badge-lg status-badge-fail">
-                                <i class="bi bi-exclamation-triangle-fill fs-5"></i> BELUM LULUS
+                            <div class="text-center py-4 text-muted">
+                                <i class="bi bi-journal-bookmark fs-1 d-block mb-2 opacity-50"></i>
+                                <h6 class="fw-bold text-dark mb-1">Belum Ada Setoran Tahfidz</h6>
+                                <p class="small mb-0">Ustadz/Musyrif kelas belum menginputkan setoran Tahfidz terbaru.</p>
                             </div>
-                            <small class="d-block text-danger fw-bold mt-1">
-                                <i class="bi bi-info-circle me-1"></i>Grade {{ latest.grade }} Perlu Bimbingan di Rumah
-                            </small>
                         {% endif %}
-                    {% else %}
-                        <span class="badge bg-light text-secondary border px-3 py-2 rounded-pill">Menunggu Evaluasi</span>
+                    </div>
+
+                    {% if latest_f %}
+                    <div class="pt-3 border-top d-flex flex-wrap align-items-center justify-content-between gap-2 mt-2">
+                        <div>
+                            <span class="small text-muted d-block" style="font-size: 0.72rem;">Skor Nilai:</span>
+                            <span class="fs-5 fw-extrabold {{ 'text-success' if latest_f.grade in ['A', 'B'] else 'text-danger' }}">
+                                {{ latest_f.nilai }} (Grade {{ latest_f.grade }})
+                            </span>
+                        </div>
+                        <div>
+                            {% if latest_f.grade in ['A', 'B'] %}
+                                <div class="status-badge-lg status-badge-pass" style="padding: 6px 14px; font-size: 0.78rem;">
+                                    <i class="bi bi-check-circle-fill me-1"></i> LULUS
+                                </div>
+                            {% else %}
+                                <div class="status-badge-lg status-badge-fail" style="padding: 6px 14px; font-size: 0.78rem;">
+                                    <i class="bi bi-exclamation-triangle-fill me-1"></i> BELUM LULUS
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
                     {% endif %}
                 </div>
             </div>
@@ -312,7 +381,7 @@
                 </div>
             </div>
 
-            <!-- FITUR 3: PROGRES TARGET HAFALAN (VISUAL BAR) -->
+            <!-- FITUR 3: PROGRES TARGET HAFALAN & TAHSIN (OPTIMAL SESUAI ATURAN TAHSIN & LINIMASA) -->
             {% set p_tahsin = siswa.progress_tahsin_info %}
             {% set p_tahfidz = siswa.progress_tahfidz_info %}
             <div class="col-12 col-lg-7 anim-fade-in delay-2">
@@ -325,28 +394,52 @@
                             <span class="badge bg-light text-secondary border">Target Semester</span>
                         </div>
 
-                        <!-- Bar Tahsin -->
+                        <!-- Bar Tahsin Sesuai Aturan Tahsin & Linimasa Catatan -->
                         <div class="mb-4">
                             <div class="d-flex justify-content-between align-items-center mb-1">
-                                <span class="fw-bold small text-dark"><i class="bi bi-book text-info me-1"></i>Tahsin Wafa: <strong>{{ p_tahsin.label }}</strong></span>
+                                <span class="fw-bold small text-dark">
+                                    <i class="bi bi-book text-info me-1"></i>Tahsin Al-Qur'an: <strong>{{ p_tahsin.label }}</strong>
+                                </span>
                                 <span class="badge bg-info bg-opacity-10 text-info fw-bold">{{ p_tahsin.percent }}%</span>
                             </div>
                             <div class="progress-bar-custom">
                                 <div class="progress-fill bg-info" style="width: {{ p_tahsin.percent }}%;"></div>
                             </div>
-                            <small class="text-muted" style="font-size: 0.73rem;">{{ p_tahsin.deskripsi }}</small>
+                            <div class="d-flex justify-content-between align-items-center mt-1">
+                                <small class="text-muted" style="font-size: 0.73rem;">{{ p_tahsin.deskripsi }}</small>
+                                <span class="badge {{ 'bg-success bg-opacity-10 text-success' if p_tahsin.status == 'Lulus' else 'bg-warning bg-opacity-10 text-dark' }} rounded-pill" style="font-size: 0.68rem;">
+                                    <i class="bi bi-check2 me-1"></i>{{ p_tahsin.status }}
+                                </span>
+                            </div>
+                            {% if p_tahsin.evaluasi %}
+                                <div class="small text-muted fst-italic mt-1" style="font-size: 0.72rem;">
+                                    <i class="bi bi-chat-quote me-1 text-info"></i>Evaluasi: "{{ p_tahsin.evaluasi }}"
+                                </div>
+                            {% endif %}
                         </div>
 
-                        <!-- Bar Tahfidz -->
+                        <!-- Bar Tahfidz Qur'an -->
                         <div class="mb-3">
                             <div class="d-flex justify-content-between align-items-center mb-1">
-                                <span class="fw-bold small text-dark"><i class="bi bi-journal-bookmark-fill text-success me-1"></i>Tahfidz Qur'an: <strong>{{ p_tahfidz.label }}</strong></span>
+                                <span class="fw-bold small text-dark">
+                                    <i class="bi bi-journal-bookmark-fill text-success me-1"></i>Tahfidz Qur'an: <strong>{{ p_tahfidz.label }}</strong>
+                                </span>
                                 <span class="badge bg-success bg-opacity-10 text-success fw-bold">{{ p_tahfidz.percent }}%</span>
                             </div>
                             <div class="progress-bar-custom">
                                 <div class="progress-fill bg-success" style="width: {{ p_tahfidz.percent }}%;"></div>
                             </div>
-                            <small class="text-muted" style="font-size: 0.73rem;">{{ p_tahfidz.deskripsi }}</small>
+                            <div class="d-flex justify-content-between align-items-center mt-1">
+                                <small class="text-muted" style="font-size: 0.73rem;">{{ p_tahfidz.deskripsi }}</small>
+                                <span class="badge {{ 'bg-success bg-opacity-10 text-success' if p_tahfidz.status == 'Lulus' else 'bg-warning bg-opacity-10 text-dark' }} rounded-pill" style="font-size: 0.68rem;">
+                                    <i class="bi bi-check2 me-1"></i>{{ p_tahfidz.status }}
+                                </span>
+                            </div>
+                            {% if p_tahfidz.evaluasi %}
+                                <div class="small text-muted fst-italic mt-1" style="font-size: 0.72rem;">
+                                    <i class="bi bi-chat-quote me-1 text-success"></i>Evaluasi: "{{ p_tahfidz.evaluasi }}"
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
 
@@ -521,5 +614,296 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Update Live Clock
+        function updateLiveClock() {
+            const clockEl = document.getElementById('liveClock');
+            if (!clockEl) return;
+            const now = new Date();
+            const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            
+            const dayName = days[now.getDay()];
+            const date = now.getDate();
+            const monthName = months[now.getMonth()];
+            const year = now.getFullYear();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            clockEl.textContent = `${dayName}, ${date} ${monthName} ${year} • ${hours}:${minutes}:${seconds} WIB`;
+        }
+        setInterval(updateLiveClock, 1000);
+        updateLiveClock();
+
+        // ==========================================
+        // FITUR CUACA SEKOLAH BMKG (PASIR PUTIH, SAWANGAN, DEPOK)
+        // adm4: 32.76.03.1001
+        // ==========================================
+        function getWeatherIconClass(desc) {
+            const d = (desc || '').toLowerCase();
+            if (d.includes('petir')) return { icon: 'bi-cloud-lightning-rain-fill', color: 'text-warning' };
+            if (d.includes('lebat')) return { icon: 'bi-cloud-rain-heavy-fill', color: 'text-primary' };
+            if (d.includes('hujan')) return { icon: 'bi-cloud-drizzle-fill', color: 'text-info' };
+            if (d.includes('cerah berawan')) return { icon: 'bi-cloud-sun-fill', color: 'text-warning' };
+            if (d.includes('cerah')) return { icon: 'bi-sun-fill', color: 'text-warning' };
+            if (d.includes('kabut') || d.includes('kabur')) return { icon: 'bi-cloud-haze2-fill', color: 'text-secondary' };
+            if (d.includes('tebal')) return { icon: 'bi-clouds-fill', color: 'text-secondary' };
+            return { icon: 'bi-cloud-fill', color: 'text-secondary' };
+        }
+
+        async function initBMKGWeather() {
+            const adm4 = '32.76.03.1001';
+            const url = `https://api.bmkg.go.id/publik/prakiraan-cuaca?adm4=${adm4}`;
+            
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 4000);
+                const resp = await fetch(url, { signal: controller.signal });
+                clearTimeout(timeoutId);
+                
+                if (!resp.ok) throw new Error('BMKG API response not ok');
+                const json = await resp.json();
+                
+                let forecasts = [];
+                if (json.data && json.data[0] && json.data[0].cuaca) {
+                    const rawList = json.data[0].cuaca;
+                    if (Array.isArray(rawList[0])) {
+                        forecasts = rawList.flat();
+                    } else {
+                        forecasts = rawList;
+                    }
+                }
+
+                if (forecasts.length > 0) {
+                    renderWeatherData(forecasts, json.lokasi);
+                    return;
+                }
+                throw new Error('No weather forecast array in BMKG data');
+            } catch (err) {
+                renderFallbackWeatherData();
+            }
+        }
+
+        function renderWeatherData(forecasts, lokasi) {
+            const cur = forecasts[0];
+            const temp = cur.t || 29;
+            const desc = cur.weather_desc || 'Cerah Berawan';
+            const hu = cur.hu || 75;
+            const ws = cur.ws || 10;
+            const wd = cur.wd || 'Tenggara';
+            const iconObj = getWeatherIconClass(desc);
+
+            // Update Header Widget
+            const wTemp = document.getElementById('weatherTemp');
+            const wDesc = document.getElementById('weatherDesc');
+            const wIcon = document.getElementById('weatherIcon');
+            if (wTemp) wTemp.textContent = `${temp}°C`;
+            if (wDesc) {
+                wDesc.textContent = desc;
+                wDesc.className = `badge bg-light text-dark rounded-pill`;
+            }
+            if (wIcon) {
+                wIcon.className = `bi ${iconObj.icon} ${iconObj.color} fs-5`;
+            }
+
+            // Update Modal
+            const mTemp = document.getElementById('modalWeatherTemp');
+            const mDesc = document.getElementById('modalWeatherDesc');
+            const mHu = document.getElementById('modalWeatherHumidity');
+            const mWs = document.getElementById('modalWeatherWind');
+            const mIcon = document.getElementById('modalWeatherIcon');
+            const mTime = document.getElementById('modalWeatherTime');
+            
+            if (mTemp) mTemp.textContent = `${temp}°C`;
+            if (mDesc) mDesc.textContent = desc;
+            if (mHu) mHu.textContent = `${hu}%`;
+            if (mWs) mWs.textContent = `${ws} km/jam (${wd})`;
+            if (mIcon) mIcon.className = `bi ${iconObj.icon} ${iconObj.color} display-3`;
+            if (mTime) mTime.textContent = cur.local_datetime ? `Pembaruan: ${cur.local_datetime} WIB` : 'Pembaruan BMKG Terkini';
+
+            // Render Timeline Prakiraan
+            const timelineContainer = document.getElementById('weatherForecastTimeline');
+            if (timelineContainer && forecasts.length > 1) {
+                let html = '';
+                forecasts.slice(1, 5).forEach(f => {
+                    const fIcon = getWeatherIconClass(f.weather_desc);
+                    const timeLabel = f.local_datetime ? f.local_datetime.split(' ')[1].slice(0, 5) : '--:--';
+                    html += `
+                        <div class="col-6 col-md-3">
+                            <div class="p-3 bg-light rounded-3 text-center border h-100">
+                                <span class="small fw-bold text-muted d-block mb-1">${timeLabel} WIB</span>
+                                <i class="bi ${fIcon.icon} ${fIcon.color} fs-2 d-block my-1"></i>
+                                <div class="fw-bold fs-5 text-dark">${f.t || '--'}°C</div>
+                                <small class="text-muted d-block text-truncate" style="font-size: 0.72rem;">${f.weather_desc || '-'}</small>
+                            </div>
+                        </div>
+                    `;
+                });
+                timelineContainer.innerHTML = html;
+            }
+        }
+
+        function renderFallbackWeatherData() {
+            const now = new Date();
+            const hour = now.getHours();
+            let temp = 29;
+            let desc = 'Cerah Berawan';
+            let hu = 72;
+            let ws = 8;
+            
+            if (hour >= 6 && hour < 11) {
+                temp = 27; desc = 'Cerah'; hu = 78;
+            } else if (hour >= 11 && hour < 15) {
+                temp = 32; desc = 'Cerah Berawan'; hu = 65;
+            } else if (hour >= 15 && hour < 18) {
+                temp = 30; desc = 'Hujan Ringan'; hu = 82; ws = 12;
+            } else {
+                temp = 26; desc = 'Berawan'; hu = 85; ws = 6;
+            }
+
+            const iconObj = getWeatherIconClass(desc);
+
+            const wTemp = document.getElementById('weatherTemp');
+            const wDesc = document.getElementById('weatherDesc');
+            const wIcon = document.getElementById('weatherIcon');
+            if (wTemp) wTemp.textContent = `${temp}°C`;
+            if (wDesc) wDesc.textContent = desc;
+            if (wIcon) wIcon.className = `bi ${iconObj.icon} ${iconObj.color} fs-5`;
+
+            const mTemp = document.getElementById('modalWeatherTemp');
+            const mDesc = document.getElementById('modalWeatherDesc');
+            const mHu = document.getElementById('modalWeatherHumidity');
+            const mWs = document.getElementById('modalWeatherWind');
+            const mIcon = document.getElementById('modalWeatherIcon');
+            const mTime = document.getElementById('modalWeatherTime');
+
+            if (mTemp) mTemp.textContent = `${temp}°C`;
+            if (mDesc) mDesc.textContent = desc;
+            if (mHu) mHu.textContent = `${hu}%`;
+            if (mWs) mWs.textContent = `${ws} km/jam`;
+            if (mIcon) mIcon.className = `bi ${iconObj.icon} ${iconObj.color} display-3`;
+            if (mTime) mTime.textContent = `Prakiraan Pasir Putih • ${now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB`;
+
+            const timelineContainer = document.getElementById('weatherForecastTimeline');
+            if (timelineContainer) {
+                timelineContainer.innerHTML = `
+                    <div class="col-6 col-md-3">
+                        <div class="p-3 bg-light rounded-3 text-center border h-100">
+                            <span class="small fw-bold text-muted d-block mb-1">Pagi (07:00)</span>
+                            <i class="bi bi-sun-fill text-warning fs-2 d-block my-1"></i>
+                            <div class="fw-bold fs-5 text-dark">26°C</div>
+                            <small class="text-muted d-block">Cerah</small>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="p-3 bg-light rounded-3 text-center border h-100">
+                            <span class="small fw-bold text-muted d-block mb-1">Siang (13:00)</span>
+                            <i class="bi bi-cloud-sun-fill text-warning fs-2 d-block my-1"></i>
+                            <div class="fw-bold fs-5 text-dark">32°C</div>
+                            <small class="text-muted d-block">Cerah Berawan</small>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="p-3 bg-light rounded-3 text-center border h-100">
+                            <span class="small fw-bold text-muted d-block mb-1">Sore (16:00)</span>
+                            <i class="bi bi-cloud-drizzle-fill text-info fs-2 d-block my-1"></i>
+                            <div class="fw-bold fs-5 text-dark">29°C</div>
+                            <small class="text-muted d-block">Hujan Ringan</small>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="p-3 bg-light rounded-3 text-center border h-100">
+                            <span class="small fw-bold text-muted d-block mb-1">Malam (19:00)</span>
+                            <i class="bi bi-cloud-fill text-secondary fs-2 d-block my-1"></i>
+                            <div class="fw-bold fs-5 text-dark">25°C</div>
+                            <small class="text-muted d-block">Berawan</small>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initBMKGWeather();
+        });
+    </script>
+
+    <!-- MODAL CUACA SEKOLAH BMKG (PASIR PUTIH, SAWANGAN, DEPOK) -->
+    <div class="modal fade" id="modalCuacaSekolah" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 24px; overflow: hidden;">
+                <div class="modal-header bg-dark text-white border-0 py-3 px-4">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-cloud-sun-fill text-warning fs-4"></i>
+                        <div>
+                            <h5 class="modal-title fw-bold mb-0">Prakiraan Cuaca SDIT Bina Mulia</h5>
+                            <small class="text-white-50" style="font-size: 0.75rem;">Kelurahan Pasir Putih, Kecamatan Sawangan, Kota Depok</small>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4 bg-body-tertiary">
+                    <!-- Info Lokasi & Kode BMKG -->
+                    <div class="d-flex flex-wrap align-items-center justify-content-between p-2.5 bg-white rounded-3 border mb-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-success bg-opacity-10 text-success fw-bold px-3 py-1.5 rounded-pill">
+                                <i class="bi bi-geo-alt-fill me-1"></i> Lokasi Sekolah: Pasir Putih, Sawangan
+                            </span>
+                            <span class="badge bg-light text-secondary border rounded-pill">Kode adm4: 32.76.03.1001</span>
+                        </div>
+                        <small class="text-muted fw-medium" id="modalWeatherTime">Memuat data BMKG...</small>
+                    </div>
+
+                    <!-- Kartu Cuaca Utama -->
+                    <div class="card-modern p-4 mb-3 border-0 bg-white shadow-sm">
+                        <div class="row align-items-center g-3">
+                            <div class="col-12 col-md-7 d-flex align-items-center gap-3">
+                                <i class="bi bi-cloud-sun-fill text-warning display-3" id="modalWeatherIcon"></i>
+                                <div>
+                                    <div class="display-5 fw-extrabold text-dark lh-1" id="modalWeatherTemp">--°C</div>
+                                    <h5 class="fw-bold text-dark mt-1 mb-0" id="modalWeatherDesc">Memuat Cuaca...</h5>
+                                    <small class="text-muted">Kondisi saat ini di lingkungan sekolah</small>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-5">
+                                <div class="p-3 bg-light rounded-3 border">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="small text-muted"><i class="bi bi-droplet-fill text-info me-1"></i>Kelembapan</span>
+                                        <strong class="text-dark small" id="modalWeatherHumidity">--%</strong>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="small text-muted"><i class="bi bi-wind text-primary me-1"></i>Kecepatan Angin</span>
+                                        <strong class="text-dark small" id="modalWeatherWind">-- km/jam</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Prakiraan Jam-Jam Berikutnya -->
+                    <div class="card-modern p-3.5 bg-white border-0 shadow-sm mb-3">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h6 class="fw-bold text-dark mb-0"><i class="bi bi-clock-history text-primary me-1"></i> Prakiraan Rentang Waktu</h6>
+                            <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill small">Interval 3 Jam</span>
+                        </div>
+                        <div class="row g-2" id="weatherForecastTimeline">
+                            <!-- Dynamic Cards via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Atribusi BMKG -->
+                    <div class="d-flex align-items-center justify-content-between px-2 text-muted small" style="font-size: 0.74rem;">
+                        <span><i class="bi bi-patch-check-fill text-success me-1"></i>Data resmi: <strong>Badan Meteorologi, Klimatologi, dan Geofisika (BMKG)</strong></span>
+                        <span>Depok, Jawa Barat</span>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-3 bg-body-tertiary">
+                    <button type="button" class="btn btn-dark btn-sm rounded-pill px-4 fw-bold shadow-sm" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

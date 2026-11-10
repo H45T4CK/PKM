@@ -33,3 +33,25 @@ class User(db.Model):
 
     def __getitem__(self, key):
         return getattr(self, key)
+
+
+class AppSetting(db.Model):
+    __tablename__ = 'app_setting'
+    id = db.Column(db.Integer, primary_key=True)
+    key = db.Column(db.String(50), unique=True, nullable=False)
+    value = db.Column(db.String(100), nullable=False)
+
+    @classmethod
+    def get_val(cls, key_name, default_val=''):
+        item = cls.query.filter_by(key=key_name).first()
+        return item.value if item else default_val
+
+    @classmethod
+    def set_val(cls, key_name, val_name):
+        item = cls.query.filter_by(key=key_name).first()
+        if not item:
+            item = cls(key=key_name, value=val_name)
+            db.session.add(item)
+        else:
+            item.value = val_name
+        db.session.commit()

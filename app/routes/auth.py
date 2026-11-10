@@ -41,7 +41,7 @@ def login():
             session['kelas'] = user.kelas or '-'
 
             if user.role == 'admin':
-                return redirect(url_for('admin.dashboard'))
+                return redirect(url_for('admin.dashboard_admin'))
             elif user.role == 'guru':
                 return redirect(url_for('guru.dashboard'))
             elif user.role == 'ortu':
@@ -70,11 +70,11 @@ def login():
                     (User.role == 'ortu')
                 ).first()
 
-            # Verifikasi password akun ortu atau default '1234'
+            # Verifikasi password akun ortu atau default NISN / '1234'
             valid_pass = False
-            if ortu:
-                valid_pass = ortu.check_password(password)
-            elif password == '1234':
+            if ortu and ortu.check_password(password):
+                valid_pass = True
+            elif password == siswa.id or password == '1234':
                 valid_pass = True
 
             if valid_pass:

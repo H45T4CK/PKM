@@ -13,9 +13,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
-    
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
         :root {
@@ -34,7 +31,7 @@
             --radius-lg: 20px;
             --radius-md: 14px;
             --shadow-subtle: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
-            --shadow-hover: 0 12px 30px -4px rgba(15, 23, 42, 0.12);
+            --shadow-hover: 0 12px 32px -4px rgba(15, 23, 42, 0.12);
         }
 
         * { box-sizing: border-box; }
@@ -62,16 +59,45 @@
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 65%, #334155 100%);
             box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.35);
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
         }
 
-        .user-chip {
-            background: rgba(255, 255, 255, 0.12);
+        /* Widget Chip Interaktif */
+        .widget-chip {
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.18);
             border-radius: 50rem;
-            padding: 5px 14px;
+            padding: 6px 16px;
             color: #ffffff;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            user-select: none;
+        }
+        .widget-chip:hover {
+            background: rgba(255, 255, 255, 0.22);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+            border-color: rgba(255, 255, 255, 0.35);
+        }
+        .widget-chip .chevron-arrow {
+            font-size: 0.75rem;
+            transition: transform 0.2s ease;
+            opacity: 0.75;
+        }
+        .widget-chip:hover .chevron-arrow {
+            transform: translateY(2px);
+            opacity: 1;
+        }
+        
+        /* Modifikasi Khusus Widget Mobile */
+        .widget-mobile {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 10px 14px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
         }
 
         .hero-banner {
@@ -188,24 +214,66 @@
         .class-badge-btn.selected {
             background: #0f172a; color: #ffffff; border-color: #0f172a;
         }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            text-align: center;
+        }
+        .calendar-day-header {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #64748b;
+            padding: 6px 0;
+            text-transform: uppercase;
+        }
+        .calendar-cell {
+            padding: 10px 0;
+            font-size: 0.88rem;
+            font-weight: 600;
+            border-radius: 10px;
+            background: #f8fafc;
+            color: #334155;
+        }
+        .calendar-cell.today {
+            background: #059669;
+            color: #ffffff;
+            font-weight: 800;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.35);
+        }
     </style>
 </head>
 <body>
 
-    <!-- NAVBAR RESMI ADMINISTRATOR DENGAN LOGO SDIT -->
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top py-2 mb-4">
+    <!-- NAVBAR RESMI ADMINISTRATOR -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top py-2 mb-3 mb-md-4">
         <div class="container-fluid px-3 px-lg-4">
             <a class="navbar-brand d-flex align-items-center gap-3 fw-bold" href="#">
                 <img src="{{ url_for('static', filename='img/logo-sdit.png') }}" height="42" class="bg-white p-1 rounded-3 shadow-sm" alt="Logo SDIT" onerror="this.src='https://placehold.co/80x80/0f172a/ffffff?text=SDIT'">
                 <div>
-                    <div class="fs-5 lh-1 mt-1 text-white fw-extrabold tracking-tight">SIMA SDIT</div>
+                    <div class="fs-5 lh-1 mt-1 text-white fw-extrabold tracking-tight">SDIT BINA MULIA</div>
                     <small class="text-white-50 fw-normal" style="font-size: 0.72rem; letter-spacing: 0.3px;">Panel Administrator Sistem</small>
                 </div>
             </a>
 
-            <div class="d-none d-lg-flex align-items-center gap-2 user-chip">
-                <i class="bi bi-clock-history text-warning"></i>
-                <span id="liveClock" class="small fw-semibold">Memuat waktu...</span>
+            <!-- WIDGET DESKTOP DENGAN CHEVRON PANAH KEBAWAH -->
+            <div class="d-none d-xl-flex align-items-center gap-2">
+                <!-- Widget Jam (Klik Kalender) -->
+                <div class="widget-chip d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalKalender" title="Klik untuk membuka Kalender Interaktif">
+                    <i class="bi bi-clock-history text-warning"></i>
+                    <span id="liveClock" class="fw-semibold">Memuat waktu...</span>
+                    <i class="bi bi-chevron-down chevron-arrow text-warning ms-1"></i>
+                </div>
+                
+                <!-- Widget Cuaca (Klik Detail 3 Jam) -->
+                <div class="widget-chip d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalDetailCuaca" title="Klik untuk melihat Rincian Cuaca 3 Jam">
+                    <span id="weatherIcon"><i class="bi bi-sun-fill text-warning"></i></span>
+                    <span id="weatherTemp" class="fw-bold">--°C</span>
+                    <span id="weatherDesc" class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25 rounded-pill px-2" style="font-size: 0.68rem;">Memuat...</span>
+                    <small class="text-white-50 ms-1" style="font-size: 0.72rem;"><i class="bi bi-geo-alt-fill text-danger me-0.5"></i>Sawangan</small>
+                    <i class="bi bi-chevron-down chevron-arrow text-info ms-1"></i>
+                </div>
             </div>
 
             <div class="d-flex align-items-center gap-2 gap-md-3">
@@ -227,42 +295,55 @@
     <!-- MAIN CONTAINER -->
     <div class="container-fluid px-3 px-lg-4 mb-5">
 
-        <!-- NOTIFIKASI TOAST -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <script>
-                        Swal.fire({
-                            toast: true,
-                            position: 'top-end',
-                            icon: '{{ "success" if category == "success" else ("warning" if category == "warning" else "error") }}',
-                            title: '{{ message }}',
-                            showConfirmButton: false,
-                            timer: 4000,
-                            timerProgressBar: true
-                        });
-                    </script>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+        <!-- IMPORT COMPONENT NOTIFIKASI TOAST CUSTOM -->
+        {% include 'components/alerts.html' ignore missing %}
+
+        <!-- WIDGET KHUSUS TAMPILAN HP / TABLET (Tampil dengan panah interaktif) -->
+        <div class="d-flex d-xl-none gap-2 mb-4 anim-fade-in">
+            <!-- Jam Mobile -->
+            <div class="widget-chip widget-mobile flex-fill d-flex justify-content-center align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalKalender">
+                <i class="bi bi-clock-history text-warning" style="font-size: 0.95rem;"></i>
+                <span id="liveClockMobile" class="fw-bold text-white" style="font-size: 0.78rem;">--:--</span>
+                <i class="bi bi-chevron-down text-white-50 chevron-arrow" style="font-size: 0.7rem; opacity: 0.9;"></i>
+            </div>
+            
+            <!-- Cuaca Mobile -->
+            <div class="widget-chip widget-mobile flex-fill d-flex justify-content-center align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalDetailCuaca">
+                <span id="weatherIconMobile" style="font-size: 0.95rem;"><i class="bi bi-sun-fill text-warning"></i></span>
+                <div class="d-flex align-items-center gap-1">
+                    <span id="weatherTempMobile" class="fw-extrabold text-white" style="font-size: 0.78rem;">--°C</span>
+                    <span id="weatherDescMobile" class="text-white-50 text-truncate ms-1" style="font-size: 0.72rem; max-width: 70px;">...</span>
+                </div>
+                <i class="bi bi-chevron-down text-info chevron-arrow" style="font-size: 0.7rem; opacity: 0.9;"></i>
+            </div>
+        </div>
 
         <!-- HERO BANNER ADMIN -->
         <div class="hero-banner mb-4 anim-fade-in">
             <div class="row align-items-center g-3">
                 <div class="col-12 col-lg-7">
-                    <div class="d-flex align-items-center gap-2 mb-1">
+                    <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
                         <span class="badge bg-dark text-white fw-bold px-3 py-1 rounded-pill">
                             <i class="bi bi-shield-check me-1"></i> Mode Kontrol Administrator
                         </span>
-                        <span class="text-muted small">• Tahun Ajaran 2026/2027</span>
+                        <span class="badge bg-success bg-opacity-10 text-success fw-bold px-3 py-1 rounded-pill">
+                            • {{ tahun_ajaran_full or 'Tahun Ajaran ' ~ (tahun_ajaran or '2026/2027') ~ ' – Semester ' ~ (semester or 'Ganjil') }}
+                        </span>
+                        <!-- BADGE KET. METODE UMMI AMAN & HIGH CONTRAST -->
+                        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 fw-bold px-3 py-1 rounded-pill">
+                            <i class="bi bi-journal-bookmark-fill me-1"></i> Kurikulum Al-Qur'an: Metode Ummi
+                        </span>
                     </div>
                     <h3 class="fw-bold text-dark mb-1">Ahlan wa Sahlan, Administrator SIMA SDIT! 🛠️</h3>
                     <p class="text-muted mb-0 small">
-                        Kelola data keanggotaan Guru SDIT, edit nama/username murid & akun wali, pantau capaian nilai Qur'an seluruh murid.
+                        Kelola data keanggotaan Guru SDIT, edit nama/username murid & akun wali, serta atur Tahun Ajaran aktif.
                     </p>
                 </div>
                 <div class="col-12 col-lg-5 text-lg-end">
                     <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+                        <button type="button" class="btn btn-warning btn-sm rounded-pill px-3 fw-bold text-dark shadow-sm" data-bs-toggle="modal" data-bs-target="#modalSettingTA">
+                            <i class="bi bi-gear-fill me-1"></i> ⚙️ TA {{ tahun_ajaran or '2026/2027' }} ({{ semester or 'Ganjil' }})
+                        </button>
                         <a href="{{ url_for('admin.template_guru') }}" class="btn btn-outline-success btn-sm rounded-pill px-3 fw-bold shadow-sm">
                             <i class="bi bi-file-earmark-arrow-down-fill me-1"></i> Template Excel Guru
                         </a>
@@ -361,14 +442,15 @@
                 <div class="card-modern kpi-card kpi-amber h-100">
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
-                            <span class="text-muted fw-bold text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.5px;">Hak Akses Siswa</span>
+                            <span class="text-muted fw-bold text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.5px;">Tahun Ajaran Aktif</span>
                             <div class="d-flex align-items-baseline gap-2 mt-1">
-                                <h5 class="fw-bold mb-0 text-dark">Kelola Akun Murid</h5>
+                                <h5 class="fw-bold mb-0 text-dark">{{ tahun_ajaran or '2026/2027' }}</h5>
+                                <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 rounded-pill fw-semibold small">{{ semester or 'Ganjil' }}</span>
                             </div>
-                            <small class="text-muted" style="font-size: 0.75rem;"><i class="bi bi-pencil-square text-warning me-1"></i>Admin & Guru dapat edit nama/user</small>
+                            <small class="text-muted" style="font-size: 0.75rem;"><i class="bi bi-gear-fill text-warning me-1"></i>Admin kontrol TA manual</small>
                         </div>
                         <div class="kpi-icon-wrap bg-warning bg-opacity-10 text-warning">
-                            <i class="bi bi-shield-lock-fill"></i>
+                            <i class="bi bi-calendar-range-fill"></i>
                         </div>
                     </div>
                 </div>
@@ -500,12 +582,9 @@
 
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center align-items-center gap-2">
-                                            <!-- Tombol Ubah / Edit Guru -->
                                             <button type="button" class="btn btn-act btn-dark" data-bs-toggle="modal" data-bs-target="#modalEditGuru{{ g.id }}" title="Ubah Nama, Password, Kelas & Status Guru">
                                                 <i class="bi bi-pencil-square me-1"></i> Ubah / Edit
                                             </button>
-
-                                            <!-- Tombol Hapus Guru -->
                                             <button type="button" class="btn btn-act btn-outline-danger" onclick="confirmHapusGuru('{{ g.id }}', '{{ g.nama }}')" title="Hapus Akun Guru">
                                                 <i class="bi bi-trash"></i>
                                             </button>
@@ -536,7 +615,7 @@
                 </div>
             </div>
 
-            <!-- PANE 2: MONITORING DATA SELURUH MURID (ADMIN DAPAT EDIT NAMA & USERNAME, TANPA BISA TAMBAH SISWA) -->
+            <!-- PANE 2: MONITORING DATA SELURUH MURID -->
             <div class="tab-pane fade" id="tab-siswa-pane" role="tabpanel">
                 <div class="card-modern overflow-hidden">
                     <div class="p-4 border-bottom bg-white">
@@ -626,7 +705,6 @@
                                         </span>
                                     </td>
 
-                                    <!-- Nilai Rata-rata Tahsin Dipisah -->
                                     <td>
                                         {% if s.rata_rata_tahsin is not none %}
                                             <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 px-2.5 py-1.5 rounded-pill fw-bold">
@@ -637,7 +715,6 @@
                                         {% endif %}
                                     </td>
 
-                                    <!-- Nilai Rata-rata Tahfidz Dipisah -->
                                     <td>
                                         {% if s.rata_rata_tahfidz is not none %}
                                             <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2.5 py-1.5 rounded-pill fw-bold">
@@ -648,7 +725,6 @@
                                         {% endif %}
                                     </td>
 
-                                    <!-- Akumulasi Gabungan -->
                                     <td>
                                         {% if s.rata_rata_nilai is not none %}
                                             <div class="d-flex align-items-center gap-1.5">
@@ -672,17 +748,12 @@
 
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center align-items-center gap-1.5 flex-wrap">
-                                            <!-- Tombol Edit Data Siswa (Nama & Username) -->
                                             <button type="button" class="btn btn-act btn-dark" data-bs-toggle="modal" data-bs-target="#modalEditMuridAdmin{{ s.id }}" title="Edit Nama Lengkap, Username Login & Kelas Murid">
                                                 <i class="bi bi-pencil-square me-1"></i> Edit Murid
                                             </button>
-
-                                            <!-- Tombol Edit Password Siswa -->
                                             <button type="button" class="btn btn-act btn-outline-dark" data-bs-toggle="modal" data-bs-target="#modalPassSiswa{{ s.id }}" title="Edit Password Login Murid/Wali">
                                                 <i class="bi bi-key-fill text-warning"></i> Pass
                                             </button>
-                                            
-                                            <!-- Tombol Cetak Rapor -->
                                             <a href="{{ url_for('export.cetak_hafalan_siswa', id_siswa=s.id) }}" target="_blank" class="btn btn-act btn-light border" title="Lihat Lembar Laporan Hafalan">
                                                 <i class="bi bi-printer"></i>
                                             </a>
@@ -712,6 +783,184 @@
 
         </div>
 
+    </div>
+
+    <!-- MODAL POP-UP 1: RINCIAN CUACA MODERN & PRESISI SAWANGAN -->
+    <div class="modal fade" id="modalDetailCuaca" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 24px; overflow: hidden; background: #ffffff;">
+                <!-- Header Modal -->
+                <div class="modal-header bg-dark text-white border-0 py-3 px-4 d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-2.5">
+                        <div>
+                            <h5 class="modal-title fw-bold mb-0">Prakiraan Cuaca Sawangan</h5>
+                            <small class="text-white-50" style="font-size: 0.72rem;">Pasir Putih, Sawangan, Kota Depok • Open-Meteo Live API</small>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body p-4">
+                    <!-- HERO BOX UTAMA CUACA (Kontras Warna Tinggi) -->
+                    <div id="weatherHeroBg" class="p-4 rounded-4 mb-4 position-relative overflow-hidden text-white" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3);">
+                        <div class="row align-items-center g-3">
+                            <!-- Sisi Kiri: Suhu & Status -->
+                            <div class="col-12 col-md-5">
+                                <span class="badge rounded-pill px-3 py-1.5 small fw-bold mb-2 d-inline-flex align-items-center gap-1.5" style="background-color: rgba(255, 255, 255, 0.15); color: #ffffff;" id="modalDayNightBadge">
+                                    <i class="bi bi-moon-stars-fill text-warning"></i> Suasana Malam Hari
+                                </span>
+                                <div class="d-flex align-items-baseline gap-2 mt-1">
+                                    <h1 class="display-3 fw-extrabold mb-0 tracking-tight" id="modalCurrentTemp">--°C</h1>
+                                </div>
+                                <div class="mt-2">
+                                    <span class="badge bg-warning text-dark fw-bold px-3 py-1.5 rounded-pill fs-6" id="modalCurrentDesc">Memuat...</span>
+                                    <div class="small text-white-50 mt-2 fw-medium" id="modalFeelsLike">
+                                        <i class="bi bi-thermometer-half me-1 text-warning"></i>Sensasi Terasa: --°C
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Sisi Kanan: 4 Kotak Metrik Lengkap (Fix Kontras Warna Slate-300 & White) -->
+                            <div class="col-12 col-md-7">
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);">
+                                            <div class="small fw-semibold mb-1" style="color: #cbd5e1; font-size: 0.75rem;">
+                                                <i class="bi bi-droplet-fill text-info me-1"></i> Kelembaban
+                                            </div>
+                                            <div class="fw-extrabold fs-5 text-white" id="metricHumidity">--%</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);">
+                                            <div class="small fw-semibold mb-1" style="color: #cbd5e1; font-size: 0.75rem;">
+                                                <i class="bi bi-wind text-warning me-1"></i> Kecepatan Angin
+                                            </div>
+                                            <div class="fw-extrabold fs-5 text-white" id="metricWind">-- km/j</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);">
+                                            <div class="small fw-semibold mb-1" style="color: #cbd5e1; font-size: 0.75rem;">
+                                                <i class="bi bi-cloud-rain-fill text-primary me-1"></i> Peluang Hujan
+                                            </div>
+                                            <div class="fw-extrabold fs-5 text-white" id="metricRainProb">--%</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);">
+                                            <div class="small fw-semibold mb-1" style="color: #cbd5e1; font-size: 0.75rem;">
+                                                <i class="bi bi-sun-fill text-warning me-1"></i> Indeks UV
+                                            </div>
+                                            <div class="fw-extrabold fs-5 text-white" id="metricUV">--</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HEADING PER 3 JAM -->
+                    <div class="d-flex align-items-center justify-content-between mb-3 px-1">
+                        <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+                            <i class="bi bi-clock-history text-primary"></i> Prediksi Jam per Jam (Sawangan)
+                        </h6>
+                        <span class="badge bg-light text-muted border px-2.5 py-1 rounded-pill" style="font-size: 0.7rem;">Pembaruan Otomatis</span>
+                    </div>
+                    
+                    <!-- CONTAINER KARTU PER 3 JAM -->
+                    <div class="row g-2.5" id="weather3hContainer">
+                        <div class="col-12 text-center py-4 text-muted">
+                            <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
+                            Sedang mengambil data cuaca terbaru...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="button" class="btn btn-dark rounded-3 fw-bold px-4 ms-auto" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL POP-UP 2: KALENDER INTERAKTIF -->
+    <div class="modal fade" id="modalKalender" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-dark text-white border-0 py-3" style="border-radius: 20px 20px 0 0;">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-calendar-week-fill text-warning fs-4"></i>
+                        <div>
+                            <h5 class="modal-title fw-bold mb-0" id="calendarMonthTitle">Kalender Sistem</h5>
+                            <small class="text-white-50" style="font-size: 0.72rem;">Waktu Operasional SDIT Bina Mulia</small>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="text-center bg-success bg-opacity-10 border border-success border-opacity-25 rounded-4 p-3 mb-4">
+                        <span class="text-success fw-bold small text-uppercase d-block mb-1">Hari Ini</span>
+                        <h4 class="fw-bold text-dark mb-0" id="calendarTodayHeader">Ahad, 8 November 2026</h4>
+                    </div>
+
+                    <div class="calendar-grid mb-2">
+                        <div class="calendar-day-header text-danger">Aha</div>
+                        <div class="calendar-day-header">Sen</div>
+                        <div class="calendar-day-header">Sel</div>
+                        <div class="calendar-day-header">Rab</div>
+                        <div class="calendar-day-header">Kam</div>
+                        <div class="calendar-day-header text-success">Jum</div>
+                        <div class="calendar-day-header">Sab</div>
+                    </div>
+
+                    <div class="calendar-grid" id="calendarDaysGrid">
+                        <!-- Tanggal dimasukkan via JS -->
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="button" class="btn btn-dark rounded-3 fw-bold px-4" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PENGATURAN TAHUN AJARAN & SEMESTER -->
+    <div class="modal fade" id="modalSettingTA" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <form action="/admin/update_tahun_ajaran" method="POST">
+                    <div class="modal-header bg-dark text-white border-0 py-3" style="border-radius: 20px 20px 0 0;">
+                        <h5 class="modal-title fw-bold mb-0">
+                            <i class="bi bi-gear-fill me-2 text-warning"></i> Pengaturan Tahun Ajaran & Semester
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small text-muted">Tahun Ajaran Aktif</label>
+                            <input type="text" name="tahun_ajaran" class="form-control rounded-3 bg-light border fw-bold text-dark" value="{{ tahun_ajaran or '2026/2027' }}" placeholder="Contoh: 2026/2027" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small text-muted">Semester Aktif</label>
+                            <select name="semester" class="form-select rounded-3 bg-light border fw-bold text-dark">
+                                <option value="Ganjil" {{ 'selected' if semester == 'Ganjil' else '' }}>Semester Ganjil</option>
+                                <option value="Genap" {{ 'selected' if semester == 'Genap' else '' }}>Semester Genap</option>
+                            </select>
+                        </div>
+                        <small class="text-muted d-block" style="font-size: 0.73rem;">
+                            <i class="bi bi-info-circle me-1"></i>Perubahan ini akan otomatis memperbarui tampilan di seluruh portal Admin, Guru, Wali Murid, dan berkas Laporan.
+                        </small>
+                    </div>
+                    <div class="modal-footer border-0 p-4 pt-0">
+                        <button type="button" class="btn btn-light rounded-3 fw-bold" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-dark rounded-3 fw-bold px-4">
+                            <i class="bi bi-save me-1"></i> Simpan Pengaturan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     <!-- MODAL EDIT DATA GURU -->
@@ -784,7 +1033,7 @@
         </div>
     {% endfor %}
 
-    <!-- MODAL EDIT DATA MURID OLEH ADMIN (NAMA & USERNAME) -->
+    <!-- MODAL EDIT DATA MURID OLEH ADMIN -->
     {% for s in siswa_list %}
         <div class="modal fade" id="modalEditMuridAdmin{{ s.id }}" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -879,7 +1128,7 @@
         </div>
     {% endfor %}
 
-    <!-- MODAL TAMBAH GURU (WITH MULTI-CLASS PICKER & SHOW PASS) -->
+    <!-- MODAL TAMBAH GURU -->
     <div class="modal fade" id="modalTambahGuru" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg">
@@ -902,7 +1151,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label fw-bold small text-muted">Password Akun</label>
+                            <label class="form-label fw-bold small text-muted">Password Akun Initial</label>
                             <div class="position-relative">
                                 <input type="password" id="inputTambahGuruPass" name="password" class="form-control rounded-3 bg-light border pe-5" placeholder="Buat password akun guru..." required minlength="4">
                                 <button type="button" class="btn btn-link position-absolute top-50 end-0 translate-middle-y text-muted pe-3 text-decoration-none" onclick="toggleGenericPassword('inputTambahGuruPass', 'iconTambahGuruPass')">
@@ -972,7 +1221,7 @@
                         </div>
 
                         <div class="alert alert-info bg-info bg-opacity-10 border-0 text-dark small mb-3">
-                            <i class="bi bi-info-circle-fill text-info me-1"></i> Kolom header pada template: <strong>No</strong>, <strong>Nama Lengkap</strong>, <strong>Username</strong>, <strong>Password</strong>, dan <strong>Kelas Binaan</strong>. Guru dapat membina lebih dari 1 kelas (misal: <code>1A, 2B</code>).
+                            <i class="bi bi-info-circle-fill text-info me-1"></i> Header kolom pada template: <strong>No</strong>, <strong>Nama Lengkap</strong>, <strong>Username</strong>, <strong>Password Initial</strong>, dan <strong>Kelas Binaan</strong>. Guru dapat membina lebih dari 1 kelas (misal: <code>1A, 2B</code>).
                         </div>
 
                         <div class="mb-3">
@@ -991,22 +1240,279 @@
         </div>
     </div>
 
-    <!-- SCRIPTS DAN JS -->
+    <!-- SCRIPTS DAN JS LOGIC -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             updateLiveClock();
             setInterval(updateLiveClock, 1000);
+            fetchWeatherSawangan();
+            generateInteractiveCalendar();
         });
 
         function updateLiveClock() {
             const now = new Date();
             const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
             const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            const shortMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
             
+            const hours = String(now.getHours()).padStart(2, '0');
+            const mins = String(now.getMinutes()).padStart(2, '0');
+            const secs = String(now.getSeconds()).padStart(2, '0');
+            
+            // Tembak ke Desktop
             const clockEl = document.getElementById('liveClock');
             if (clockEl) {
-                clockEl.textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()} • ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')} WIB`;
+                clockEl.textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()} • ${hours}:${mins}:${secs} WIB`;
+            }
+
+            // Tembak ke Mobile (Format Singkat)
+            const clockElMobile = document.getElementById('liveClockMobile');
+            if (clockElMobile) {
+                clockElMobile.textContent = `${hours}:${mins} WIB • ${now.getDate()} ${shortMonths[now.getMonth()]}`;
+            }
+        }
+
+        function generateInteractiveCalendar() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            const todayDate = now.getDate();
+
+            const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+            const monthTitle = document.getElementById('calendarMonthTitle');
+            const todayHeader = document.getElementById('calendarTodayHeader');
+            const daysGrid = document.getElementById('calendarDaysGrid');
+
+            if (monthTitle) monthTitle.textContent = `Kalender ${months[month]} ${year}`;
+            if (todayHeader) todayHeader.textContent = `${days[now.getDay()]}, ${todayDate} ${months[month]} ${year}`;
+
+            if (!daysGrid) return;
+            daysGrid.innerHTML = '';
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'calendar-cell bg-transparent';
+                daysGrid.appendChild(emptyCell);
+            }
+
+            for (let d = 1; d <= totalDays; d++) {
+                const cell = document.createElement('div');
+                cell.className = `calendar-cell ${d === todayDate ? 'today' : ''}`;
+                cell.textContent = d;
+                daysGrid.appendChild(cell);
+            }
+        }
+
+        // Helper Pemetaan Status Cuaca & Deteksi Ikon Siang/Malam Presisi
+        function getWeatherDetails(code, isNight) {
+            let desc = "Cerah";
+            let iconClass = isNight ? "bi-moon-stars-fill text-warning" : "bi-sun-fill text-warning";
+
+            if (code === 0) {
+                desc = isNight ? "Cerah (Malam)" : "Cerah";
+                iconClass = isNight ? "bi-moon-stars-fill text-warning" : "bi-sun-fill text-warning";
+            } else if (code >= 1 && code <= 3) {
+                desc = "Berawan";
+                iconClass = isNight ? "bi-cloud-moon-fill text-info" : "bi-cloud-sun-fill text-info";
+            } else if (code >= 45 && code <= 48) {
+                desc = "Berkabut";
+                iconClass = "bi-cloud-haze2-fill text-secondary";
+            } else if (code >= 51 && code <= 67) {
+                desc = "Hujan Ringan";
+                iconClass = "bi-cloud-drizzle-fill text-primary";
+            } else if (code >= 71 && code <= 77) {
+                desc = "Hujan Sedang";
+                iconClass = "bi-cloud-rain-fill text-primary";
+            } else if (code >= 80 && code <= 99) {
+                desc = "Hujan Badai";
+                iconClass = "bi-cloud-lightning-rain-fill text-danger";
+            }
+
+            return { desc, iconClass };
+        }
+
+       function fetchWeatherSawangan() {
+    // API Open-Meteo v1 untuk Sawangan Depok
+    const url = 'https://api.open-meteo.com/v1/forecast?latitude=-6.417&longitude=106.783&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,weather_code,precipitation_probability,wind_speed_10m,uv_index&timezone=Asia%2FJakarta';
+    
+    // AbortController untuk timeout 6 detik jika koneksi lambat
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 6000);
+
+    fetch(url, { signal: controller.signal })
+        .then(response => {
+            clearTimeout(timeoutId);
+            if (!response.ok) throw new Error("API Response Error: " + response.status);
+            return response.json();
+        })
+        .then(data => {
+            if (data && data.current) {
+                const cur = data.current;
+                const temp = Math.round(cur.temperature_2m);
+                const feelsLike = Math.round(cur.apparent_temperature);
+                const humidity = cur.relative_humidity_2m;
+                const windSpeed = Math.round(cur.wind_speed_10m);
+                const isNight = (cur.is_day === 0);
+                const weatherInfo = getWeatherDetails(cur.weather_code, isNight);
+
+                // Timestamp ISO presisi jam lokal
+                const now = new Date();
+                const currentISO = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}T${String(now.getHours()).padStart(2,'0')}:00`;
+                
+                let targetIdx = 0;
+                if (data.hourly && data.hourly.time) {
+                    const foundIdx = data.hourly.time.findIndex(t => t.startsWith(currentISO));
+                    if (foundIdx !== -1) targetIdx = foundIdx;
+                    else targetIdx = now.getHours();
+                }
+
+                const rainProb = (data.hourly && data.hourly.precipitation_probability) ? (data.hourly.precipitation_probability[targetIdx] || 0) : 0;
+                const uvVal = (data.hourly && data.hourly.uv_index) ? Math.round(data.hourly.uv_index[targetIdx] || 0) : 0;
+
+                // 1. UPDATE WIDGET NAVBAR (DESKTOP & MOBILE)
+                const wTemp = document.getElementById('weatherTemp');
+                const wDesc = document.getElementById('weatherDesc');
+                const wIcon = document.getElementById('weatherIcon');
+                const mTempMob = document.getElementById('weatherTempMobile');
+                const mDescMob = document.getElementById('weatherDescMobile');
+                const mIconMob = document.getElementById('weatherIconMobile');
+
+                if (wTemp) wTemp.textContent = `${temp}°C`;
+                if (wDesc) wDesc.textContent = weatherInfo.desc;
+                if (wIcon) wIcon.innerHTML = `<i class="bi ${weatherInfo.iconClass}"></i>`;
+
+                if (mTempMob) mTempMob.textContent = `${temp}°C`;
+                if (mDescMob) mDescMob.textContent = weatherInfo.desc;
+                if (mIconMob) mIconMob.innerHTML = `<i class="bi ${weatherInfo.iconClass}"></i>`;
+
+                // 2. UPDATE HERO BOX MODAL UTAMA
+                const mTemp = document.getElementById('modalCurrentTemp');
+                const mDesc = document.getElementById('modalCurrentDesc');
+                const mIcon = document.getElementById('modalHeaderIconWrap');
+                const heroBg = document.getElementById('weatherHeroBg');
+                const dayNightBadge = document.getElementById('modalDayNightBadge');
+
+                if (mTemp) mTemp.textContent = `${temp}°C`;
+                if (mDesc) mDesc.textContent = weatherInfo.desc;
+                if (mIcon) mIcon.innerHTML = `<i class="bi ${weatherInfo.iconClass}"></i>`;
+
+                if (isNight) {
+                    if (dayNightBadge) dayNightBadge.innerHTML = `<i class="bi bi-moon-stars-fill text-warning me-1"></i> Suasana Malam Hari`;
+                    if (heroBg) heroBg.style.background = 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)';
+                } else {
+                    if (dayNightBadge) dayNightBadge.innerHTML = `<i class="bi bi-sun-fill text-warning me-1"></i> Suasana Siang Hari`;
+                    if (heroBg) heroBg.style.background = 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)';
+                }
+
+                // 3. UPDATE METRIK LENGKAP
+                const elFeelsLike = document.getElementById('modalFeelsLike');
+                const elHumidity = document.getElementById('metricHumidity');
+                const elWind = document.getElementById('metricWind');
+                const elRainProb = document.getElementById('metricRainProb');
+                const elUV = document.getElementById('metricUV');
+
+                if (elFeelsLike) elFeelsLike.innerHTML = `<i class="bi bi-thermometer-half me-1 text-warning"></i>Sensasi Terasa: ${feelsLike}°C`;
+                if (elHumidity) elHumidity.textContent = `${humidity}%`;
+                if (elWind) elWind.textContent = `${windSpeed} km/j`;
+                if (elRainProb) elRainProb.textContent = `${rainProb}%`;
+                
+                let uvStatus = "Rendah";
+                if (uvVal >= 3 && uvVal <= 5) uvStatus = "Sedang";
+                else if (uvVal >= 6) uvStatus = "Tinggi";
+                if (elUV) elUV.textContent = `${uvVal} (${uvStatus})`;
+
+                // 4. RENDER PREDIKSI PER 3 JAM
+                renderHourly3hForecast(data);
+            }
+        })
+        .catch(err => {
+            clearTimeout(timeoutId);
+            console.error("Gagal mengambil data cuaca Sawangan:", err);
+
+            // FALLBACK VISUAL SAAT API FAIL (Supaya tidak berputar selamanya)
+            const container = document.getElementById('weather3hContainer');
+            if (container) {
+                container.innerHTML = `
+                    <div class="col-12 text-center py-4 text-danger">
+                        <i class="bi bi-exclamation-triangle-fill fs-3 mb-2 d-block"></i>
+                        <h6 class="fw-bold mb-1">Gagal Memuat Data Cuaca</h6>
+                        <small class="text-muted">Periksa koneksi internet atau matikan ekstensi AdBlocker pada browser, lalu muat ulang halaman.</small>
+                    </div>
+                `;
+            }
+
+            const mDesc = document.getElementById('modalCurrentDesc');
+            const wDesc = document.getElementById('weatherDesc');
+            if (mDesc) mDesc.textContent = "Offline";
+            if (wDesc) wDesc.textContent = "Offline";
+        });
+}
+
+        function renderHourly3hForecast(data) {
+            const container = document.getElementById('weather3hContainer');
+            if (!container || !data.hourly) return;
+
+            container.innerHTML = '';
+            const targetHours = [6, 9, 12, 15, 18, 21];
+            
+            const times = data.hourly.time;
+            const temps = data.hourly.temperature_2m;
+            const codes = data.hourly.weather_code;
+            const rainProbs = data.hourly.precipitation_probability || [];
+            const winds = data.hourly.wind_speed_10m || [];
+
+            for (let i = 0; i < 24; i++) {
+                const timeStr = times[i];
+                const hourNum = parseInt(timeStr.split('T')[1].split(':')[0], 10);
+
+                if (targetHours.includes(hourNum)) {
+                    const temp = Math.round(temps[i]);
+                    const code = codes[i];
+                    const rainP = rainProbs[i] || 0;
+                    const windS = Math.round(winds[i] || 0);
+                    
+                    // Jam 18:00 dan 21:00 dihitung sebagai suasana malam
+                    const isNightCard = (hourNum < 6 || hourNum >= 18);
+                    const weatherInfo = getWeatherDetails(code, isNightCard);
+
+                    // Styling Card Siang vs Malam dengan Teks Berkontras Tinggi
+                    const cardBgStyle = isNightCard 
+                        ? 'background: #0f172a; color: #ffffff; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 4px 12px rgba(0,0,0,0.2);' 
+                        : 'background: #f8fafc; color: #0f172a; border: 1px solid #e2e8f0;';
+
+                    // FIX 1: Badge jam malam pakai RGBA transparan absolut, jam siang pakai Dark
+                    const badgeHtml = isNightCard
+                        ? `<span class="badge rounded-pill px-2.5 py-1 small fw-bold mb-2" style="background-color: rgba(255,255,255,0.15); color: #ffffff;">${String(hourNum).padStart(2, '0')}:00 WIB</span>`
+                        : `<span class="badge bg-dark text-white rounded-pill px-2.5 py-1 small fw-bold mb-2">${String(hourNum).padStart(2, '0')}:00 WIB</span>`;
+
+                    // FIX 2: Warna teks metrik bawah ditegaskan (Hitam pekat untuk siang, Putih untuk malam)
+                    const metricTextColor = isNightCard ? '#ffffff' : '#0f172a';
+
+                    const col = document.createElement('div');
+                    col.className = 'col-6 col-md-4 col-lg-2';
+                    col.innerHTML = `
+                        <div class="p-3 rounded-4 text-center transition-all h-100" style="${cardBgStyle}">
+                            ${badgeHtml}
+                            <div class="fs-2 my-1">
+                                <i class="bi ${weatherInfo.iconClass}"></i>
+                            </div>
+                            <div class="fw-extrabold fs-4 mb-0">${temp}°C</div>
+                            <small class="d-block fw-bold ${isNightCard ? 'text-white-50' : 'text-muted'} text-truncate" style="font-size: 0.74rem;">${weatherInfo.desc}</small>
+                            
+                            <div class="mt-2 pt-2 border-top border-secondary border-opacity-25 d-flex justify-content-around align-items-center fw-bold" style="font-size: 0.76rem;">
+                                <span title="Peluang Hujan" style="color: ${metricTextColor};"><i class="bi bi-cloud-rain-fill text-primary"></i> ${rainP}%</span>
+                                <span title="Kecepatan Angin" style="color: ${metricTextColor};"><i class="bi bi-wind text-warning"></i> ${windS}k/h</span>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(col);
+                }
             }
         }
 
@@ -1150,20 +1656,11 @@
         }
 
         function confirmHapusGuru(id, nama) {
-            Swal.fire({
-                title: 'Hapus Akun Guru?',
-                html: `Apakah Anda yakin ingin menghapus akun guru <strong>${nama}</strong>? Akses login guru ini akan terhapus secara permanen.`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                cancelButtonColor: '#64748b',
-                confirmButtonText: 'Ya, Hapus!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = `/admin/hapus_guru/${id}`;
-                }
-            });
+            if (typeof showCustomToast === 'function') {
+                showCustomToast('warning', 'Konfirmasi Hapus', `Apakah Anda yakin ingin menghapus akun guru ${nama}? <br><a href="/admin/hapus_guru/${id}" class="btn btn-danger btn-sm rounded-pill mt-2 fw-bold text-white text-decoration-none">Ya, Hapus Permanen</a>`);
+            } else if (confirm(`Apakah Anda yakin ingin menghapus akun guru ${nama}?`)) {
+                window.location.href = `/admin/hapus_guru/${id}`;
+            }
         }
     </script>
 </body>
