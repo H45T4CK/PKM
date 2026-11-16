@@ -5,6 +5,7 @@ from app import db
 
 auth_bp = Blueprint('auth', __name__)
 
+
 @auth_bp.route('/')
 def index():
     if session.get('role') == 'admin':
@@ -14,6 +15,7 @@ def index():
     elif session.get('role') == 'ortu':
         return redirect(url_for('ortu.dashboard'))
     return redirect(url_for('auth.login'))
+
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -40,13 +42,15 @@ def login():
             session['role'] = user.role
             session['kelas'] = user.kelas or '-'
 
+            flash(f'Ahlan wa Sahlan, {session["user"]}!', 'success')
+
             if user.role == 'admin':
                 return redirect(url_for('admin.dashboard_admin'))
             elif user.role == 'guru':
                 return redirect(url_for('guru.dashboard'))
             elif user.role == 'ortu':
                 siswa = Siswa.query.filter(
-                    (Siswa.user_id_ortu == user.id) | 
+                    (Siswa.user_id_ortu == user.id) |
                     (db.func.lower(Siswa.nama) == user.username.lower())
                 ).first()
                 if siswa:
@@ -56,7 +60,7 @@ def login():
 
         # 2. Cek apakah login menggunakan NISN atau Nama Siswa untuk akun Orang Tua / Wali
         siswa = Siswa.query.filter(
-            (db.func.lower(Siswa.id) == username.lower()) | 
+            (db.func.lower(Siswa.id) == username.lower()) |
             (db.func.lower(Siswa.nama) == username.lower())
         ).first()
 
@@ -66,7 +70,7 @@ def login():
                 ortu = User.query.get(siswa.user_id_ortu)
             if not ortu:
                 ortu = User.query.filter(
-                    (db.func.lower(User.username) == siswa.nama.lower()) & 
+                    (db.func.lower(User.username) == siswa.nama.lower()) &
                     (User.role == 'ortu')
                 ).first()
 
@@ -97,12 +101,16 @@ def login():
                 session['role'] = 'ortu'
                 session['kelas'] = siswa.kelas
                 session['siswa_id'] = siswa.id
+
+                flash(f'Ahlan wa Sahlan, {session["user"]}!', 'success')
                 return redirect(url_for('ortu.dashboard'))
 
         flash('Username atau Password yang Anda masukkan salah!', 'danger')
     return render_template('auth/login.html')
 
+
 @auth_bp.route('/logout')
 def logout():
     session.clear()
+    flash('Anda telah berhasil keluar dari sistem.', 'info')
     return redirect(url_for('auth.login'))

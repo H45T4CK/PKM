@@ -1,4 +1,4 @@
-<!-- Custom Modern Glassmorphic Toast Notification System -->
+<!-- Custom Modern Glassmorphic Toast & Confirm Dialog System -->
 <style>
     /* Container Toast di Pojok Kanan Atas */
     #toastContainerCustom {
@@ -17,14 +17,14 @@
     /* Kartu Toast Modern */
     .toast-card-modern {
         pointer-events: auto;
-        background: rgba(15, 23, 42, 0.92);
+        background: rgba(15, 23, 42, 0.94);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.14);
         border-radius: 16px;
         padding: 16px 18px;
         color: #ffffff;
-        box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
+        box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.05);
         display: flex;
         align-items: flex-start;
         gap: 14px;
@@ -33,6 +33,7 @@
         transform: translateX(120%);
         opacity: 0;
         transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+        font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     }
 
     .toast-card-modern.show {
@@ -95,7 +96,7 @@
     }
     .toast-message-text {
         font-size: 0.82rem;
-        color: #94a3b8;
+        color: #cbd5e1;
         line-height: 1.45;
     }
 
@@ -138,24 +139,155 @@
         from { transform: scaleX(1); }
         to { transform: scaleX(0); }
     }
+
+    /* Overlay & Modal Konfirmasi Glassmorphic */
+    .custom-confirm-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 100000;
+        background: rgba(15, 23, 42, 0.68);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        opacity: 0;
+        transition: opacity 0.25s ease;
+        font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    }
+    .custom-confirm-backdrop.show {
+        opacity: 1;
+    }
+
+    .custom-confirm-card {
+        background: rgba(15, 23, 42, 0.96);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 22px;
+        padding: 28px 26px 24px;
+        max-width: 410px;
+        width: 100%;
+        color: #f8fafc;
+        text-align: center;
+        box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.55);
+        transform: scale(0.92) translateY(10px);
+        transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .custom-confirm-backdrop.show .custom-confirm-card {
+        transform: scale(1) translateY(0);
+    }
+
+    .custom-confirm-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        margin: 0 auto 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.65rem;
+        background: rgba(244, 63, 94, 0.16);
+        color: #fb7185;
+        border: 1px solid rgba(244, 63, 94, 0.32);
+    }
+    .custom-confirm-icon.warning {
+        background: rgba(245, 158, 11, 0.16);
+        color: #fbbf24;
+        border-color: rgba(245, 158, 11, 0.32);
+    }
+    .custom-confirm-icon.info {
+        background: rgba(59, 130, 246, 0.16);
+        color: #60a5fa;
+        border-color: rgba(59, 130, 246, 0.32);
+    }
+
+    .custom-confirm-title {
+        font-weight: 700;
+        font-size: 1.15rem;
+        color: #ffffff;
+        margin: 0 0 8px 0;
+    }
+
+    .custom-confirm-msg {
+        font-size: 0.86rem;
+        color: #cbd5e1;
+        line-height: 1.55;
+        margin: 0 0 22px 0;
+    }
+
+    .custom-confirm-actions {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .custom-confirm-btn {
+        border-radius: 50rem;
+        padding: 9px 22px;
+        font-size: 0.84rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: 1px solid transparent;
+    }
+
+    .custom-confirm-btn-cancel {
+        background: rgba(255, 255, 255, 0.08);
+        color: #e2e8f0;
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+    .custom-confirm-btn-cancel:hover {
+        background: rgba(255, 255, 255, 0.16);
+        color: #ffffff;
+    }
+
+    .custom-confirm-btn-danger {
+        background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+        color: #ffffff;
+        box-shadow: 0 6px 16px rgba(225, 29, 72, 0.35);
+    }
+    .custom-confirm-btn-danger:hover {
+        filter: brightness(1.08);
+        transform: translateY(-1px);
+    }
+
+    .custom-confirm-btn-warning {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        color: #0f172a;
+        box-shadow: 0 6px 16px rgba(217, 119, 6, 0.35);
+    }
+    .custom-confirm-btn-warning:hover {
+        filter: brightness(1.06);
+        transform: translateY(-1px);
+    }
+
+    .custom-confirm-btn-info {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: #ffffff;
+        box-shadow: 0 6px 16px rgba(5, 150, 105, 0.35);
+    }
+    .custom-confirm-btn-info:hover {
+        filter: brightness(1.08);
+        transform: translateY(-1px);
+    }
 </style>
 
 <!-- Container Penampung Toast -->
 <div id="toastContainerCustom"></div>
 
 <script>
-    // Fungsi Utama Memunculkan Custom Toast
+    // 1. Fungsi Utama Memunculkan Custom Glassmorphic Toast
     function showCustomToast(type, title, message, duration = 4500) {
         const container = document.getElementById('toastContainerCustom');
         if (!container) return;
 
-        // Pemilihan Ikon Bootstrap
         let iconClass = 'bi-info-circle-fill';
         if (type === 'success') iconClass = 'bi-check-circle-fill';
         else if (type === 'danger' || type === 'error') iconClass = 'bi-exclamation-triangle-fill';
         else if (type === 'warning') iconClass = 'bi-exclamation-circle-fill';
 
-        // Elemen Toast
         const toast = document.createElement('div');
         toast.className = `toast-card-modern ${type}`;
 
@@ -167,23 +299,21 @@
                 <div class="toast-title-text">${title}</div>
                 <div class="toast-message-text">${message}</div>
             </div>
-            <button type="button" class="toast-close-btn" onclick="dismissCustomToast(this.parentElement)">
+            <button type="button" class="toast-close-btn" aria-label="Tutup">
                 <i class="bi bi-x-lg"></i>
             </button>
             <div class="toast-progress-bar" style="animation: toastProgressAnim ${duration}ms linear forwards;"></div>
         `;
 
+        toast.querySelector('.toast-close-btn').addEventListener('click', () => dismissCustomToast(toast));
         container.appendChild(toast);
 
-        // Slide in
-        setTimeout(() => toast.classList.add('show'), 50);
+        requestAnimationFrame(() => {
+            setTimeout(() => toast.classList.add('show'), 20);
+        });
 
-        // Auto dismiss setelah durasi selesai
-        const timer = setTimeout(() => {
-            dismissCustomToast(toast);
-        }, duration);
+        let timer = setTimeout(() => dismissCustomToast(toast), duration);
 
-        // Pause progress & timer saat di-hover mouse
         toast.addEventListener('mouseenter', () => {
             const pb = toast.querySelector('.toast-progress-bar');
             if (pb) pb.style.animationPlayState = 'paused';
@@ -191,7 +321,7 @@
         });
 
         toast.addEventListener('mouseleave', () => {
-            dismissCustomToast(toast);
+            timer = setTimeout(() => dismissCustomToast(toast), 1800);
         });
     }
 
@@ -204,21 +334,144 @@
         }, 400);
     }
 
-    // Eksekusi Pesan Flash dari Flask Backend
+    // 2. Fungsi Dialog Konfirmasi Glassmorphic Global
+    function showCustomConfirm({
+        title = 'Konfirmasi Tindakan',
+        message = 'Apakah Anda yakin ingin melanjutkan?',
+        confirmText = 'Ya, Lanjutkan',
+        cancelText = 'Batal',
+        type = 'danger',
+        onConfirm = null
+    }) {
+        const backdrop = document.createElement('div');
+        backdrop.className = 'custom-confirm-backdrop';
+
+        let iconClass = 'bi-trash3-fill';
+        let iconVariant = '';
+        let btnVariant = 'custom-confirm-btn-danger';
+
+        if (type === 'warning') {
+            iconClass = 'bi-exclamation-circle-fill';
+            iconVariant = 'warning';
+            btnVariant = 'custom-confirm-btn-warning';
+        } else if (type === 'info' || type === 'success') {
+            iconClass = 'bi-question-circle-fill';
+            iconVariant = 'info';
+            btnVariant = 'custom-confirm-btn-info';
+        }
+
+        backdrop.innerHTML = `
+            <div class="custom-confirm-card" role="dialog" aria-modal="true">
+                <div class="custom-confirm-icon ${iconVariant}">
+                    <i class="bi ${iconClass}"></i>
+                </div>
+                <h5 class="custom-confirm-title">${title}</h5>
+                <p class="custom-confirm-msg">${message}</p>
+                <div class="custom-confirm-actions">
+                    <button type="button" class="custom-confirm-btn custom-confirm-btn-cancel" id="btnCancelCustomConfirm">
+                        ${cancelText}
+                    </button>
+                    <button type="button" class="custom-confirm-btn ${btnVariant}" id="btnOkCustomConfirm">
+                        ${confirmText}
+                    </button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(backdrop);
+        requestAnimationFrame(() => backdrop.classList.add('show'));
+
+        const escHandler = (e) => {
+            if (e.key === 'Escape') closeModal();
+        };
+
+        const closeModal = () => {
+            document.removeEventListener('keydown', escHandler);
+            backdrop.classList.remove('show');
+            setTimeout(() => {
+                if (backdrop.parentElement) backdrop.parentElement.removeChild(backdrop);
+            }, 250);
+        };
+
+        document.addEventListener('keydown', escHandler);
+
+        backdrop.querySelector('#btnCancelCustomConfirm').addEventListener('click', closeModal);
+        backdrop.addEventListener('click', (e) => {
+            if (e.target === backdrop) closeModal();
+        });
+        backdrop.querySelector('#btnOkCustomConfirm').addEventListener('click', () => {
+            closeModal();
+            if (typeof onConfirm === 'function') onConfirm();
+        });
+    }
+
+    // 3. Handler Otomatis untuk atribut data-confirm pada <a> / <button> maupun <form>
+    document.addEventListener('click', function (e) {
+        const trigger = e.target.closest('[data-confirm]');
+        if (!trigger || trigger.tagName === 'FORM') return;
+        if (trigger.type === 'submit' && trigger.form) return;
+
+        e.preventDefault();
+        const title = trigger.getAttribute('data-confirm-title') || 'Konfirmasi Tindakan';
+        const message = trigger.getAttribute('data-confirm');
+        const confirmText = trigger.getAttribute('data-confirm-ok') || 'Ya, Lanjutkan';
+        const cancelText = trigger.getAttribute('data-confirm-cancel') || 'Batal';
+        const type = trigger.getAttribute('data-confirm-type') || 'danger';
+        const href = trigger.getAttribute('href');
+
+        showCustomConfirm({
+            title,
+            message,
+            confirmText,
+            cancelText,
+            type,
+            onConfirm: () => {
+                if (href && href !== '#') {
+                    window.location.href = href;
+                }
+            }
+        });
+    });
+
+    document.addEventListener('submit', function (e) {
+        const form = e.target;
+        const submitter = e.submitter;
+        const message = form.getAttribute('data-confirm') || (submitter && submitter.getAttribute('data-confirm'));
+        if (!message) return;
+
+        e.preventDefault();
+        const title = form.getAttribute('data-confirm-title') || (submitter && submitter.getAttribute('data-confirm-title')) || 'Konfirmasi Tindakan';
+        const confirmText = form.getAttribute('data-confirm-ok') || (submitter && submitter.getAttribute('data-confirm-ok')) || 'Ya, Lanjutkan';
+        const cancelText = form.getAttribute('data-confirm-cancel') || (submitter && submitter.getAttribute('data-confirm-cancel')) || 'Batal';
+        const type = form.getAttribute('data-confirm-type') || (submitter && submitter.getAttribute('data-confirm-type')) || 'danger';
+
+        showCustomConfirm({
+            title,
+            message,
+            confirmText,
+            cancelText,
+            type,
+            onConfirm: () => {
+                HTMLFormElement.prototype.submit.call(form);
+            }
+        });
+    });
+
+    // 4. Eksekusi Pesan Flash dari Flask Backend (Aman terhadap tanda petik via tojson)
     document.addEventListener("DOMContentLoaded", function () {
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
                     (function() {
-                        const cat = '{{ category }}';
+                        const cat = {{ category|tojson }};
+                        const msg = {{ message|tojson }};
                         let title = 'Informasi Sistem';
                         if (cat === 'success') title = 'Berhasil!';
                         else if (cat === 'danger' || cat === 'error') title = 'Terjadi Kesalahan!';
                         else if (cat === 'warning') title = 'Peringatan!';
 
-                        // Beri jeda sedikit jika ada multiple messages
                         setTimeout(() => {
-                            showCustomToast(cat, title, '{{ message|safe }}');
+                            showCustomToast(cat, title, msg);
                         }, {{ loop.index0 * 250 }});
                     })();
                 {% endfor %}

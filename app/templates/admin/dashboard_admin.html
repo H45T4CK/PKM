@@ -20,18 +20,18 @@
             --primary-dark: #065f46;
             --primary-light: #10b981;
             --primary-soft: #ecfdf5;
-            --accent: #3b82f6;
-            --warning-soft: #fffbeb;
-            --danger-soft: #fef2f2;
+            --slate-900: #0f172a;
+            --slate-800: #1e293b;
+            --slate-700: #334155;
             --bg-body: #f8fafc;
             --card-bg: #ffffff;
             --border-subtle: #e2e8f0;
             --text-main: #0f172a;
             --text-muted: #64748b;
-            --radius-lg: 20px;
+            --radius-lg: 22px;
             --radius-md: 14px;
             --shadow-subtle: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
-            --shadow-hover: 0 12px 32px -4px rgba(15, 23, 42, 0.12);
+            --shadow-hover: 0 12px 32px -4px rgba(15, 23, 42, 0.11);
         }
 
         * { box-sizing: border-box; }
@@ -56,7 +56,7 @@
         .delay-4 { animation-delay: 0.24s; }
 
         .navbar-custom {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 65%, #334155 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 65%, #064e3b 100%);
             box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.35);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.12);
@@ -91,7 +91,7 @@
             opacity: 1;
         }
         
-        /* Modifikasi Khusus Widget Mobile */
+        /* Widget Mobile */
         .widget-mobile {
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             padding: 10px 14px;
@@ -101,13 +101,53 @@
         }
 
         .hero-banner {
-            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 60%, #ecfdf5 100%);
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-lg);
-            padding: 24px 28px;
+            padding: 26px 28px;
             box-shadow: var(--shadow-subtle);
             position: relative;
             overflow: hidden;
+        }
+
+        /* Tombol Toolbar Seragam & Rapi */
+        .btn-toolbar-clean {
+            height: 40px;
+            padding: 0 16px;
+            border-radius: 12px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            white-space: nowrap;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-toolbar-clean:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-ta-setting {
+            background: #fffbeb;
+            color: #92400e;
+            border: 1.5px solid #fcd34d;
+            border-radius: 14px;
+            padding: 10px 18px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.12);
+            transition: all 0.2s ease;
+        }
+        .btn-ta-setting:hover {
+            background: #fef3c7;
+            color: #78350f;
+            border-color: #f59e0b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.2);
         }
 
         .card-modern {
@@ -131,35 +171,47 @@
 
         .kpi-icon-wrap {
             width: 54px; height: 54px; border-radius: var(--radius-md);
-            display: flex; align-items: center; justify-content: center; font-size: 1.6rem;
+            display: flex; align-items: center; justify-content: center; font-size: 1.55rem;
+            flex-shrink: 0;
         }
 
-        .nav-tabs-modern {
-            border-bottom: 2px solid #e2e8f0;
-            gap: 8px;
+        /* Modern Pill Tabs */
+        .nav-pills-modern {
+            background: #ffffff;
+            padding: 6px;
+            border-radius: 16px;
+            border: 1px solid var(--border-subtle);
+            display: inline-flex;
+            gap: 6px;
+            box-shadow: var(--shadow-subtle);
         }
-        .nav-tabs-modern .nav-link {
+        .nav-pills-modern .nav-link {
             border: none;
             color: var(--text-muted);
             font-weight: 700;
-            padding: 12px 20px;
-            border-radius: 12px 12px 0 0;
+            font-size: 0.88rem;
+            padding: 10px 20px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             gap: 8px;
             transition: all 0.2s ease;
         }
-        .nav-tabs-modern .nav-link.active {
-            color: #0f172a;
-            background: #ffffff;
-            border-bottom: 3px solid #0f172a;
+        .nav-pills-modern .nav-link:hover {
+            color: var(--slate-900);
+            background: #f1f5f9;
+        }
+        .nav-pills-modern .nav-link.active {
+            color: #ffffff;
+            background: var(--slate-900);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.22);
         }
 
         .table-custom { margin-bottom: 0; }
         .table-custom thead th {
             background-color: #f8fafc;
             color: var(--text-muted);
-            font-size: 0.76rem;
+            font-size: 0.74rem;
             text-transform: uppercase;
             letter-spacing: 0.6px;
             font-weight: 700;
@@ -168,36 +220,43 @@
             white-space: nowrap;
         }
         .table-custom tbody td {
-            padding: 16px 18px;
+            padding: 15px 18px;
             vertical-align: middle;
             border-bottom: 1px solid #f1f5f9;
             font-size: 0.9rem;
         }
+        .table-custom tbody tr:hover {
+            background-color: #f8fafc;
+        }
 
         .btn-act {
-            border-radius: 10px; font-weight: 600; font-size: 0.82rem; padding: 6px 12px;
+            border-radius: 10px; font-weight: 600; font-size: 0.8rem; padding: 6px 12px;
             display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s ease;
         }
-        .btn-act:hover { transform: translateY(-2px); }
+        .btn-act:hover { transform: translateY(-1px); }
 
         .filter-pill {
-            padding: 7px 16px; font-size: 0.84rem; font-weight: 600; border-radius: 50rem;
+            padding: 6px 14px; font-size: 0.8rem; font-weight: 600; border-radius: 50rem;
             border: 1px solid var(--border-subtle); background: #ffffff; color: var(--text-muted);
             cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px;
         }
+        .filter-pill:hover {
+            background: #f1f5f9;
+            color: var(--slate-900);
+        }
         .filter-pill.active {
             background: #0f172a; color: #ffffff; border-color: #0f172a;
-            box-shadow: 0 3px 12px rgba(15, 23, 42, 0.25);
+            box-shadow: 0 3px 10px rgba(15, 23, 42, 0.2);
         }
 
         .avatar-circle {
-            width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center;
-            justify-content: center; font-weight: 700; font-size: 0.95rem; color: #fff;
+            width: 42px; height: 42px; border-radius: 13px; display: flex; align-items: center;
+            justify-content: center; font-weight: 800; font-size: 0.95rem; color: #fff;
             background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
             box-shadow: 0 4px 10px rgba(15, 23, 42, 0.15); flex-shrink: 0;
         }
 
-        .modal-content { border-radius: 20px; border: 1px solid rgba(226, 232, 240, 0.8); }
+        .modal-content { border-radius: 22px; border: 1px solid rgba(226, 232, 240, 0.8); }
 
         .class-badge-btn {
             border: 1px solid #cbd5e1;
@@ -212,7 +271,8 @@
         }
         .class-badge-btn:hover { background: #e2e8f0; }
         .class-badge-btn.selected {
-            background: #0f172a; color: #ffffff; border-color: #0f172a;
+            background: #059669; color: #ffffff; border-color: #059669;
+            box-shadow: 0 2px 6px rgba(5, 150, 105, 0.3);
         }
 
         .calendar-grid {
@@ -257,16 +317,14 @@
                 </div>
             </a>
 
-            <!-- WIDGET DESKTOP DENGAN CHEVRON PANAH KEBAWAH -->
+            <!-- WIDGET DESKTOP -->
             <div class="d-none d-xl-flex align-items-center gap-2">
-                <!-- Widget Jam (Klik Kalender) -->
                 <div class="widget-chip d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalKalender" title="Klik untuk membuka Kalender Interaktif">
                     <i class="bi bi-clock-history text-warning"></i>
                     <span id="liveClock" class="fw-semibold">Memuat waktu...</span>
                     <i class="bi bi-chevron-down chevron-arrow text-warning ms-1"></i>
                 </div>
                 
-                <!-- Widget Cuaca (Klik Detail 3 Jam) -->
                 <div class="widget-chip d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalDetailCuaca" title="Klik untuk melihat Rincian Cuaca 3 Jam">
                     <span id="weatherIcon"><i class="bi bi-sun-fill text-warning"></i></span>
                     <span id="weatherTemp" class="fw-bold">--°C</span>
@@ -280,12 +338,18 @@
                 <div class="d-none d-sm-block text-end text-white">
                     <div class="fw-bold fs-6 lh-1">{{ session.get('user', 'Administrator') }}</div>
                     <div class="d-flex align-items-center justify-content-end gap-1 mt-1">
-                        <span class="badge bg-danger bg-opacity-75 text-white" style="font-size: 0.65rem;">
+                        <span class="badge bg-success text-white" style="font-size: 0.65rem;">
                             <i class="bi bi-shield-lock-fill me-1"></i>Super Admin
                         </span>
                     </div>
                 </div>
-                <a href="/logout" class="btn btn-light btn-sm rounded-pill px-3 py-2 fw-bold text-dark shadow-sm d-flex align-items-center gap-2" style="font-size: 0.82rem;">
+                <a href="/logout"
+                   class="btn btn-light btn-sm rounded-pill px-3 py-2 fw-bold text-dark shadow-sm d-flex align-items-center gap-2"
+                   style="font-size: 0.82rem;"
+                   data-confirm="Apakah Anda yakin ingin keluar dari Panel Administrator SIMA SDIT?"
+                   data-confirm-title="Keluar dari Sistem?"
+                   data-confirm-ok="Ya, Keluar"
+                   data-confirm-type="warning">
                     <i class="bi bi-box-arrow-right"></i> <span class="d-none d-md-inline">Keluar</span>
                 </a>
             </div>
@@ -295,19 +359,17 @@
     <!-- MAIN CONTAINER -->
     <div class="container-fluid px-3 px-lg-4 mb-5">
 
-        <!-- IMPORT COMPONENT NOTIFIKASI TOAST CUSTOM -->
+        <!-- COMPONENT NOTIFIKASI TOAST & CONFIRM DIALOG CUSTOM -->
         {% include 'components/alerts.html' ignore missing %}
 
-        <!-- WIDGET KHUSUS TAMPILAN HP / TABLET (Tampil dengan panah interaktif) -->
+        <!-- WIDGET KHUSUS TAMPILAN HP / TABLET -->
         <div class="d-flex d-xl-none gap-2 mb-4 anim-fade-in">
-            <!-- Jam Mobile -->
             <div class="widget-chip widget-mobile flex-fill d-flex justify-content-center align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalKalender">
                 <i class="bi bi-clock-history text-warning" style="font-size: 0.95rem;"></i>
                 <span id="liveClockMobile" class="fw-bold text-white" style="font-size: 0.78rem;">--:--</span>
                 <i class="bi bi-chevron-down text-white-50 chevron-arrow" style="font-size: 0.7rem; opacity: 0.9;"></i>
             </div>
             
-            <!-- Cuaca Mobile -->
             <div class="widget-chip widget-mobile flex-fill d-flex justify-content-center align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalDetailCuaca">
                 <span id="weatherIconMobile" style="font-size: 0.95rem;"><i class="bi bi-sun-fill text-warning"></i></span>
                 <div class="d-flex align-items-center gap-1">
@@ -318,42 +380,35 @@
             </div>
         </div>
 
-        <!-- HERO BANNER ADMIN -->
+        <!-- HERO BANNER ADMIN (BERSIH & FOKUS PADA KONTROL GLOBAL) -->
         <div class="hero-banner mb-4 anim-fade-in">
             <div class="row align-items-center g-3">
-                <div class="col-12 col-lg-7">
-                    <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
+                <div class="col-12 col-lg-8">
+                    <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
                         <span class="badge bg-dark text-white fw-bold px-3 py-1 rounded-pill">
-                            <i class="bi bi-shield-check me-1"></i> Mode Kontrol Administrator
+                            <i class="bi bi-shield-check me-1"></i> Pusat Kontrol Administrator
                         </span>
-                        <span class="badge bg-success bg-opacity-10 text-success fw-bold px-3 py-1 rounded-pill">
-                            • {{ tahun_ajaran_full or 'Tahun Ajaran ' ~ (tahun_ajaran or '2026/2027') ~ ' – Semester ' ~ (semester or 'Ganjil') }}
-                        </span>
-                        <!-- BADGE KET. METODE UMMI AMAN & HIGH CONTRAST -->
                         <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 fw-bold px-3 py-1 rounded-pill">
-                            <i class="bi bi-journal-bookmark-fill me-1"></i> Kurikulum Al-Qur'an: Metode Ummi
+                            <i class="bi bi-calendar-check me-1"></i> {{ tahun_ajaran_full or 'Tahun Ajaran ' ~ (tahun_ajaran or '2026/2027') ~ ' – Semester ' ~ (semester or 'Ganjil') }}
+                        </span>
+                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 fw-bold px-3 py-1 rounded-pill">
+                            <i class="bi bi-journal-bookmark-fill me-1"></i> Kurikulum Metode Ummi
                         </span>
                     </div>
-                    <h3 class="fw-bold text-dark mb-1">Ahlan wa Sahlan, Administrator SIMA SDIT! 🛠️</h3>
+                    <h3 class="fw-extrabold text-dark mb-1">Ahlan wa Sahlan, Administrator SIMA SDIT!</h3>
                     <p class="text-muted mb-0 small">
-                        Kelola data keanggotaan Guru SDIT, edit nama/username murid & akun wali, serta atur Tahun Ajaran aktif.
+                        Kelola akun Guru & Musyrif, pantau predikat capaian Al-Qur'an seluruh murid, serta atur Tahun Ajaran aktif sekolah.
                     </p>
                 </div>
-                <div class="col-12 col-lg-5 text-lg-end">
-                    <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
-                        <button type="button" class="btn btn-warning btn-sm rounded-pill px-3 fw-bold text-dark shadow-sm" data-bs-toggle="modal" data-bs-target="#modalSettingTA">
-                            <i class="bi bi-gear-fill me-1"></i> ⚙️ TA {{ tahun_ajaran or '2026/2027' }} ({{ semester or 'Ganjil' }})
-                        </button>
-                        <a href="{{ url_for('admin.template_guru') }}" class="btn btn-outline-success btn-sm rounded-pill px-3 fw-bold shadow-sm">
-                            <i class="bi bi-file-earmark-arrow-down-fill me-1"></i> Template Excel Guru
-                        </a>
-                        <button type="button" class="btn btn-outline-dark btn-sm rounded-pill px-3 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalImportGuru">
-                            <i class="bi bi-file-earmark-excel me-1"></i> Import Excel Guru
-                        </button>
-                        <button type="button" class="btn btn-dark btn-sm rounded-pill px-3 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalTambahGuru">
-                            <i class="bi bi-person-plus-fill me-1"></i> + Tambah Guru Baru
-                        </button>
-                    </div>
+                <div class="col-12 col-lg-4 text-lg-end">
+                    <button type="button" class="btn btn-ta-setting" data-bs-toggle="modal" data-bs-target="#modalSettingTA">
+                        <i class="bi bi-gear-fill fs-5 text-warning"></i>
+                        <div class="text-start lh-sm">
+                            <div class="small text-uppercase opacity-75" style="font-size: 0.65rem; letter-spacing: 0.4px;">Pengaturan Periode</div>
+                            <div>TA {{ tahun_ajaran or '2026/2027' }} ({{ semester or 'Ganjil' }})</div>
+                        </div>
+                        <i class="bi bi-chevron-right ms-1 opacity-75"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -361,7 +416,7 @@
         <!-- STATISTIK / KPI METRICS ADMIN -->
         {% set total_guru = guru_list|length if guru_list else 0 %}
         {% set total_siswa = siswa_list|length if siswa_list else 0 %}
-        {% set ns_admin = namespace(guru_aktif=0, siswa_aktif=0, kelas_set=[]) %}
+        {% set ns_admin = namespace(guru_aktif=0, siswa_aktif=0, siswa_lulus=0, kelas_set=[]) %}
         
         {% for g in guru_list %}
             {% if g.status == 'Aktif' or g.status is not defined or g.status == True %}
@@ -381,6 +436,12 @@
             {% if s.status_clean == 'Aktif' %}
                 {% set ns_admin.siswa_aktif = ns_admin.siswa_aktif + 1 %}
             {% endif %}
+            {% if s.status_kelulusan_rata_rata == 'Lulus' %}
+                {% set ns_admin.siswa_lulus = ns_admin.siswa_lulus + 1 %}
+            {% endif %}
+            {% if s.kelas and s.kelas != '-' and s.kelas.strip() not in ns_admin.kelas_set %}
+                {% set _ = ns_admin.kelas_set.append(s.kelas.strip()) %}
+            {% endif %}
         {% endfor %}
 
         <div class="row g-3 g-xl-4 mb-4">
@@ -390,7 +451,7 @@
                         <div>
                             <span class="text-muted fw-bold text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.5px;">Total Guru / Musyrif</span>
                             <div class="d-flex align-items-baseline gap-2 mt-1">
-                                <h2 class="fw-bold mb-0 text-dark">{{ total_guru }}</h2>
+                                <h2 class="fw-extrabold mb-0 text-dark">{{ total_guru }}</h2>
                                 <span class="badge bg-dark text-white rounded-pill fw-semibold small">{{ ns_admin.guru_aktif }} Aktif</span>
                             </div>
                             <small class="text-muted" style="font-size: 0.75rem;"><i class="bi bi-people-fill text-dark me-1"></i>Staf pengajar terdaftar</small>
@@ -408,13 +469,13 @@
                         <div>
                             <span class="text-muted fw-bold text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.5px;">Total Seluruh Murid</span>
                             <div class="d-flex align-items-baseline gap-2 mt-1">
-                                <h2 class="fw-bold mb-0 text-dark">{{ total_siswa }}</h2>
+                                <h2 class="fw-extrabold mb-0 text-dark">{{ total_siswa }}</h2>
                                 <span class="badge bg-success bg-opacity-10 text-success rounded-pill fw-semibold small">{{ ns_admin.siswa_aktif }} Aktif</span>
                             </div>
-                            <small class="text-muted" style="font-size: 0.75rem;"><i class="bi bi-mortarboard-fill text-success me-1"></i>Data murid semua kelas</small>
+                            <small class="text-muted" style="font-size: 0.75rem;"><i class="bi bi-award-fill text-success me-1"></i>{{ ns_admin.siswa_lulus }} murid berpredikat Lulus</small>
                         </div>
                         <div class="kpi-icon-wrap bg-success bg-opacity-10 text-success">
-                            <i class="bi bi-mortarboard"></i>
+                            <i class="bi bi-mortarboard-fill"></i>
                         </div>
                     </div>
                 </div>
@@ -424,12 +485,12 @@
                 <div class="card-modern kpi-card kpi-blue h-100">
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
-                            <span class="text-muted fw-bold text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.5px;">Rombel / Kelas Binaan</span>
+                            <span class="text-muted fw-bold text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.5px;">Rombel / Kelas Aktif</span>
                             <div class="d-flex align-items-baseline gap-2 mt-1">
-                                <h2 class="fw-bold mb-0 text-dark">{{ ns_admin.kelas_set|length }}</h2>
-                                <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill fw-semibold small">Kelas</span>
+                                <h2 class="fw-extrabold mb-0 text-dark">{{ ns_admin.kelas_set|length }}</h2>
+                                <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill fw-semibold small">Rombel</span>
                             </div>
-                            <small class="text-muted" style="font-size: 0.75rem;"><i class="bi bi-building text-primary me-1"></i>Total rombel aktif</small>
+                            <small class="text-muted" style="font-size: 0.75rem;"><i class="bi bi-building text-primary me-1"></i>Kelas 1 hingga Kelas 6</small>
                         </div>
                         <div class="kpi-icon-wrap bg-primary bg-opacity-10 text-primary">
                             <i class="bi bi-door-open-fill"></i>
@@ -444,10 +505,10 @@
                         <div>
                             <span class="text-muted fw-bold text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.5px;">Tahun Ajaran Aktif</span>
                             <div class="d-flex align-items-baseline gap-2 mt-1">
-                                <h5 class="fw-bold mb-0 text-dark">{{ tahun_ajaran or '2026/2027' }}</h5>
-                                <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 rounded-pill fw-semibold small">{{ semester or 'Ganjil' }}</span>
+                                <h5 class="fw-extrabold mb-0 text-dark">{{ tahun_ajaran or '2026/2027' }}</h5>
+                                <span class="badge bg-warning bg-opacity-15 text-dark border border-warning border-opacity-50 rounded-pill fw-bold small">{{ semester or 'Ganjil' }}</span>
                             </div>
-                            <small class="text-muted" style="font-size: 0.75rem;"><i class="bi bi-gear-fill text-warning me-1"></i>Admin kontrol TA manual</small>
+                            <small class="text-muted" style="font-size: 0.75rem;"><i class="bi bi-sliders text-warning me-1"></i>Kontrol periode akademik</small>
                         </div>
                         <div class="kpi-icon-wrap bg-warning bg-opacity-10 text-warning">
                             <i class="bi bi-calendar-range-fill"></i>
@@ -458,18 +519,20 @@
         </div>
 
         <!-- TAB NAVIGATION (GURU & MURID) -->
-        <ul class="nav nav-tabs nav-tabs-modern mb-3" id="adminMainTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="tab-guru-btn" data-bs-toggle="tab" data-bs-target="#tab-guru-pane" type="button" role="tab">
-                    <i class="bi bi-person-gear fs-5"></i> Data Pengguna & Guru SDIT ({{ total_guru }})
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="tab-siswa-btn" data-bs-toggle="tab" data-bs-target="#tab-siswa-pane" type="button" role="tab">
-                    <i class="bi bi-mortarboard-fill fs-5 text-success"></i> Monitoring & Kelola Murid ({{ total_siswa }})
-                </button>
-            </li>
-        </ul>
+        <div class="mb-3 anim-fade-in delay-2">
+            <ul class="nav nav-pills nav-pills-modern" id="adminMainTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="tab-guru-btn" data-bs-toggle="tab" data-bs-target="#tab-guru-pane" type="button" role="tab">
+                        <i class="bi bi-person-gear fs-5"></i> Data Pengguna & Guru ({{ total_guru }})
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="tab-siswa-btn" data-bs-toggle="tab" data-bs-target="#tab-siswa-pane" type="button" role="tab">
+                        <i class="bi bi-mortarboard-fill fs-5"></i> Monitoring & Kelola Murid ({{ total_siswa }})
+                    </button>
+                </li>
+            </ul>
+        </div>
 
         <div class="tab-content" id="adminTabContent">
             
@@ -477,46 +540,59 @@
             <div class="tab-pane fade show active" id="tab-guru-pane" role="tabpanel">
                 <div class="card-modern overflow-hidden">
                     <div class="p-4 border-bottom bg-white">
-                        <div class="row align-items-center g-3">
-                            <div class="col-12 col-md-5">
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="bg-dark text-white p-2 rounded-3">
-                                        <i class="bi bi-person-badge fs-5"></i>
-                                    </div>
-                                    <div>
-                                        <h5 class="fw-bold mb-0 text-dark">Kelola Akun Guru & Musyrif</h5>
-                                        <small class="text-muted">Total {{ total_guru }} akun guru terdaftar</small>
-                                    </div>
+                        <!-- BARIS 1: JUDUL & TOMBOL AKSI GURU YANG RAPI & SERAGAM -->
+                        <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="bg-dark text-white p-2.5 rounded-3 shadow-sm">
+                                    <i class="bi bi-person-badge fs-5"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold mb-0 text-dark">Kelola Akun Guru & Musyrif</h5>
+                                    <small class="text-muted">Total {{ total_guru }} akun guru terdaftar dalam sistem</small>
                                 </div>
                             </div>
                             
-                            <div class="col-12 col-md-7">
-                                <div class="d-flex flex-wrap align-items-center justify-content-md-end gap-2">
-                                    <div class="position-relative flex-grow-1 flex-md-grow-0" style="min-width: 250px;">
-                                        <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
-                                        <input type="text" id="searchGuruInput" class="form-control rounded-pill ps-5 bg-light border" placeholder="Cari nama, username, kelas..." onkeyup="filterTabelGuru()">
-                                        <button type="button" id="clearSearchGuruBtn" class="btn btn-sm text-muted position-absolute top-50 end-0 translate-middle-y me-2 d-none" onclick="clearSearchGuru()">
-                                            <i class="bi bi-x-circle-fill"></i>
-                                        </button>
-                                    </div>
-                                </div>
+                            <!-- Action Toolbar Guru (Template, Import Excel, Tambah Guru) -->
+                            <div class="d-flex flex-wrap align-items-center gap-2">
+                                <a href="{{ url_for('admin.template_guru') }}" class="btn btn-outline-success btn-toolbar-clean bg-white" title="Unduh Template Resmi Excel Guru (.xlsx)">
+                                    <i class="bi bi-file-earmark-arrow-down-fill fs-6"></i>
+                                    <span>Unduh Template</span>
+                                </a>
+                                <button type="button" class="btn btn-success btn-toolbar-clean shadow-sm" data-bs-toggle="modal" data-bs-target="#modalImportGuru" title="Import Banyak Guru Sekaligus dari Excel">
+                                    <i class="bi bi-file-earmark-excel-fill fs-6"></i>
+                                    <span>Import Excel</span>
+                                </button>
+                                <button type="button" class="btn btn-dark btn-toolbar-clean shadow-sm" data-bs-toggle="modal" data-bs-target="#modalTambahGuru">
+                                    <i class="bi bi-person-plus-fill fs-6"></i>
+                                    <span>Tambah Guru</span>
+                                </button>
                             </div>
                         </div>
 
-                        <!-- Filter Keaktifan Guru -->
-                        <div class="d-flex flex-wrap align-items-center gap-2 mt-3 pt-3 border-top">
-                            <span class="small fw-bold text-muted me-1"><i class="bi bi-funnel me-1"></i>Filter Keaktifan:</span>
-                            <button type="button" class="filter-pill active" onclick="setFilterGuruStatus('all', this)">
-                                Semua Guru <span class="badge bg-secondary text-white rounded-pill ms-1">{{ total_guru }}</span>
-                            </button>
-                            <button type="button" class="filter-pill" onclick="setFilterGuruStatus('aktif', this)">
-                                <i class="bi bi-check-circle-fill text-success"></i> Guru Aktif
-                                <span class="badge bg-success text-white rounded-pill ms-1">{{ ns_admin.guru_aktif }}</span>
-                            </button>
-                            <button type="button" class="filter-pill" onclick="setFilterGuruStatus('nonaktif', this)">
-                                <i class="bi bi-dash-circle-fill text-warning"></i> Tidak Aktif
-                                <span class="badge bg-warning text-dark rounded-pill ms-1">{{ total_guru - ns_admin.guru_aktif }}</span>
-                            </button>
+                        <!-- BARIS 2: FILTER KEAKTIFAN & PENCARIAN GURU -->
+                        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mt-3 pt-3 border-top">
+                            <div class="d-flex flex-wrap align-items-center gap-2">
+                                <span class="small fw-bold text-muted me-1"><i class="bi bi-funnel me-1"></i>Status Mengajar:</span>
+                                <button type="button" class="filter-pill active" onclick="setFilterGuruStatus('all', this)">
+                                    Semua Guru <span class="badge bg-secondary text-white rounded-pill ms-1">{{ total_guru }}</span>
+                                </button>
+                                <button type="button" class="filter-pill" onclick="setFilterGuruStatus('aktif', this)">
+                                    <i class="bi bi-check-circle-fill text-success"></i> Aktif Mengajar
+                                    <span class="badge bg-success text-white rounded-pill ms-1">{{ ns_admin.guru_aktif }}</span>
+                                </button>
+                                <button type="button" class="filter-pill" onclick="setFilterGuruStatus('nonaktif', this)">
+                                    <i class="bi bi-dash-circle-fill text-warning"></i> Tidak Aktif
+                                    <span class="badge bg-warning text-dark rounded-pill ms-1">{{ total_guru - ns_admin.guru_aktif }}</span>
+                                </button>
+                            </div>
+
+                            <div class="position-relative" style="min-width: 280px;">
+                                <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                                <input type="text" id="searchGuruInput" class="form-control rounded-pill ps-5 bg-light border" placeholder="Cari nama, username, kelas..." onkeyup="filterTabelGuru()">
+                                <button type="button" id="clearSearchGuruBtn" class="btn btn-sm text-muted position-absolute top-50 end-0 translate-middle-y me-2 d-none" onclick="clearSearchGuru()">
+                                    <i class="bi bi-x-circle-fill"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -556,25 +632,27 @@
 
                                     <td>
                                         {% if g.kelas and g.kelas != '-' %}
-                                            {% for c in g.kelas.replace(';', ',').split(',') %}
-                                                {% if c.strip() %}
-                                                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1 rounded-2 fw-bold me-1">
-                                                        {{ c.strip() }}
-                                                    </span>
-                                                {% endif %}
-                                            {% endfor %}
+                                            <div class="d-flex flex-wrap gap-1">
+                                                {% for c in g.kelas.replace(';', ',').split(',') %}
+                                                    {% if c.strip() %}
+                                                        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2.5 py-1 rounded-2 fw-bold">
+                                                            Kelas {{ c.strip() }}
+                                                        </span>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
                                         {% else %}
-                                            <span class="text-muted small">-</span>
+                                            <span class="text-muted small fst-italic">Belum diatur</span>
                                         {% endif %}
                                     </td>
 
                                     <td>
                                         {% if is_active %}
-                                            <span class="badge bg-success text-white px-3 py-2 rounded-pill fw-bold" style="font-size: 0.75rem;">
+                                            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-1.5 rounded-pill fw-bold" style="font-size: 0.75rem;">
                                                 <i class="bi bi-check-circle-fill me-1"></i> Aktif Mengajar
                                             </span>
                                         {% else %}
-                                            <span class="badge bg-secondary text-white px-3 py-2 rounded-pill fw-bold" style="font-size: 0.75rem;">
+                                            <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-3 py-1.5 rounded-pill fw-bold" style="font-size: 0.75rem;">
                                                 <i class="bi bi-person-x-fill me-1"></i> Tidak Aktif
                                             </span>
                                         {% endif %}
@@ -583,11 +661,17 @@
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center align-items-center gap-2">
                                             <button type="button" class="btn btn-act btn-dark" data-bs-toggle="modal" data-bs-target="#modalEditGuru{{ g.id }}" title="Ubah Nama, Password, Kelas & Status Guru">
-                                                <i class="bi bi-pencil-square me-1"></i> Ubah / Edit
+                                                <i class="bi bi-pencil-square me-1"></i> Edit Akun
                                             </button>
-                                            <button type="button" class="btn btn-act btn-outline-danger" onclick="confirmHapusGuru('{{ g.id }}', '{{ g.nama }}')" title="Hapus Akun Guru">
+                                            <a href="/admin/hapus_guru/{{ g.id }}"
+                                               class="btn btn-act btn-outline-danger"
+                                               data-confirm="Apakah Anda yakin ingin menghapus akun {{ g.nama }} secara permanen?"
+                                               data-confirm-title="Hapus Akun Guru?"
+                                               data-confirm-ok="Ya, Hapus Permanen"
+                                               data-confirm-type="danger"
+                                               title="Hapus Akun Guru">
                                                 <i class="bi bi-trash"></i>
-                                            </button>
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>
@@ -595,11 +679,16 @@
                                 <tr id="emptyGuruRow">
                                     <td colspan="5" class="text-center py-5 text-muted">
                                         <i class="bi bi-person-x fs-1 d-block mb-2 opacity-50"></i>
-                                        <h6 class="fw-bold">Belum Ada Data Guru Terdaftar</h6>
-                                        <p class="small mb-3">Silakan tambah guru baru secara manual atau import dari file Excel.</p>
-                                        <button type="button" class="btn btn-dark btn-sm rounded-pill px-4 fw-bold" data-bs-toggle="modal" data-bs-target="#modalTambahGuru">
-                                            <i class="bi bi-plus-circle me-1"></i> Tambah Guru
-                                        </button>
+                                        <h6 class="fw-bold text-dark">Belum Ada Data Guru Terdaftar</h6>
+                                        <p class="small mb-3">Silakan tambah guru baru secara manual atau import massal dari file Excel.</p>
+                                        <div class="d-inline-flex flex-wrap justify-content-center gap-2">
+                                            <button type="button" class="btn btn-success btn-sm rounded-pill px-4 fw-bold" data-bs-toggle="modal" data-bs-target="#modalImportGuru">
+                                                <i class="bi bi-file-earmark-excel-fill me-1"></i> Import Excel
+                                            </button>
+                                            <button type="button" class="btn btn-dark btn-sm rounded-pill px-4 fw-bold" data-bs-toggle="modal" data-bs-target="#modalTambahGuru">
+                                                <i class="bi bi-plus-circle me-1"></i> Tambah Guru
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -620,23 +709,32 @@
                 <div class="card-modern overflow-hidden">
                     <div class="p-4 border-bottom bg-white">
                         <div class="row align-items-center g-3">
-                            <div class="col-12 col-md-6">
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="bg-success text-white p-2 rounded-3">
+                            <div class="col-12 col-lg-5">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="bg-success text-white p-2.5 rounded-3 shadow-sm">
                                         <i class="bi bi-mortarboard fs-5"></i>
                                     </div>
                                     <div>
-                                        <h5 class="fw-bold mb-0 text-dark">Data Seluruh Murid SDIT</h5>
-                                        <small class="text-muted">Total {{ total_siswa }} murid • Admin dapat edit nama & username login murid</small>
+                                        <h5 class="fw-bold mb-0 text-dark">Monitoring & Kelola Seluruh Murid</h5>
+                                        <small class="text-muted">Evaluasi predikat metode Ummi & pengelolaan akun wali murid</small>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div class="col-12 col-md-6">
-                                <div class="d-flex flex-wrap align-items-center justify-content-md-end gap-2">
+                            <div class="col-12 col-lg-7">
+                                <div class="d-flex flex-wrap align-items-center justify-content-lg-end gap-2">
+                                    <!-- Dropdown Filter Kelas -->
+                                    <select id="filterKelasSiswaSelect" class="form-select form-select-sm rounded-pill bg-light border fw-bold text-dark px-3" style="width: auto; min-width: 150px; height: 38px;" onchange="filterTabelSiswaAdmin()">
+                                        <option value="all">Semua Kelas ({{ ns_admin.kelas_set|length }})</option>
+                                        {% for k in ns_admin.kelas_set|sort %}
+                                            <option value="{{ k|lower }}">Kelas {{ k }}</option>
+                                        {% endfor %}
+                                    </select>
+
+                                    <!-- Search Box Murid -->
                                     <div class="position-relative flex-grow-1 flex-md-grow-0" style="min-width: 250px;">
                                         <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
-                                        <input type="text" id="searchSiswaInput" class="form-control rounded-pill ps-5 bg-light border" placeholder="Cari nama, NISN, atau kelas murid..." onkeyup="filterTabelSiswaAdmin()">
+                                        <input type="text" id="searchSiswaInput" class="form-control rounded-pill ps-5 bg-light border" placeholder="Cari nama, NISN, username..." onkeyup="filterTabelSiswaAdmin()">
                                         <button type="button" id="clearSearchSiswaBtn" class="btn btn-sm text-muted position-absolute top-50 end-0 translate-middle-y me-2 d-none" onclick="clearSearchSiswaAdmin()">
                                             <i class="bi bi-x-circle-fill"></i>
                                         </button>
@@ -645,20 +743,33 @@
                             </div>
                         </div>
 
-                        <!-- Filter Status & Kelas Murid -->
-                        <div class="d-flex flex-wrap align-items-center gap-2 mt-3 pt-3 border-top">
-                            <span class="small fw-bold text-muted me-1"><i class="bi bi-funnel me-1"></i>Filter Murid:</span>
-                            <button type="button" class="filter-pill active" onclick="setFilterSiswaStatus('all', this)">
-                                Semua Murid <span class="badge bg-secondary text-white rounded-pill ms-1">{{ total_siswa }}</span>
-                            </button>
-                            <button type="button" class="filter-pill" onclick="setFilterSiswaStatus('aktif', this)">
-                                <i class="bi bi-check-circle-fill text-success"></i> Murid Aktif
-                                <span class="badge bg-success text-white rounded-pill ms-1">{{ ns_admin.siswa_aktif }}</span>
-                            </button>
-                            <button type="button" class="filter-pill" onclick="setFilterSiswaStatus('nonaktif', this)">
-                                <i class="bi bi-dash-circle-fill text-secondary"></i> Tidak Aktif
-                                <span class="badge bg-secondary text-white rounded-pill ms-1">{{ total_siswa - ns_admin.siswa_aktif }}</span>
-                            </button>
+                        <!-- Filter Status Keaktifan & Predikat Kelulusan -->
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-3 pt-3 border-top">
+                            <div class="d-flex flex-wrap align-items-center gap-2">
+                                <span class="small fw-bold text-muted me-1"><i class="bi bi-funnel me-1"></i>Keaktifan:</span>
+                                <button type="button" class="filter-pill active" onclick="setFilterSiswaStatus('all', this)">
+                                    Semua <span class="badge bg-secondary text-white rounded-pill ms-1">{{ total_siswa }}</span>
+                                </button>
+                                <button type="button" class="filter-pill" onclick="setFilterSiswaStatus('aktif', this)">
+                                    <i class="bi bi-check-circle-fill text-success"></i> Aktif
+                                    <span class="badge bg-success text-white rounded-pill ms-1">{{ ns_admin.siswa_aktif }}</span>
+                                </button>
+                                <button type="button" class="filter-pill" onclick="setFilterSiswaStatus('nonaktif', this)">
+                                    <i class="bi bi-dash-circle-fill text-secondary"></i> Non-Aktif
+                                    <span class="badge bg-secondary text-white rounded-pill ms-1">{{ total_siswa - ns_admin.siswa_aktif }}</span>
+                                </button>
+                            </div>
+
+                            <div class="d-flex flex-wrap align-items-center gap-2">
+                                <span class="small fw-bold text-muted me-1"><i class="bi bi-award me-1"></i>Predikat:</span>
+                                <button type="button" class="filter-pill active" onclick="setFilterSiswaLulus('all', this)">Semua</button>
+                                <button type="button" class="filter-pill" onclick="setFilterSiswaLulus('lulus', this)">
+                                    <i class="bi bi-patch-check-fill text-success"></i> Lulus ({{ ns_admin.siswa_lulus }})
+                                </button>
+                                <button type="button" class="filter-pill" onclick="setFilterSiswaLulus('bimbingan', this)">
+                                    <i class="bi bi-exclamation-circle-fill text-danger"></i> Perlu Bimbingan
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -670,17 +781,25 @@
                                     <th class="ps-4">Nama Lengkap Murid</th>
                                     <th>NISN / ID</th>
                                     <th>Kelas</th>
-                                    <th>Rata-rata Tahsin</th>
-                                    <th>Rata-rata Tahfidz</th>
-                                    <th>Akumulasi Nilai</th>
-                                    <th>Akun Login (Username)</th>
+                                    <th>Predikat Tahsin</th>
+                                    <th>Predikat Tahfidz</th>
+                                    <th>Predikat Akhir Qur'an</th>
+                                    <th>Akun Wali (Username)</th>
                                     <th class="text-center">Aksi Administrator</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for s in siswa_list %}
                                 {% set is_siswa_active = (s.status_clean == 'Aktif') %}
-                                <tr class="siswa-admin-row" data-id="{{ s.id }}" data-nama="{{ s.nama|lower }}" data-kelas="{{ s.kelas|lower }}" data-status="{{ 'aktif' if is_siswa_active else 'nonaktif' }}">
+                                {% set is_lulus_akhir = (s.status_kelulusan_rata_rata == 'Lulus') %}
+                                {% set is_tidak_lulus = (s.status_kelulusan_rata_rata == 'Tidak Lulus') %}
+                                <tr class="siswa-admin-row" 
+                                    data-id="{{ s.id }}" 
+                                    data-nama="{{ s.nama|lower }}" 
+                                    data-username="{{ s.ortu_username|lower if s.ortu_username else '' }}"
+                                    data-kelas="{{ s.kelas|lower }}" 
+                                    data-status="{{ 'aktif' if is_siswa_active else 'nonaktif' }}"
+                                    data-lulus="{{ 'lulus' if is_lulus_akhir else ('bimbingan' if is_tidak_lulus else 'belum') }}">
                                     <td class="ps-4">
                                         <div class="d-flex align-items-center gap-3">
                                             <div class="avatar-circle" style="background: linear-gradient(135deg, #059669 0%, #10b981 100%);">
@@ -706,37 +825,52 @@
                                     </td>
 
                                     <td>
-                                        {% if s.rata_rata_tahsin is not none %}
-                                            <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 px-2.5 py-1.5 rounded-pill fw-bold">
-                                                {{ s.rata_rata_tahsin }} (Grade {{ s.grade_tahsin }})
-                                            </span>
-                                        {% else %}
-                                            <span class="text-muted small">-</span>
-                                        {% endif %}
-                                    </td>
-
-                                    <td>
-                                        {% if s.rata_rata_tahfidz is not none %}
-                                            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2.5 py-1.5 rounded-pill fw-bold">
-                                                {{ s.rata_rata_tahfidz }} (Grade {{ s.grade_tahfidz }})
-                                            </span>
-                                        {% else %}
-                                            <span class="text-muted small">-</span>
-                                        {% endif %}
-                                    </td>
-
-                                    <td>
-                                        {% if s.rata_rata_nilai is not none %}
-                                            <div class="d-flex align-items-center gap-1.5">
-                                                <span class="badge {{ 'bg-success' if s.status_kelulusan_rata_rata == 'Lulus' else 'bg-danger' }} text-white px-2 py-1 rounded-pill fw-bold">
-                                                    {{ s.rata_rata_nilai }} ({{ s.grade_rata_rata }})
+                                        {% if s.grade_tahsin and s.grade_tahsin != '-' %}
+                                            <div>
+                                                <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 px-2.5 py-1 rounded-pill fw-bold">
+                                                    Grade {{ s.grade_tahsin }}
                                                 </span>
-                                                <small class="fw-bold {{ 'text-success' if s.status_kelulusan_rata_rata == 'Lulus' else 'text-danger' }}">
-                                                    {{ s.status_kelulusan_rata_rata }}
-                                                </small>
+                                                {% if s.predikat_tahsin_desc is defined and s.predikat_tahsin_desc %}
+                                                    <small class="text-muted d-block mt-0.5" style="font-size: 0.68rem;">{{ s.predikat_tahsin_desc }}</small>
+                                                {% endif %}
                                             </div>
                                         {% else %}
-                                            <span class="text-muted small">Belum Dinilai</span>
+                                            <span class="text-muted small fst-italic">Belum ada</span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        {% if s.grade_tahfidz and s.grade_tahfidz != '-' %}
+                                            <div>
+                                                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2.5 py-1 rounded-pill fw-bold">
+                                                    Grade {{ s.grade_tahfidz }}
+                                                </span>
+                                                {% if s.predikat_tahfidz_desc is defined and s.predikat_tahfidz_desc %}
+                                                    <small class="text-muted d-block mt-0.5" style="font-size: 0.68rem;">{{ s.predikat_tahfidz_desc }}</small>
+                                                {% endif %}
+                                            </div>
+                                        {% else %}
+                                            <span class="text-muted small fst-italic">Belum ada</span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        {% if s.grade_rata_rata and s.grade_rata_rata != '-' %}
+                                            <div class="d-flex flex-column align-items-start gap-1">
+                                                <div class="d-flex align-items-center gap-1.5">
+                                                    <span class="badge {{ 'bg-success' if is_lulus_akhir else 'bg-danger' }} text-white px-2.5 py-1 rounded-pill fw-bold">
+                                                        Grade {{ s.grade_rata_rata }}
+                                                    </span>
+                                                    <small class="fw-bold {{ 'text-success' if is_lulus_akhir else 'text-danger' }}" style="font-size: 0.75rem;">
+                                                        {{ 'Lulus' if is_lulus_akhir else 'Perlu Bimbingan' }}
+                                                    </small>
+                                                </div>
+                                                {% if s.predikat_rata_rata_desc is defined and s.predikat_rata_rata_desc %}
+                                                    <small class="text-muted" style="font-size: 0.68rem;">{{ s.predikat_rata_rata_desc }}</small>
+                                                {% endif %}
+                                            </div>
+                                        {% else %}
+                                            <span class="badge bg-light text-muted border rounded-pill px-2.5 py-1">Belum Dinilai</span>
                                         {% endif %}
                                     </td>
 
@@ -749,13 +883,13 @@
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center align-items-center gap-1.5 flex-wrap">
                                             <button type="button" class="btn btn-act btn-dark" data-bs-toggle="modal" data-bs-target="#modalEditMuridAdmin{{ s.id }}" title="Edit Nama Lengkap, Username Login & Kelas Murid">
-                                                <i class="bi bi-pencil-square me-1"></i> Edit Murid
+                                                <i class="bi bi-pencil-square me-1"></i> Edit
                                             </button>
                                             <button type="button" class="btn btn-act btn-outline-dark" data-bs-toggle="modal" data-bs-target="#modalPassSiswa{{ s.id }}" title="Edit Password Login Murid/Wali">
                                                 <i class="bi bi-key-fill text-warning"></i> Pass
                                             </button>
-                                            <a href="{{ url_for('export.cetak_hafalan_siswa', id_siswa=s.id) }}" target="_blank" class="btn btn-act btn-light border" title="Lihat Lembar Laporan Hafalan">
-                                                <i class="bi bi-printer"></i>
+                                            <a href="{{ url_for('export.cetak_hafalan_siswa', id_siswa=s.id) }}" target="_blank" class="btn btn-act btn-outline-success" title="Cetak Rapor Digital PDF">
+                                                <i class="bi bi-printer-fill"></i>
                                             </a>
                                         </div>
                                     </td>
@@ -776,7 +910,7 @@
                     <div id="noMatchSiswaAlert" class="text-center py-5 d-none">
                         <i class="bi bi-search fs-1 text-muted opacity-50 d-block mb-2"></i>
                         <h6 class="fw-bold text-dark">Data Murid Tidak Ditemukan</h6>
-                        <p class="text-muted small mb-0">Coba gunakan kata kunci pencarian nama atau NISN murid yang lain.</p>
+                        <p class="text-muted small mb-0">Coba ubah filter kelas, status, atau kata kunci pencarian Anda.</p>
                     </div>
                 </div>
             </div>
@@ -789,9 +923,9 @@
     <div class="modal fade" id="modalDetailCuaca" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content border-0 shadow-lg" style="border-radius: 24px; overflow: hidden; background: #ffffff;">
-                <!-- Header Modal -->
                 <div class="modal-header bg-dark text-white border-0 py-3 px-4 d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center gap-2.5">
+                        <i class="bi bi-cloud-sun-fill text-warning fs-4"></i>
                         <div>
                             <h5 class="modal-title fw-bold mb-0">Prakiraan Cuaca Sawangan</h5>
                             <small class="text-white-50" style="font-size: 0.72rem;">Pasir Putih, Sawangan, Kota Depok • Open-Meteo Live API</small>
@@ -801,10 +935,8 @@
                 </div>
 
                 <div class="modal-body p-4">
-                    <!-- HERO BOX UTAMA CUACA (Kontras Warna Tinggi) -->
                     <div id="weatherHeroBg" class="p-4 rounded-4 mb-4 position-relative overflow-hidden text-white" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3);">
                         <div class="row align-items-center g-3">
-                            <!-- Sisi Kiri: Suhu & Status -->
                             <div class="col-12 col-md-5">
                                 <span class="badge rounded-pill px-3 py-1.5 small fw-bold mb-2 d-inline-flex align-items-center gap-1.5" style="background-color: rgba(255, 255, 255, 0.15); color: #ffffff;" id="modalDayNightBadge">
                                     <i class="bi bi-moon-stars-fill text-warning"></i> Suasana Malam Hari
@@ -820,7 +952,6 @@
                                 </div>
                             </div>
 
-                            <!-- Sisi Kanan: 4 Kotak Metrik Lengkap (Fix Kontras Warna Slate-300 & White) -->
                             <div class="col-12 col-md-7">
                                 <div class="row g-2">
                                     <div class="col-6">
@@ -860,7 +991,6 @@
                         </div>
                     </div>
 
-                    <!-- HEADING PER 3 JAM -->
                     <div class="d-flex align-items-center justify-content-between mb-3 px-1">
                         <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
                             <i class="bi bi-clock-history text-primary"></i> Prediksi Jam per Jam (Sawangan)
@@ -868,7 +998,6 @@
                         <span class="badge bg-light text-muted border px-2.5 py-1 rounded-pill" style="font-size: 0.7rem;">Pembaruan Otomatis</span>
                     </div>
                     
-                    <!-- CONTAINER KARTU PER 3 JAM -->
                     <div class="row g-2.5" id="weather3hContainer">
                         <div class="col-12 text-center py-4 text-muted">
                             <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
@@ -901,7 +1030,7 @@
                 <div class="modal-body p-4">
                     <div class="text-center bg-success bg-opacity-10 border border-success border-opacity-25 rounded-4 p-3 mb-4">
                         <span class="text-success fw-bold small text-uppercase d-block mb-1">Hari Ini</span>
-                        <h4 class="fw-bold text-dark mb-0" id="calendarTodayHeader">Ahad, 8 November 2026</h4>
+                        <h4 class="fw-bold text-dark mb-0" id="calendarTodayHeader">--</h4>
                     </div>
 
                     <div class="calendar-grid mb-2">
@@ -914,9 +1043,7 @@
                         <div class="calendar-day-header">Sab</div>
                     </div>
 
-                    <div class="calendar-grid" id="calendarDaysGrid">
-                        <!-- Tanggal dimasukkan via JS -->
-                    </div>
+                    <div class="calendar-grid" id="calendarDaysGrid"></div>
                 </div>
                 <div class="modal-footer border-0 p-4 pt-0">
                     <button type="button" class="btn btn-dark rounded-3 fw-bold px-4" data-bs-dismiss="modal">Tutup</button>
@@ -966,6 +1093,14 @@
     <!-- MODAL EDIT DATA GURU -->
     {% for g in guru_list %}
         {% set is_active = (g.status == 'Aktif' or g.status is not defined or g.status == True or g.status == 'aktif') %}
+        {% set assigned_classes = [] %}
+        {% if g.kelas and g.kelas != '-' %}
+            {% for c in g.kelas.replace(';', ',').split(',') %}
+                {% if c.strip() %}
+                    {% set _ = assigned_classes.append(c.strip().upper()) %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
         <div class="modal fade" id="modalEditGuru{{ g.id }}" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow-lg">
@@ -1003,14 +1138,14 @@
                                     {% for level in range(1, 7) %}
                                         {% for alpha in ['A', 'B', 'C', 'D'] %}
                                             {% set k_code = level ~ alpha %}
-                                            <button type="button" class="class-badge-btn" onclick="toggleClassInInput('inputKelasEdit{{ g.id }}', '{{ k_code }}', this)">
+                                            <button type="button" class="class-badge-btn {{ 'selected' if k_code in assigned_classes else '' }}" onclick="toggleClassInInput('inputKelasEdit{{ g.id }}', '{{ k_code }}', this)">
                                                 {{ k_code }}
                                             </button>
                                         {% endfor %}
                                     {% endfor %}
                                 </div>
                                 <input type="text" id="inputKelasEdit{{ g.id }}" name="kelas" class="form-control rounded-3 bg-light border" value="{{ g.kelas if g.kelas and g.kelas != '-' else '' }}" placeholder="Contoh: 1A, 2B">
-                                <small class="text-muted" style="font-size: 0.73rem;"><i class="bi bi-info-circle me-1"></i>Klik tombol kelas di atas untuk memilih atau ketik langsung dipisah koma.</small>
+                                <small class="text-muted" style="font-size: 0.73rem;"><i class="bi bi-info-circle me-1"></i>Klik tombol kelas di atas untuk memilih/menghapus atau ketik langsung dipisah koma.</small>
                             </div>
 
                             <div class="mb-3">
@@ -1213,7 +1348,7 @@
                         <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-light rounded-3 border">
                             <div>
                                 <h6 class="fw-bold mb-0 text-dark">Template Resmi Excel Guru (.xlsx)</h6>
-                                <small class="text-muted">Format standar & rapi sesuai sistem SDIT</small>
+                                <small class="text-muted">Unduh format khusus Guru & Musyrif</small>
                             </div>
                             <a href="{{ url_for('admin.template_guru') }}" class="btn btn-success btn-sm fw-bold px-3 rounded-pill text-decoration-none shadow-sm">
                                 <i class="bi bi-download me-1"></i> Unduh Template
@@ -1221,11 +1356,11 @@
                         </div>
 
                         <div class="alert alert-info bg-info bg-opacity-10 border-0 text-dark small mb-3">
-                            <i class="bi bi-info-circle-fill text-info me-1"></i> Header kolom pada template: <strong>No</strong>, <strong>Nama Lengkap</strong>, <strong>Username</strong>, <strong>Password Initial</strong>, dan <strong>Kelas Binaan</strong>. Guru dapat membina lebih dari 1 kelas (misal: <code>1A, 2B</code>).
+                            <i class="bi bi-info-circle-fill text-info me-1"></i> Pastikan memakai <strong>Template Guru</strong> (bukan Template Murid) dengan kolom: <strong>No</strong>, <strong>Nama Lengkap</strong>, <strong>Username</strong>, <strong>Password Initial</strong>, dan <strong>Kelas Binaan</strong> (misal: <code>1A, 2B</code>).
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label fw-bold small text-muted">Pilih File Spreadsheet (.xlsx / .xls)</label>
+                            <label class="form-label fw-bold small text-muted">Pilih File Spreadsheet Guru (.xlsx / .xls)</label>
                             <input type="file" name="file_excel_guru" class="form-control bg-light rounded-3 border" accept=".xlsx, .xls" required>
                         </div>
                     </div>
@@ -1260,13 +1395,11 @@
             const mins = String(now.getMinutes()).padStart(2, '0');
             const secs = String(now.getSeconds()).padStart(2, '0');
             
-            // Tembak ke Desktop
             const clockEl = document.getElementById('liveClock');
             if (clockEl) {
                 clockEl.textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()} • ${hours}:${mins}:${secs} WIB`;
             }
 
-            // Tembak ke Mobile (Format Singkat)
             const clockElMobile = document.getElementById('liveClockMobile');
             if (clockElMobile) {
                 clockElMobile.textContent = `${hours}:${mins} WIB • ${now.getDate()} ${shortMonths[now.getMonth()]}`;
@@ -1309,7 +1442,6 @@
             }
         }
 
-        // Helper Pemetaan Status Cuaca & Deteksi Ikon Siang/Malam Presisi
         function getWeatherDetails(code, isNight) {
             let desc = "Cerah";
             let iconClass = isNight ? "bi-moon-stars-fill text-warning" : "bi-sun-fill text-warning";
@@ -1337,122 +1469,109 @@
             return { desc, iconClass };
         }
 
-       function fetchWeatherSawangan() {
-    // API Open-Meteo v1 untuk Sawangan Depok
-    const url = 'https://api.open-meteo.com/v1/forecast?latitude=-6.417&longitude=106.783&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,weather_code,precipitation_probability,wind_speed_10m,uv_index&timezone=Asia%2FJakarta';
-    
-    // AbortController untuk timeout 6 detik jika koneksi lambat
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 6000);
+        function fetchWeatherSawangan() {
+            const url = 'https://api.open-meteo.com/v1/forecast?latitude=-6.417&longitude=106.783&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,weather_code,precipitation_probability,wind_speed_10m,uv_index&timezone=Asia%2FJakarta';
+            
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 6000);
 
-    fetch(url, { signal: controller.signal })
-        .then(response => {
-            clearTimeout(timeoutId);
-            if (!response.ok) throw new Error("API Response Error: " + response.status);
-            return response.json();
-        })
-        .then(data => {
-            if (data && data.current) {
-                const cur = data.current;
-                const temp = Math.round(cur.temperature_2m);
-                const feelsLike = Math.round(cur.apparent_temperature);
-                const humidity = cur.relative_humidity_2m;
-                const windSpeed = Math.round(cur.wind_speed_10m);
-                const isNight = (cur.is_day === 0);
-                const weatherInfo = getWeatherDetails(cur.weather_code, isNight);
+            fetch(url, { signal: controller.signal })
+                .then(response => {
+                    clearTimeout(timeoutId);
+                    if (!response.ok) throw new Error("API Response Error: " + response.status);
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.current) {
+                        const cur = data.current;
+                        const temp = Math.round(cur.temperature_2m);
+                        const feelsLike = Math.round(cur.apparent_temperature);
+                        const humidity = cur.relative_humidity_2m;
+                        const windSpeed = Math.round(cur.wind_speed_10m);
+                        const isNight = (cur.is_day === 0);
+                        const weatherInfo = getWeatherDetails(cur.weather_code, isNight);
 
-                // Timestamp ISO presisi jam lokal
-                const now = new Date();
-                const currentISO = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}T${String(now.getHours()).padStart(2,'0')}:00`;
-                
-                let targetIdx = 0;
-                if (data.hourly && data.hourly.time) {
-                    const foundIdx = data.hourly.time.findIndex(t => t.startsWith(currentISO));
-                    if (foundIdx !== -1) targetIdx = foundIdx;
-                    else targetIdx = now.getHours();
-                }
+                        const now = new Date();
+                        const currentISO = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}T${String(now.getHours()).padStart(2,'0')}:00`;
+                        
+                        let targetIdx = 0;
+                        if (data.hourly && data.hourly.time) {
+                            const foundIdx = data.hourly.time.findIndex(t => t.startsWith(currentISO));
+                            if (foundIdx !== -1) targetIdx = foundIdx;
+                            else targetIdx = now.getHours();
+                        }
 
-                const rainProb = (data.hourly && data.hourly.precipitation_probability) ? (data.hourly.precipitation_probability[targetIdx] || 0) : 0;
-                const uvVal = (data.hourly && data.hourly.uv_index) ? Math.round(data.hourly.uv_index[targetIdx] || 0) : 0;
+                        const rainProb = (data.hourly && data.hourly.precipitation_probability) ? (data.hourly.precipitation_probability[targetIdx] || 0) : 0;
+                        const uvVal = (data.hourly && data.hourly.uv_index) ? Math.round(data.hourly.uv_index[targetIdx] || 0) : 0;
 
-                // 1. UPDATE WIDGET NAVBAR (DESKTOP & MOBILE)
-                const wTemp = document.getElementById('weatherTemp');
-                const wDesc = document.getElementById('weatherDesc');
-                const wIcon = document.getElementById('weatherIcon');
-                const mTempMob = document.getElementById('weatherTempMobile');
-                const mDescMob = document.getElementById('weatherDescMobile');
-                const mIconMob = document.getElementById('weatherIconMobile');
+                        const wTemp = document.getElementById('weatherTemp');
+                        const wDesc = document.getElementById('weatherDesc');
+                        const wIcon = document.getElementById('weatherIcon');
+                        const mTempMob = document.getElementById('weatherTempMobile');
+                        const mDescMob = document.getElementById('weatherDescMobile');
+                        const mIconMob = document.getElementById('weatherIconMobile');
 
-                if (wTemp) wTemp.textContent = `${temp}°C`;
-                if (wDesc) wDesc.textContent = weatherInfo.desc;
-                if (wIcon) wIcon.innerHTML = `<i class="bi ${weatherInfo.iconClass}"></i>`;
+                        if (wTemp) wTemp.textContent = `${temp}°C`;
+                        if (wDesc) wDesc.textContent = weatherInfo.desc;
+                        if (wIcon) wIcon.innerHTML = `<i class="bi ${weatherInfo.iconClass}"></i>`;
 
-                if (mTempMob) mTempMob.textContent = `${temp}°C`;
-                if (mDescMob) mDescMob.textContent = weatherInfo.desc;
-                if (mIconMob) mIconMob.innerHTML = `<i class="bi ${weatherInfo.iconClass}"></i>`;
+                        if (mTempMob) mTempMob.textContent = `${temp}°C`;
+                        if (mDescMob) mDescMob.textContent = weatherInfo.desc;
+                        if (mIconMob) mIconMob.innerHTML = `<i class="bi ${weatherInfo.iconClass}"></i>`;
 
-                // 2. UPDATE HERO BOX MODAL UTAMA
-                const mTemp = document.getElementById('modalCurrentTemp');
-                const mDesc = document.getElementById('modalCurrentDesc');
-                const mIcon = document.getElementById('modalHeaderIconWrap');
-                const heroBg = document.getElementById('weatherHeroBg');
-                const dayNightBadge = document.getElementById('modalDayNightBadge');
+                        const mTemp = document.getElementById('modalCurrentTemp');
+                        const mDesc = document.getElementById('modalCurrentDesc');
+                        const heroBg = document.getElementById('weatherHeroBg');
+                        const dayNightBadge = document.getElementById('modalDayNightBadge');
 
-                if (mTemp) mTemp.textContent = `${temp}°C`;
-                if (mDesc) mDesc.textContent = weatherInfo.desc;
-                if (mIcon) mIcon.innerHTML = `<i class="bi ${weatherInfo.iconClass}"></i>`;
+                        if (mTemp) mTemp.textContent = `${temp}°C`;
+                        if (mDesc) mDesc.textContent = weatherInfo.desc;
 
-                if (isNight) {
-                    if (dayNightBadge) dayNightBadge.innerHTML = `<i class="bi bi-moon-stars-fill text-warning me-1"></i> Suasana Malam Hari`;
-                    if (heroBg) heroBg.style.background = 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)';
-                } else {
-                    if (dayNightBadge) dayNightBadge.innerHTML = `<i class="bi bi-sun-fill text-warning me-1"></i> Suasana Siang Hari`;
-                    if (heroBg) heroBg.style.background = 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)';
-                }
+                        if (isNight) {
+                            if (dayNightBadge) dayNightBadge.innerHTML = `<i class="bi bi-moon-stars-fill text-warning me-1"></i> Suasana Malam Hari`;
+                            if (heroBg) heroBg.style.background = 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)';
+                        } else {
+                            if (dayNightBadge) dayNightBadge.innerHTML = `<i class="bi bi-sun-fill text-warning me-1"></i> Suasana Siang Hari`;
+                            if (heroBg) heroBg.style.background = 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)';
+                        }
 
-                // 3. UPDATE METRIK LENGKAP
-                const elFeelsLike = document.getElementById('modalFeelsLike');
-                const elHumidity = document.getElementById('metricHumidity');
-                const elWind = document.getElementById('metricWind');
-                const elRainProb = document.getElementById('metricRainProb');
-                const elUV = document.getElementById('metricUV');
+                        const elFeelsLike = document.getElementById('modalFeelsLike');
+                        const elHumidity = document.getElementById('metricHumidity');
+                        const elWind = document.getElementById('metricWind');
+                        const elRainProb = document.getElementById('metricRainProb');
+                        const elUV = document.getElementById('metricUV');
 
-                if (elFeelsLike) elFeelsLike.innerHTML = `<i class="bi bi-thermometer-half me-1 text-warning"></i>Sensasi Terasa: ${feelsLike}°C`;
-                if (elHumidity) elHumidity.textContent = `${humidity}%`;
-                if (elWind) elWind.textContent = `${windSpeed} km/j`;
-                if (elRainProb) elRainProb.textContent = `${rainProb}%`;
-                
-                let uvStatus = "Rendah";
-                if (uvVal >= 3 && uvVal <= 5) uvStatus = "Sedang";
-                else if (uvVal >= 6) uvStatus = "Tinggi";
-                if (elUV) elUV.textContent = `${uvVal} (${uvStatus})`;
+                        if (elFeelsLike) elFeelsLike.innerHTML = `<i class="bi bi-thermometer-half me-1 text-warning"></i>Sensasi Terasa: ${feelsLike}°C`;
+                        if (elHumidity) elHumidity.textContent = `${humidity}%`;
+                        if (elWind) elWind.textContent = `${windSpeed} km/j`;
+                        if (elRainProb) elRainProb.textContent = `${rainProb}%`;
+                        
+                        let uvStatus = "Rendah";
+                        if (uvVal >= 3 && uvVal <= 5) uvStatus = "Sedang";
+                        else if (uvVal >= 6) uvStatus = "Tinggi";
+                        if (elUV) elUV.textContent = `${uvVal} (${uvStatus})`;
 
-                // 4. RENDER PREDIKSI PER 3 JAM
-                renderHourly3hForecast(data);
-            }
-        })
-        .catch(err => {
-            clearTimeout(timeoutId);
-            console.error("Gagal mengambil data cuaca Sawangan:", err);
-
-            // FALLBACK VISUAL SAAT API FAIL (Supaya tidak berputar selamanya)
-            const container = document.getElementById('weather3hContainer');
-            if (container) {
-                container.innerHTML = `
-                    <div class="col-12 text-center py-4 text-danger">
-                        <i class="bi bi-exclamation-triangle-fill fs-3 mb-2 d-block"></i>
-                        <h6 class="fw-bold mb-1">Gagal Memuat Data Cuaca</h6>
-                        <small class="text-muted">Periksa koneksi internet atau matikan ekstensi AdBlocker pada browser, lalu muat ulang halaman.</small>
-                    </div>
-                `;
-            }
-
-            const mDesc = document.getElementById('modalCurrentDesc');
-            const wDesc = document.getElementById('weatherDesc');
-            if (mDesc) mDesc.textContent = "Offline";
-            if (wDesc) wDesc.textContent = "Offline";
-        });
-}
+                        renderHourly3hForecast(data);
+                    }
+                })
+                .catch(err => {
+                    clearTimeout(timeoutId);
+                    const container = document.getElementById('weather3hContainer');
+                    if (container) {
+                        container.innerHTML = `
+                            <div class="col-12 text-center py-4 text-danger">
+                                <i class="bi bi-exclamation-triangle-fill fs-3 mb-2 d-block"></i>
+                                <h6 class="fw-bold mb-1">Gagal Memuat Data Cuaca</h6>
+                                <small class="text-muted">Periksa koneksi internet Anda lalu muat ulang halaman.</small>
+                            </div>
+                        `;
+                    }
+                    const mDesc = document.getElementById('modalCurrentDesc');
+                    const wDesc = document.getElementById('weatherDesc');
+                    if (mDesc) mDesc.textContent = "Offline";
+                    if (wDesc) wDesc.textContent = "Offline";
+                });
+        }
 
         function renderHourly3hForecast(data) {
             const container = document.getElementById('weather3hContainer');
@@ -1477,21 +1596,17 @@
                     const rainP = rainProbs[i] || 0;
                     const windS = Math.round(winds[i] || 0);
                     
-                    // Jam 18:00 dan 21:00 dihitung sebagai suasana malam
                     const isNightCard = (hourNum < 6 || hourNum >= 18);
                     const weatherInfo = getWeatherDetails(code, isNightCard);
 
-                    // Styling Card Siang vs Malam dengan Teks Berkontras Tinggi
                     const cardBgStyle = isNightCard 
                         ? 'background: #0f172a; color: #ffffff; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 4px 12px rgba(0,0,0,0.2);' 
                         : 'background: #f8fafc; color: #0f172a; border: 1px solid #e2e8f0;';
 
-                    // FIX 1: Badge jam malam pakai RGBA transparan absolut, jam siang pakai Dark
                     const badgeHtml = isNightCard
                         ? `<span class="badge rounded-pill px-2.5 py-1 small fw-bold mb-2" style="background-color: rgba(255,255,255,0.15); color: #ffffff;">${String(hourNum).padStart(2, '0')}:00 WIB</span>`
                         : `<span class="badge bg-dark text-white rounded-pill px-2.5 py-1 small fw-bold mb-2">${String(hourNum).padStart(2, '0')}:00 WIB</span>`;
 
-                    // FIX 2: Warna teks metrik bawah ditegaskan (Hitam pekat untuk siang, Putih untuk malam)
                     const metricTextColor = isNightCard ? '#ffffff' : '#0f172a';
 
                     const col = document.createElement('div');
@@ -1555,6 +1670,7 @@
             input.value = classes.join(', ');
         }
 
+        /* FILTER TAB GURU */
         let activeGuruStatusFilter = 'all';
 
         function filterTabelGuru() {
@@ -1596,7 +1712,7 @@
         }
 
         function setFilterGuruStatus(status, btnElement) {
-            const container = btnElement.closest('.border-top');
+            const container = btnElement.parentElement;
             if (container) {
                 container.querySelectorAll('.filter-pill').forEach(btn => btn.classList.remove('active'));
             }
@@ -1605,10 +1721,13 @@
             filterTabelGuru();
         }
 
+        /* FILTER TAB MURID */
         let activeSiswaStatusFilter = 'all';
+        let activeSiswaLulusFilter = 'all';
 
         function filterTabelSiswaAdmin() {
             const query = document.getElementById('searchSiswaInput').value.toLowerCase().trim();
+            const selectedKelas = document.getElementById('filterKelasSiswaSelect').value;
             const clearBtn = document.getElementById('clearSearchSiswaBtn');
             clearBtn.classList.toggle('d-none', query === '');
 
@@ -1618,13 +1737,17 @@
             rows.forEach(row => {
                 const nama = row.getAttribute('data-nama') || '';
                 const nisn = row.getAttribute('data-id') ? row.getAttribute('data-id').toLowerCase() : '';
+                const username = row.getAttribute('data-username') || '';
                 const kelas = row.getAttribute('data-kelas') || '';
                 const rowStatus = row.getAttribute('data-status');
+                const rowLulus = row.getAttribute('data-lulus');
 
-                const matchQuery = (nama.includes(query) || nisn.includes(query) || kelas.includes(query));
+                const matchQuery = (nama.includes(query) || nisn.includes(query) || username.includes(query) || kelas.includes(query));
+                const matchKelas = (selectedKelas === 'all' || kelas === selectedKelas);
                 const matchStatus = (activeSiswaStatusFilter === 'all' || rowStatus === activeSiswaStatusFilter);
+                const matchLulus = (activeSiswaLulusFilter === 'all' || rowLulus === activeSiswaLulusFilter);
 
-                if (matchQuery && matchStatus) {
+                if (matchQuery && matchKelas && matchStatus && matchLulus) {
                     row.style.display = '';
                     visibleCount++;
                 } else {
@@ -1646,7 +1769,7 @@
         }
 
         function setFilterSiswaStatus(status, btnElement) {
-            const container = btnElement.closest('.border-top');
+            const container = btnElement.parentElement;
             if (container) {
                 container.querySelectorAll('.filter-pill').forEach(btn => btn.classList.remove('active'));
             }
@@ -1655,12 +1778,14 @@
             filterTabelSiswaAdmin();
         }
 
-        function confirmHapusGuru(id, nama) {
-            if (typeof showCustomToast === 'function') {
-                showCustomToast('warning', 'Konfirmasi Hapus', `Apakah Anda yakin ingin menghapus akun guru ${nama}? <br><a href="/admin/hapus_guru/${id}" class="btn btn-danger btn-sm rounded-pill mt-2 fw-bold text-white text-decoration-none">Ya, Hapus Permanen</a>`);
-            } else if (confirm(`Apakah Anda yakin ingin menghapus akun guru ${nama}?`)) {
-                window.location.href = `/admin/hapus_guru/${id}`;
+        function setFilterSiswaLulus(lulusStatus, btnElement) {
+            const container = btnElement.parentElement;
+            if (container) {
+                container.querySelectorAll('.filter-pill').forEach(btn => btn.classList.remove('active'));
             }
+            if (btnElement) btnElement.classList.add('active');
+            activeSiswaLulusFilter = lulusStatus;
+            filterTabelSiswaAdmin();
         }
     </script>
 </body>

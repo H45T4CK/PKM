@@ -1,6 +1,14 @@
 import re
 from app import db
 
+PREDIKAT_LABELS = {
+    'A': 'Sangat Baik (Mumtaz)',
+    'B+': 'Baik Sekali (Jayyid Jiddan)',
+    'B': 'Baik (Jayyid)',
+    'C': 'Perlu Bimbingan (Maqbul)',
+    '-': 'Belum Dinilai'
+}
+
 class Siswa(db.Model):
     __tablename__ = 'siswa'
     id = db.Column(db.String(50), primary_key=True)
@@ -24,89 +32,117 @@ class Siswa(db.Model):
             return self.ortu.username
         return self.nama
 
-    @property
-    def rata_rata_tahsin(self):
-        nilai_list = [t.nilai for t in self.tahsin if t.nilai is not None]
-        if not nilai_list:
-            return None
-        return round(sum(nilai_list) / len(nilai_list), 1)
+    @staticmethod
+    def get_predikat_desc(grade):
+        g = str(grade).strip().upper() if grade else '-'
+        return PREDIKAT_LABELS.get(g, 'Belum Dinilai')
+
+    @staticmethod
+    def _calc_grade_from_records(records):
+        GRADE_WEIGHTS = {'A': 4.0, 'B+': 3.0, 'B': 2.0, 'C': 1.0}
+        grades = []
+        for r in records:
+            g = getattr(r, 'grade', None)
+            if g:
+                grades.append(str(g).strip().upper())
+            elif getattr(r, 'nilai', None) is not None:
+                n = r.nilai
+                if n >= 90: grades.append('A')
+                elif n >= 80: grades.append('B+')
+                elif n >= 70: grades.append('B')
+                else: grades.append('C')
+        if not grades:
+            return '-'
+        weights = [GRADE_WEIGHTS.get(g, 1.0) for g in grades]
+        avg = sum(weights) / len(weights)
+        if avg >= 3.5: return 'A'
+        if avg >= 2.5: return 'B+'
+        if avg >= 1.5: return 'B'
+        return 'C'
 
     @property
     def grade_tahsin(self):
-        avg = self.rata_rata_tahsin
-        if avg is None: return '-'
-        if avg >= 90: return 'A'
-        if avg >= 80: return 'B'
-        if avg >= 70: return 'C'
-        if avg >= 60: return 'D'
-        return 'E'
+        return self._calc_grade_from_records(self.tahsin)
+
+    @property
+    def predikat_tahsin_desc(self):
+        return self.get_predikat_desc(self.grade_tahsin)
 
     @property
     def status_lulus_tahsin(self):
         g = self.grade_tahsin
-        if g in ['A', 'B']: return 'Lulus'
-        if g in ['C', 'D', 'E']: return 'Belum Lulus'
+        if g in ['A', 'B+', 'B']: return 'Lulus'
+        if g == 'C': return 'Tidak Lulus'
         return 'Belum Dinilai'
 
     @property
-    def rata_rata_tahfidz(self):
-        nilai_list = [f.nilai for f in self.tahfidz if f.nilai is not None]
-        if not nilai_list:
-            return None
-        return round(sum(nilai_list) / len(nilai_list), 1)
+    def rata_rata_tahsin(self):
+        g = self.grade_tahsin
+        return {'A': 100, 'B+': 88, 'B': 78, 'C': 60}.get(g, None)
 
     @property
     def grade_tahfidz(self):
-        avg = self.rata_rata_tahfidz
-        if avg is None: return '-'
-        if avg >= 90: return 'A'
-        if avg >= 80: return 'B'
-        if avg >= 70: return 'C'
-        if avg >= 60: return 'D'
-        return 'E'
+        return self._calc_grade_from_records(self.tahfidz)
+
+    @property
+    def predikat_tahfidz_desc(self):
+        return self.get_predikat_desc(self.grade_tahfidz)
 
     @property
     def status_lulus_tahfidz(self):
         g = self.grade_tahfidz
-        if g in ['A', 'B']: return 'Lulus'
-        if g in ['C', 'D', 'E']: return 'Belum Lulus'
+        if g in ['A', 'B+', 'B']: return 'Lulus'
+        if g == 'C': return 'Tidak Lulus'
         return 'Belum Dinilai'
 
     @property
-    def rata_rata_nilai(self):
-        all_nilai = [t.nilai for t in self.tahsin if t.nilai is not None] + [f.nilai for f in self.tahfidz if f.nilai is not None]
-        if not all_nilai:
-            return None
-        return round(sum(all_nilai) / len(all_nilai), 1)
+    def rata_rata_tahfidz(self):
+        g = self.grade_tahfidz
+        return {'A': 100, 'B+': 88, 'B': 78, 'C': 60}.get(g, None)
 
     @property
     def grade_rata_rata(self):
-        avg = self.rata_rata_nilai
-        if avg is None: return '-'
-        if avg >= 90: return 'A'
-        if avg >= 80: return 'B'
-        if avg >= 70: return 'C'
-        if avg >= 60: return 'D'
-        return 'E'
+        all_recs = list(self.tahsin) + list(self.tahfidz)
+        return self._calc_grade_from_records(all_recs)
+
+    @property
+    def predikat_rata_rata_desc(self):
+        return self.get_predikat_desc(self.grade_rata_rata)
 
     @property
     def status_kelulusan_rata_rata(self):
         g = self.grade_rata_rata
-        if g in ['A', 'B']: return 'Lulus'
-        if g in ['C', 'D', 'E']: return 'Belum Lulus'
+        if g in ['A', 'B+', 'B']: return 'Lulus'
+        if g == 'C': return 'Tidak Lulus'
         return 'Belum Dinilai'
+
+    @property
+    def rata_rata_nilai(self):
+        g = self.grade_rata_rata
+        return {'A': 100, 'B+': 88, 'B': 78, 'C': 60}.get(g, None)
+
+    def _format_date(self, d_str):
+        if not d_str:
+            return "-"
+        s = str(d_str).strip()
+        if len(s) >= 10 and s[4] == '-' and s[7] == '-':
+            return f"{s[8:10]}/{s[5:7]}/{s[0:4]}"
+        return s
 
     @property
     def latest_tahsin(self):
         if self.tahsin:
             t = self.tahsin[-1]
+            g = (t.grade or ('A' if t.nilai and t.nilai >= 90 else 'B')).upper()
+            is_lulus = g in ['A', 'B+', 'B']
             return {
                 "jenis": "Tahsin",
-                "tanggal": t.tanggal,
+                "tanggal": self._format_date(t.tanggal),
                 "materi": t.halaman_akhir,
-                "grade": t.grade or ('A' if t.nilai and t.nilai >= 90 else 'B'),
+                "grade": g,
+                "predikat": self.get_predikat_desc(g),
                 "nilai": t.nilai if t.nilai is not None else 100,
-                "status_lulus": t.status_lulus or ('Lulus' if (t.grade in ['A', 'B'] or (t.nilai and t.nilai >= 80)) else 'Belum Lulus'),
+                "status_lulus": 'Lulus' if is_lulus else 'Tidak Lulus',
                 "catatan": t.catatan or "",
                 "penilai": t.penilai or "",
                 "ceklist_ortu": bool(t.ceklist_ortu),
@@ -119,13 +155,16 @@ class Siswa(db.Model):
     def latest_tahfidz(self):
         if self.tahfidz:
             f = self.tahfidz[-1]
+            g = (f.grade or ('A' if f.nilai and f.nilai >= 90 else 'B')).upper()
+            is_lulus = g in ['A', 'B+', 'B']
             return {
                 "jenis": "Tahfidz",
-                "tanggal": f.tanggal,
+                "tanggal": self._format_date(f.tanggal),
                 "materi": f.hafalan_terakhir,
-                "grade": f.grade or ('A' if f.nilai and f.nilai >= 90 else 'B'),
+                "grade": g,
+                "predikat": self.get_predikat_desc(g),
                 "nilai": f.nilai if f.nilai is not None else 100,
-                "status_lulus": f.status_lulus or ('Lulus' if (f.grade in ['A', 'B'] or (f.nilai and f.nilai >= 80)) else 'Belum Lulus'),
+                "status_lulus": 'Lulus' if is_lulus else 'Tidak Lulus',
                 "catatan": f.catatan or "",
                 "penilai": f.penilai or "",
                 "ceklist_ortu": bool(f.ceklist_ortu),
@@ -136,102 +175,81 @@ class Siswa(db.Model):
 
     @property
     def latest_setoran(self):
-        latest = None
-        if self.tahsin:
-            t = self.tahsin[-1]
-            latest = {
-                "jenis": "Tahsin",
-                "tanggal": t.tanggal,
-                "materi": t.halaman_akhir,
-                "grade": t.grade or ('A' if t.nilai and t.nilai >= 90 else 'B'),
-                "nilai": t.nilai if t.nilai is not None else 100,
-                "status_lulus": t.status_lulus or ('Lulus' if (t.grade in ['A', 'B'] or (t.nilai and t.nilai >= 80)) else 'Belum Lulus'),
-                "catatan": t.catatan or "",
-                "penilai": t.penilai or "",
-                "ceklist_ortu": bool(t.ceklist_ortu),
-                "catatan_ortu": t.catatan_ortu or "",
-                "id": t.id
-            }
-
-        if self.tahfidz:
-            f = self.tahfidz[-1]
-            if not latest or f.id >= getattr(self.tahsin[-1], 'id', 0):
-                latest = {
-                    "jenis": "Tahfidz",
-                    "tanggal": f.tanggal,
-                    "materi": f.hafalan_terakhir,
-                    "grade": f.grade or ('A' if f.nilai and f.nilai >= 90 else 'B'),
-                    "nilai": f.nilai if f.nilai is not None else 100,
-                    "status_lulus": f.status_lulus or ('Lulus' if (f.grade in ['A', 'B'] or (f.nilai and f.nilai >= 80)) else 'Belum Lulus'),
-                    "catatan": f.catatan or "",
-                    "penilai": f.penilai or "",
-                    "ceklist_ortu": bool(f.ceklist_ortu),
-                    "catatan_ortu": f.catatan_ortu or "",
-                    "id": f.id
-                }
+        latest = self.latest_tahsin
+        f_latest = self.latest_tahfidz
+        if f_latest and (not latest or f_latest['id'] >= latest['id']):
+            return f_latest
         return latest
 
     @property
-    def progress_tahsin_info(self):
-        if not self.tahsin:
-            return {
-                "label": "Tahsin Al-Qur'an (Mulai)",
-                "percent": 0,
-                "deskripsi": "Belum ada catatan tahsin",
-                "status": "Belum Dinilai",
-                "evaluasi": "Menunggu evaluasi ustadz/ustadzah"
-            }
-        
-        last = self.tahsin[-1]
-        last_materi = last.halaman_akhir or ""
-        cnt = len(self.tahsin)
-        grade = last.grade or 'A'
-        status = last.status_lulus or ('Lulus' if grade in ['A', 'B'] else 'Perlu Bimbingan')
-        
-        match_jilid = re.search(r'jilid\s*(\d+)', last_materi, re.IGNORECASE)
-        match_juz = re.search(r'juz\s*(\d+)', last_materi, re.IGNORECASE)
-        
-        if match_jilid:
-            jilid_num = min(int(match_jilid.group(1)), 6)
-            pct = int((jilid_num / 6) * 100)
-            label = f"Wafa Jilid {jilid_num} - {last_materi}"
-            deskripsi = f"Capaian Wafa Jilid {jilid_num}/6 ({pct}%) - {cnt} kali evaluasi"
-        elif match_juz:
-            juz_num = min(int(match_juz.group(1)), 30)
-            pct = int((juz_num / 30) * 100)
-            label = f"Al-Qur'an Juz {juz_num} - {last_materi}"
-            deskripsi = f"Capaian Juz {juz_num}/30 ({pct}%) - {cnt} kali evaluasi"
-        else:
-            pct = min(max(cnt * 10, 15), 100)
-            label = last_materi
-            deskripsi = f"Tercatat {cnt} kali evaluasi capaian Tahsin"
-
-        return {
-            "label": label,
-            "percent": pct,
-            "deskripsi": deskripsi,
-            "status": status,
-            "evaluasi": last.catatan or "Fasih, makharijul huruf dan tajwid sangat baik."
-        }
+    def riwayat_capaian_tahsin(self):
+        items = []
+        for t in self.tahsin:
+            g = (t.grade or ('A' if t.nilai and t.nilai >= 90 else 'B')).upper()
+            is_lulus = g in ['A', 'B+', 'B']
+            items.append({
+                "id": t.id,
+                "tanggal": self._format_date(t.tanggal),
+                "materi": t.halaman_akhir,
+                "grade": g,
+                "predikat": self.get_predikat_desc(g),
+                "nilai": t.nilai if t.nilai is not None else 100,
+                "status_lulus": 'Lulus' if is_lulus else 'Tidak Lulus',
+                "catatan": t.catatan or "Fasih, makharijul huruf & hukum tajwid sangat baik.",
+                "penilai": t.penilai or "Musyrif",
+                "ceklist_ortu": bool(t.ceklist_ortu),
+                "catatan_ortu": t.catatan_ortu or ""
+            })
+        return items
 
     @property
-    def progress_tahfidz_info(self):
-        if not self.tahfidz:
-            return {"label": "Target Juz 30 (Mulai)", "percent": 0, "deskripsi": "Belum ada riwayat setoran", "status": "Belum Dinilai", "evaluasi": "-"}
-            
-        last = self.tahfidz[-1]
-        last_materi = last.hafalan_terakhir or ""
-        cnt = len(self.tahfidz)
-        pct = min(max(cnt * 10, 15), 100)
-        grade = last.grade or 'A'
-        status = last.status_lulus or ('Lulus' if grade in ['A', 'B'] else 'Perlu Bimbingan')
-        return {
-            "label": f"{last_materi}",
-            "percent": pct,
-            "deskripsi": f"Tercatat {cnt} kali setoran hafalan mutqin",
-            "status": status,
-            "evaluasi": last.catatan or "Hafalan lancar, mutqin dan tajwid terjaga."
-        }
+    def riwayat_capaian_tahfidz(self):
+        items = []
+        for f in self.tahfidz:
+            g = (f.grade or ('A' if f.nilai and f.nilai >= 90 else 'B')).upper()
+            is_lulus = g in ['A', 'B+', 'B']
+            items.append({
+                "id": f.id,
+                "tanggal": self._format_date(f.tanggal),
+                "materi": f.hafalan_terakhir,
+                "grade": g,
+                "predikat": self.get_predikat_desc(g),
+                "nilai": f.nilai if f.nilai is not None else 100,
+                "status_lulus": 'Lulus' if is_lulus else 'Tidak Lulus',
+                "catatan": f.catatan or "Hafalan lancar, mutqin, dan tartil.",
+                "penilai": f.penilai or "Musyrif",
+                "ceklist_ortu": bool(f.ceklist_ortu),
+                "catatan_ortu": f.catatan_ortu or ""
+            })
+        return items
+
+    @property
+    def riwayat_grade(self):
+        items = []
+        for t in self.tahsin:
+            g = (t.grade or 'A').upper()
+            items.append({
+                "jenis": "Tahsin",
+                "tanggal": self._format_date(t.tanggal),
+                "materi": t.halaman_akhir,
+                "grade": g,
+                "predikat": self.get_predikat_desc(g),
+                "status_lulus": 'Lulus' if g in ['A', 'B+', 'B'] else 'Tidak Lulus',
+                "id": t.id
+            })
+        for f in self.tahfidz:
+            g = (f.grade or 'A').upper()
+            items.append({
+                "jenis": "Tahfidz",
+                "tanggal": self._format_date(f.tanggal),
+                "materi": f.hafalan_terakhir,
+                "grade": g,
+                "predikat": self.get_predikat_desc(g),
+                "status_lulus": 'Lulus' if g in ['A', 'B+', 'B'] else 'Tidak Lulus',
+                "id": f.id
+            })
+        items.sort(key=lambda x: x['id'], reverse=True)
+        return items
 
     @property
     def has_catatan_ortu(self):
@@ -252,14 +270,14 @@ class Siswa(db.Model):
             "kelas": self.kelas,
             "poin": self.poin,
             "status": self.status_clean,
-            "rata_rata_tahsin": self.rata_rata_tahsin,
             "grade_tahsin": self.grade_tahsin,
+            "predikat_tahsin": self.predikat_tahsin_desc,
             "status_lulus_tahsin": self.status_lulus_tahsin,
-            "rata_rata_tahfidz": self.rata_rata_tahfidz,
             "grade_tahfidz": self.grade_tahfidz,
+            "predikat_tahfidz": self.predikat_tahfidz_desc,
             "status_lulus_tahfidz": self.status_lulus_tahfidz,
-            "rata_rata_nilai": self.rata_rata_nilai,
             "grade_rata_rata": self.grade_rata_rata,
+            "predikat_rata_rata": self.predikat_rata_rata_desc,
             "status_lulus": self.status_kelulusan_rata_rata,
             "catatan": [c.to_dict() for c in self.catatan],
             "tahsin": [t.to_dict() for t in self.tahsin],
@@ -276,6 +294,9 @@ class Siswa(db.Model):
         if key == 'latest_tahsin': return self.latest_tahsin
         if key == 'latest_tahfidz': return self.latest_tahfidz
         if key == 'latest_setoran': return self.latest_setoran
+        if key == 'riwayat_capaian_tahsin': return self.riwayat_capaian_tahsin
+        if key == 'riwayat_capaian_tahfidz': return self.riwayat_capaian_tahfidz
+        if key == 'riwayat_grade': return self.riwayat_grade
         if key == 'has_catatan_ortu': return self.has_catatan_ortu
         if key == 'has_paraf_ortu': return self.has_paraf_ortu
         if key == 'total_catatan_ortu': return self.total_catatan_ortu
