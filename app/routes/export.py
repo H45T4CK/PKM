@@ -3,7 +3,11 @@ from app.models.siswa import Siswa
 from app.models.user import User, AppSetting
 from app import db
 from app.utils.decorators import role_required
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
+try:
+    from zoneinfo import ZoneInfo
+except ImportError:
+    ZoneInfo = None
 import pandas as pd
 import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
@@ -12,6 +16,12 @@ from openpyxl.drawing.image import Image as ExcelImage
 import io, os
 
 export_bp = Blueprint('export', __name__)
+
+HARI_ID = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Ahad']
+BULAN_ID = [
+    '', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+]
 
 PREDIKAT_FALLBACK = {
     'A': 'Mumtaz (Sangat Baik)',
@@ -41,6 +51,29 @@ EXPORT_COLUMNS = [
 ]
 
 
+def _now_wib():
+    if ZoneInfo is not None:
+        try:
+            return datetime.now(ZoneInfo("Asia/Jakarta"))
+        except Exception:
+            pass
+    return datetime.now(timezone(timedelta(hours=7)))
+
+
+def _format_waktu_cetak_detail(dt=None):
+    if dt is None:
+        dt = _now_wib()
+    hari = HARI_ID[dt.weekday()]
+    bulan = BULAN_ID[dt.month]
+    return f"{hari}, {dt.day} {bulan} {dt.year} • {dt.strftime('%H:%M:%S')} WIB"
+
+
+def _format_tanggal_id(dt=None):
+    if dt is None:
+        dt = _now_wib()
+    return f"{dt.day} {BULAN_ID[dt.month]} {dt.year}"
+
+
 def _get_predikat_desc(siswa_obj, attr_name, grade_val):
     val = getattr(siswa_obj, attr_name, None)
     if val:
@@ -63,7 +96,6 @@ def _get_nama_musyrif_kelas(siswa):
         if target_kelas and target_kelas in g_classes:
             matched_gurus.append(g)
 
-    # Jika pengguna yang sedang login adalah guru dari kelas tersebut, gunakan namanya
     if session.get('role') == 'guru' and session.get('user'):
         logged_name = session.get('user').strip()
         for g in matched_gurus:
@@ -72,14 +104,12 @@ def _get_nama_musyrif_kelas(siswa):
         if not matched_gurus:
             return logged_name
 
-    # Prioritaskan guru aktif yang terdaftar pada kelas siswa
     for g in matched_gurus:
         if (g.status or 'Aktif') == 'Aktif':
             return g.nama or g.username
     if matched_gurus:
         return matched_gurus[0].nama or matched_gurus[0].username
 
-    # Fallback ke nama penilai terakhir pada riwayat setoran siswa jika ada
     for rec in reversed(siswa.tahfidz or []):
         if getattr(rec, 'penilai', None):
             return rec.penilai
@@ -144,31 +174,39 @@ def _build_export_rows(siswa_list):
     return rows
 
 
-def _apply_kop_surat(ws, subtitle_text, info_text):
+def _apply_kop_surat(ws, subtitle_text, info_text, merge_end_col=None):
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     logo_path = os.path.join(base_dir, 'static', 'img', 'logo-sdit.png')
     if os.path.exists(logo_path):
         try:
             img = ExcelImage(logo_path)
-            img.width = 48
-            img.height = 48
+            img.width = 46
+            img.height = 46
             ws.add_image(img, 'A1')
         except Exception:
             pass
 
+    if merge_end_col and merge_end_col > 2:
+        ws.merge_cells(start_row=1, start_column=2, end_row=1, end_column=merge_end_col)
+        ws.merge_cells(start_row=2, start_column=2, end_row=2, end_column=merge_end_col)
+        ws.merge_cells(start_row=3, start_column=2, end_row=3, end_column=merge_end_col)
+
     ws['B1'] = "SDIT BINA MULIA"
     ws['B1'].font = Font(name="Arial", size=13, bold=True, color="059669")
+    ws['B1'].alignment = Alignment(horizontal="left", vertical="center")
 
     ws['B2'] = subtitle_text
     ws['B2'].font = Font(name="Arial", size=10, bold=True, color="0F172A")
+    ws['B2'].alignment = Alignment(horizontal="left", vertical="center")
 
     ws['B3'] = info_text
     ws['B3'].font = Font(name="Arial", size=9, italic=True, color="475569")
+    ws['B3'].alignment = Alignment(horizontal="left", vertical="center")
 
     ws.row_dimensions[1].height = 20
     ws.row_dimensions[2].height = 18
     ws.row_dimensions[3].height = 16
-    ws.row_dimensions[4].height = 8
+    ws.row_dimensions[4].height = 10
 
 
 def _configure_print_landscape(ws):
@@ -186,13 +224,16 @@ def cetak_hafalan_siswa(id_siswa):
     siswa = Siswa.query.get_or_404(id_siswa)
     ta_str = AppSetting.get_val('tahun_ajaran', '2026/2027')
     sem_str = AppSetting.get_val('semester', 'Ganjil')
-    tanggal_cetak = datetime.now().strftime("%d/%m/%Y")
+    now_dt = _now_wib()
+    tanggal_cetak = _format_tanggal_id(now_dt)
+    waktu_cetak = _format_waktu_cetak_detail(now_dt)
     nama_musyrif = _get_nama_musyrif_kelas(siswa)
 
     return render_template(
         'reports/lembar_hafalan.html',
         siswa=siswa,
         tanggal=tanggal_cetak,
+        waktu_cetak=waktu_cetak,
         nama_musyrif=nama_musyrif,
         tahun_ajaran=ta_str,
         semester=sem_str,
@@ -213,7 +254,8 @@ def export_excel():
 
         ta_str = AppSetting.get_val('tahun_ajaran', '2026/2027')
         sem_str = AppSetting.get_val('semester', 'Ganjil')
-        tgl_cetak = datetime.now().strftime("%d/%m/%Y %H:%M WIB")
+        now_dt = _now_wib()
+        tgl_cetak = _format_waktu_cetak_detail(now_dt)
         kelas_info = session.get('kelas', 'Semua Kelas') if session.get('role') == 'guru' else 'Semua Kelas'
 
         header_fill = PatternFill(start_color="059669", end_color="059669", fill_type="solid")
@@ -240,7 +282,8 @@ def export_excel():
         _apply_kop_surat(
             ws,
             "REKAPITULASI CAPAIAN & PREDIKAT TAHSIN - TAHFIDZ MURID",
-            f"Tahun Ajaran: {ta_str} (Semester {sem_str})  |  Kelas Binaan: {kelas_info}  |  Dicetak: {tgl_cetak}"
+            f"Tahun Ajaran: {ta_str} (Semester {sem_str})  |  Kelas Binaan: {kelas_info}  |  Dicetak: {tgl_cetak}",
+            merge_end_col=len(EXPORT_COLUMNS)
         )
 
         header_row = 5
@@ -292,17 +335,18 @@ def export_excel():
 
         # Sheet 2: Riwayat Setoran
         ws_log = wb.create_sheet(title="Riwayat_Setoran")
-        _apply_kop_surat(
-            ws_log,
-            "LOG RIWAYAT SETORAN TAHSIN & TAHFIDZ MURID",
-            f"Tahun Ajaran: {ta_str} (Semester {sem_str})  |  Kelas Binaan: {kelas_info}  |  Dicetak: {tgl_cetak}"
-        )
-
         log_headers = [
             "No", "Tanggal", "NISN / ID", "Nama Murid", "Kelas",
             "Program", "Materi / Surah / Halaman", "Grade", "Status",
             "Catatan Musyrif", "Penilai", "Paraf Ortu", "Catatan Ortu"
         ]
+        _apply_kop_surat(
+            ws_log,
+            "LOG RIWAYAT SETORAN TAHSIN & TAHFIDZ MURID",
+            f"Tahun Ajaran: {ta_str} (Semester {sem_str})  |  Kelas Binaan: {kelas_info}  |  Dicetak: {tgl_cetak}",
+            merge_end_col=len(log_headers)
+        )
+
         ws_log.row_dimensions[5].height = 28
         for col_idx, h_text in enumerate(log_headers, start=1):
             c = ws_log.cell(row=5, column=col_idx, value=h_text)
@@ -362,7 +406,7 @@ def export_excel():
         wb.save(output)
         output.seek(0)
 
-        filename = f"Laporan_Murid_SDIT_{datetime.now().strftime('%Y%m%d')}.xlsx"
+        filename = f"Laporan_Murid_SDIT_{now_dt.strftime('%Y%m%d_%H%M%S')}.xlsx"
         return send_file(
             output,
             as_attachment=True,
@@ -383,12 +427,12 @@ def export_master_excel():
 
         ta_str = AppSetting.get_val('tahun_ajaran', '2026/2027')
         sem_str = AppSetting.get_val('semester', 'Ganjil')
-        tgl_cetak = datetime.now().strftime("%d/%m/%Y %H:%M WIB")
-        info_banner = f"Tahun Ajaran: {ta_str} (Semester {sem_str})  |  Kurikulum Metode Ummi  |  Dicetak Admin: {tgl_cetak}"
+        now_dt = _now_wib()
+        tgl_cetak = _format_waktu_cetak_detail(now_dt)
+        info_banner = f"Tahun Ajaran: {ta_str} (Semester {sem_str})  |  Kurikulum Metode Ummi  |  Dicetak: {tgl_cetak}"
 
         wb = openpyxl.Workbook()
 
-        # Styling Umum
         subtitle_font = Font(name="Arial", size=10, bold=True, color="0F172A")
         info_font = Font(name="Arial", size=9, italic=True, color="64748B")
 
@@ -419,14 +463,15 @@ def export_master_excel():
         )
 
         # =========================================================
-        # SHEET 1: RINGKASAN EKSEKUTIF SEKOLAH & PER ROMBEL
+        # SHEET 1: RINGKASAN EKSEKUTIF SEKOLAH & PER ROMBEL (A:G)
         # =========================================================
         ws_sum = wb.active
         ws_sum.title = "Ringkasan_Sekolah"
         _apply_kop_surat(
             ws_sum,
             "REKAPITULASI MASTER DATA GURU, MURID & CAPAIAN AL-QUR'AN",
-            info_banner
+            info_banner,
+            merge_end_col=7
         )
 
         total_guru_aktif = sum(1 for g in guru_list if (g.status or 'Aktif') == 'Aktif')
@@ -448,32 +493,44 @@ def export_master_excel():
             ("Murid Belum Memiliki Penilaian", f"{total_belum} Murid"),
         ]
 
-        ws_sum.cell(row=5, column=1, value="INDIKATOR STATISTIK SEKOLAH").fill = header_slate
-        ws_sum.cell(row=5, column=1).font = header_font
-        ws_sum.cell(row=5, column=1).alignment = left_align
-        ws_sum.cell(row=5, column=2, value="JUMLAH / CAPAIAN").fill = header_slate
-        ws_sum.cell(row=5, column=2).font = header_font
-        ws_sum.cell(row=5, column=2).alignment = center_align
-        ws_sum.row_dimensions[5].height = 26
+        # Header Tabel Indikator (A5:D5 dan E5:G5 sejajar dengan tabel bawah)
+        ws_sum.merge_cells("A5:D5")
+        ws_sum.merge_cells("E5:G5")
+        ws_sum.cell(row=5, column=1, value="INDIKATOR STATISTIK SEKOLAH").alignment = Alignment(horizontal="left", vertical="center", indent=1)
+        ws_sum.cell(row=5, column=5, value="JUMLAH / CAPAIAN").alignment = center_align
+        ws_sum.row_dimensions[5].height = 28
+        for c_i in range(1, 8):
+            h_cell = ws_sum.cell(row=5, column=c_i)
+            h_cell.fill = header_slate
+            h_cell.font = header_font
+            h_cell.border = thin_border
 
         for idx, (label, val) in enumerate(kpi_rows, start=6):
-            ws_sum.row_dimensions[idx].height = 22
-            c1 = ws_sum.cell(row=idx, column=1, value=label)
-            c2 = ws_sum.cell(row=idx, column=2, value=val)
-            c1.font = neutral_font
-            c2.font = bold_font
-            c1.alignment = left_align
-            c2.alignment = center_align
-            c1.border = thin_border
-            c2.border = thin_border
-            if idx % 2 == 1:
-                c1.fill = zebra_fill
-                c2.fill = zebra_fill
+            ws_sum.row_dimensions[idx].height = 23
+            ws_sum.merge_cells(start_row=idx, start_column=1, end_row=idx, end_column=4)
+            ws_sum.merge_cells(start_row=idx, start_column=5, end_row=idx, end_column=7)
 
-        # Tabel Rekap Per Rombel / Kelas
+            c_lbl = ws_sum.cell(row=idx, column=1, value=label)
+            c_val = ws_sum.cell(row=idx, column=5, value=val)
+            c_lbl.font = neutral_font
+            c_val.font = bold_font
+            c_lbl.alignment = Alignment(horizontal="left", vertical="center", indent=1)
+            c_val.alignment = center_align
+
+            for c_i in range(1, 8):
+                cell = ws_sum.cell(row=idx, column=c_i)
+                cell.border = thin_border
+                if idx % 2 == 1:
+                    cell.fill = zebra_fill
+
+        ws_sum.row_dimensions[13].height = 12
+
+        # Judul & Tabel Rekap Per Rombel / Kelas (A14:G...)
+        ws_sum.merge_cells("A14:G14")
         ws_sum['A14'] = "REKAPITULASI CAPAIAN PER ROMBEL / KELAS"
         ws_sum['A14'].font = subtitle_font
-        ws_sum.row_dimensions[14].height = 22
+        ws_sum['A14'].alignment = Alignment(horizontal="left", vertical="center")
+        ws_sum.row_dimensions[14].height = 24
 
         kelas_headers = ["No", "Kelas", "Musyrif / Guru Pembina", "Jumlah Murid", "Murid Lulus", "Perlu Bimbingan", "Belum Dinilai"]
         ws_sum.row_dimensions[15].height = 28
@@ -494,7 +551,7 @@ def export_master_excel():
         start_kls_row = 16
         for idx, kls in enumerate(all_kelas_set, start=1):
             r_i = start_kls_row + idx - 1
-            ws_sum.row_dimensions[r_i].height = 22
+            ws_sum.row_dimensions[r_i].height = 23
             s_kls = [s for s in siswa_list if (s.kelas or '').upper() == kls]
             cnt_lulus = sum(1 for s in s_kls if s.status_kelulusan_rata_rata == 'Lulus')
             cnt_gagal = sum(1 for s in s_kls if s.status_kelulusan_rata_rata == 'Tidak Lulus')
@@ -505,37 +562,46 @@ def export_master_excel():
                 cell = ws_sum.cell(row=r_i, column=c_i, value=v)
                 cell.border = thin_border
                 cell.font = bold_font if c_i in {2, 5} else neutral_font
-                cell.alignment = left_align if c_i == 3 else center_align
+                cell.alignment = Alignment(horizontal="left", vertical="center", indent=1) if c_i == 3 else center_align
                 if idx % 2 == 0:
                     cell.fill = zebra_fill
 
         end_kls_row = start_kls_row + len(all_kelas_set) - 1
         total_row_idx = end_kls_row + 1 if all_kelas_set else start_kls_row
-        ws_sum.row_dimensions[total_row_idx].height = 25
+        ws_sum.row_dimensions[total_row_idx].height = 26
 
         ws_sum.merge_cells(start_row=total_row_idx, start_column=1, end_row=total_row_idx, end_column=3)
         ws_sum.cell(row=total_row_idx, column=1, value="TOTAL KESELURUHAN SEKOLAH").alignment = center_align
+        ws_sum.cell(row=total_row_idx, column=4, value=len(siswa_list))
+        ws_sum.cell(row=total_row_idx, column=5, value=total_lulus)
+        ws_sum.cell(row=total_row_idx, column=6, value=total_bimbingan)
+        ws_sum.cell(row=total_row_idx, column=7, value=total_belum)
+
         for c_i in range(1, 8):
             tc = ws_sum.cell(row=total_row_idx, column=c_i)
             tc.fill = total_fill
             tc.font = total_font
             tc.border = thin_border
-            if c_i >= 4:
-                col_ltr = get_column_letter(c_i)
-                tc.value = f"=SUM({col_ltr}{start_kls_row}:{col_ltr}{end_kls_row})" if all_kelas_set else 0
-                tc.alignment = center_align
+            tc.alignment = center_align
 
-        # Blok Pengesahan / Tanda Tangan
-        sign_start = total_row_idx + 3
-        ws_sum.cell(row=sign_start, column=1, value="Mengetahui,").font = neutral_font
-        ws_sum.cell(row=sign_start + 1, column=1, value="Kepala Sekolah SDIT Bina Mulia").font = bold_font
-        ws_sum.cell(row=sign_start + 5, column=1, value="( .................................................. )").font = bold_font
+        # Blok Pengesahan Tunggal (Kepala Sekolah sekaligus Administrator)
+        sign_start = total_row_idx + 2
+        for r_off in range(6):
+            ws_sum.row_dimensions[sign_start + r_off].height = 19
 
-        ws_sum.cell(row=sign_start, column=5, value=f"Depok, {datetime.now().strftime('%d %B %Y')}").font = neutral_font
-        ws_sum.cell(row=sign_start + 1, column=5, value="Koordinator Tahsin & Tahfidz Al-Qur'an").font = bold_font
-        ws_sum.cell(row=sign_start + 5, column=5, value="( .................................................. )").font = bold_font
+        ws_sum.merge_cells(start_row=sign_start, start_column=5, end_row=sign_start, end_column=7)
+        ws_sum.cell(row=sign_start, column=5, value=f"Depok, {_format_tanggal_id(now_dt)}").font = neutral_font
+        ws_sum.cell(row=sign_start, column=5).alignment = center_align
 
-        sum_widths = [44, 28, 32, 16, 16, 18, 16]
+        ws_sum.merge_cells(start_row=sign_start + 1, start_column=5, end_row=sign_start + 1, end_column=7)
+        ws_sum.cell(row=sign_start + 1, column=5, value="Kepala Sekolah & Administrator SDIT Bina Mulia").font = bold_font
+        ws_sum.cell(row=sign_start + 1, column=5).alignment = center_align
+
+        ws_sum.merge_cells(start_row=sign_start + 5, start_column=5, end_row=sign_start + 5, end_column=7)
+        ws_sum.cell(row=sign_start + 5, column=5, value="( Ahmad Juwaini Ridwan, S.Pd )").font = bold_font
+        ws_sum.cell(row=sign_start + 5, column=5).alignment = center_align
+
+        sum_widths = [7, 14, 34, 15, 15, 17, 15]
         for i, w in enumerate(sum_widths, start=1):
             ws_sum.column_dimensions[get_column_letter(i)].width = w
         _configure_print_landscape(ws_sum)
@@ -544,13 +610,14 @@ def export_master_excel():
         # SHEET 2: DATA GURU & MUSYRIF
         # =========================================================
         ws_guru = wb.create_sheet(title="Data_Guru_Musyrif")
+        guru_headers = ["No", "ID Staf", "Nama Lengkap Guru / Musyrif", "Username Login", "Kelas Binaan", "Jml Murid Binaan", "Status Akun"]
         _apply_kop_surat(
             ws_guru,
             "DAFTAR AKUN GURU & MUSYRIF AL-QUR'AN",
-            info_banner
+            info_banner,
+            merge_end_col=len(guru_headers)
         )
 
-        guru_headers = ["No", "ID Staf", "Nama Lengkap Guru / Musyrif", "Username Login", "Kelas Binaan", "Jml Murid Binaan", "Status Akun"]
         ws_guru.row_dimensions[5].height = 28
         for c_i, h_t in enumerate(guru_headers, start=1):
             c = ws_guru.cell(row=5, column=c_i, value=h_t)
@@ -566,7 +633,7 @@ def export_master_excel():
                 g_classes = [x.strip().upper() for x in (g.kelas or '').replace('/', ',').replace(';', ',').split(',') if x.strip() and x.strip() != '-']
                 jml_binaan = sum(1 for s in siswa_list if (s.kelas or '').upper() in g_classes)
                 g_status = g.status or 'Aktif'
-                staf_code = f"G-{idx:04d}"
+                staf_code = f"G-{g.id:04d}"
 
                 vals = [idx, staf_code, g.nama or '-', g.username, g.kelas or '-', jml_binaan, g_status]
                 for c_i, v in enumerate(vals, start=1):
@@ -586,7 +653,7 @@ def export_master_excel():
             c_e.alignment = center_align
             c_e.font = info_font
 
-        guru_widths = [6, 14, 34, 22, 22, 18, 16]
+        guru_widths = [7, 14, 34, 22, 22, 18, 16]
         for i, w in enumerate(guru_widths, start=1):
             ws_guru.column_dimensions[get_column_letter(i)].width = w
         ws_guru.freeze_panes = "A6"
@@ -596,18 +663,19 @@ def export_master_excel():
         # SHEET 3: DATA CAPAIAN SELURUH MURID
         # =========================================================
         ws_siswa = wb.create_sheet(title="Data_Capaian_Murid")
-        _apply_kop_surat(
-            ws_siswa,
-            "DATA INDUK & CAPAIAN PREDIKAT SELURUH MURID",
-            info_banner
-        )
-
         master_siswa_cols = [
             "No", "NISN / ID", "Nama Murid", "Username Wali", "Kelas", "Status Murid",
             "Setoran Terakhir", "Materi Tahsin Terakhir", "Jml Tahsin", "Grade Tahsin", "Predikat Tahsin",
             "Hafalan Tahfidz Terakhir", "Jml Tahfidz", "Grade Tahfidz", "Predikat Tahfidz",
             "Grade Akhir", "Predikat Akhir", "Status Kelulusan"
         ]
+        _apply_kop_surat(
+            ws_siswa,
+            "DATA INDUK & CAPAIAN PREDIKAT SELURUH MURID",
+            info_banner,
+            merge_end_col=len(master_siswa_cols)
+        )
+
         ws_siswa.row_dimensions[5].height = 28
         for c_i, h_t in enumerate(master_siswa_cols, start=1):
             c = ws_siswa.cell(row=5, column=c_i, value=h_t)
@@ -667,7 +735,7 @@ def export_master_excel():
             c_e.alignment = center_align
             c_e.font = info_font
 
-        siswa_widths = [6, 15, 28, 18, 9, 13, 15, 26, 11, 13, 22, 26, 11, 13, 22, 13, 22, 18]
+        siswa_widths = [7, 15, 28, 18, 9, 13, 15, 26, 11, 13, 22, 26, 11, 13, 22, 13, 22, 18]
         for i, w in enumerate(siswa_widths, start=1):
             ws_siswa.column_dimensions[get_column_letter(i)].width = w
         ws_siswa.freeze_panes = "D6"
@@ -677,17 +745,18 @@ def export_master_excel():
         # SHEET 4: RIWAYAT SETORAN SEMUA MURID
         # =========================================================
         ws_log = wb.create_sheet(title="Riwayat_Setoran_Semua")
-        _apply_kop_surat(
-            ws_log,
-            "LOG RIWAYAT SETORAN TAHSIN & TAHFIDZ SELURUH MURID",
-            info_banner
-        )
-
         log_headers = [
             "No", "Tanggal", "NISN / ID", "Nama Murid", "Kelas",
             "Program", "Materi / Surah / Halaman", "Grade", "Status",
             "Catatan Musyrif", "Penilai", "Paraf Ortu", "Catatan Ortu"
         ]
+        _apply_kop_surat(
+            ws_log,
+            "LOG RIWAYAT SETORAN TAHSIN & TAHFIDZ SELURUH MURID",
+            info_banner,
+            merge_end_col=len(log_headers)
+        )
+
         ws_log.row_dimensions[5].height = 28
         for c_i, h_t in enumerate(log_headers, start=1):
             c = ws_log.cell(row=5, column=c_i, value=h_t)
@@ -737,7 +806,7 @@ def export_master_excel():
         else:
             ws_log.auto_filter.ref = f"A5:{get_column_letter(len(log_headers))}{log_row_idx - 1}"
 
-        log_widths = [6, 14, 16, 26, 10, 12, 30, 10, 15, 32, 18, 12, 28]
+        log_widths = [7, 14, 16, 26, 10, 12, 30, 10, 15, 32, 18, 12, 28]
         for i, w in enumerate(log_widths, start=1):
             ws_log.column_dimensions[get_column_letter(i)].width = w
         ws_log.freeze_panes = "A6"
@@ -747,7 +816,7 @@ def export_master_excel():
         wb.save(output)
         output.seek(0)
 
-        filename = f"Rekap_Master_SDIT_Bina_Mulia_{datetime.now().strftime('%Y%m%d')}.xlsx"
+        filename = f"Rekap_Master_SDIT_Bina_Mulia_{now_dt.strftime('%Y%m%d_%H%M%S')}.xlsx"
         return send_file(
             output,
             as_attachment=True,
@@ -783,10 +852,12 @@ def export_pdf():
     siswa_list = _get_filtered_siswa()
     ta_str = AppSetting.get_val('tahun_ajaran', '2026/2027')
     sem_str = AppSetting.get_val('semester', 'Ganjil')
+    now_dt = _now_wib()
     return render_template(
         'reports/laporansemua.html',
         siswa_list=siswa_list,
-        tanggal=datetime.now().strftime("%d/%m/%Y"),
+        tanggal=_format_tanggal_id(now_dt),
+        waktu_cetak=_format_waktu_cetak_detail(now_dt),
         tahun_ajaran=ta_str,
         semester=sem_str,
         tahun_ajaran_full=f"Tahun Ajaran {ta_str} – Semester {sem_str}"

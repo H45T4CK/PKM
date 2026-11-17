@@ -85,10 +85,11 @@
         /* Widget Mobile */
         .widget-mobile {
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            padding: 10px 14px;
+            padding: 10px 12px;
             border-radius: 14px;
             border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+            min-width: 0;
         }
 
         .calendar-grid {
@@ -147,6 +148,24 @@
             background: linear-gradient(135deg, #059669 0%, #10b981 100%);
             box-shadow: 0 8px 20px rgba(5, 150, 105, 0.28);
             flex-shrink: 0;
+        }
+
+        .student-info-wrap {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .hero-badge {
+            white-space: normal;
+            text-align: left;
+            line-height: 1.35;
+        }
+
+        .student-name-title {
+            font-size: clamp(1.15rem, 4.4vw, 1.5rem);
+            line-height: 1.25;
+            word-break: break-word;
+            overflow-wrap: break-word;
         }
 
         .card-modern {
@@ -256,18 +275,54 @@
             border-color: #ef4444;
             box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
         }
+
+        /* PENYESUAIAN LAYAR MOBILE */
+        @media (max-width: 575.98px) {
+            .navbar-brand-title {
+                font-size: 1rem !important;
+            }
+            .navbar-brand-sub {
+                font-size: 0.66rem !important;
+            }
+            .btn-logout-mobile {
+                padding: 0.4rem 0.75rem !important;
+                font-size: 0.78rem !important;
+                white-space: nowrap;
+            }
+            .hero-banner {
+                padding: 18px 16px;
+                border-radius: 18px;
+            }
+            .student-avatar-lg {
+                width: 48px;
+                height: 48px;
+                border-radius: 14px;
+                font-size: 1.25rem;
+            }
+            .timeline-container {
+                padding-left: 22px;
+            }
+            .timeline-dot {
+                left: -22px;
+                width: 15px;
+                height: 15px;
+            }
+            .timeline-container::before {
+                left: 6px;
+            }
+        }
     </style>
 </head>
 <body>
 
     <!-- NAVBAR RESMI WALI MURID -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top py-2 mb-4">
-        <div class="container-fluid px-3 px-lg-4">
-            <a class="navbar-brand d-flex align-items-center gap-3 fw-bold" href="#">
-                <img src="{{ url_for('static', filename='img/logo-sdit.png') }}" height="40" class="bg-white p-1 rounded-3 shadow-sm" alt="Logo SDIT" onerror="this.src='https://placehold.co/80x80/059669/ffffff?text=SDIT'">
-                <div>
-                    <div class="fs-5 lh-1 text-white fw-extrabold tracking-tight">SDIT BINA MULIA</div>
-                    <small class="text-white-50" style="font-size: 0.72rem; letter-spacing: 0.3px;">Portal Rapor & Evaluasi Wali Murid</small>
+        <div class="container-fluid px-3 px-lg-4 flex-nowrap gap-2">
+            <a class="navbar-brand d-flex align-items-center gap-2 gap-sm-3 fw-bold me-0" style="min-width: 0; flex: 1;" href="#">
+                <img src="{{ url_for('static', filename='img/logo-sdit.png') }}" height="38" class="bg-white p-1 rounded-3 shadow-sm flex-shrink-0" alt="Logo SDIT" onerror="this.src='https://placehold.co/80x80/059669/ffffff?text=SDIT'">
+                <div style="min-width: 0;">
+                    <div class="fs-5 lh-1 text-white fw-extrabold tracking-tight navbar-brand-title text-truncate">SDIT BINA MULIA</div>
+                    <small class="text-white-50 d-block text-truncate navbar-brand-sub" style="font-size: 0.72rem; letter-spacing: 0.3px;">Portal Rapor & Evaluasi Wali Murid</small>
                 </div>
             </a>
 
@@ -288,13 +343,13 @@
                 </div>
             </div>
 
-            <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center gap-3 flex-shrink-0">
                 <div class="text-white text-end d-none d-sm-block">
                     <div class="fw-bold fs-6 lh-1">{{ session.get('user', 'Wali Murid') }}</div>
                     <small class="text-white-50" style="font-size: 0.7rem;">Orang Tua / Wali</small>
                 </div>
                 <a href="/logout"
-                   class="btn btn-light btn-sm rounded-pill px-3 py-2 fw-bold text-success shadow-sm d-inline-flex align-items-center gap-2"
+                   class="btn btn-light btn-sm rounded-pill px-3 py-2 fw-bold text-success shadow-sm d-inline-flex align-items-center gap-1 gap-sm-2 btn-logout-mobile"
                    data-confirm="Apakah Anda yakin ingin keluar dari Portal Wali Murid SIMA SDIT?"
                    data-confirm-title="Keluar dari Sistem?"
                    data-confirm-ok="Ya, Keluar"
@@ -313,15 +368,15 @@
         <!-- WIDGET KHUSUS TAMPILAN HP / TABLET -->
         <div class="d-flex d-xl-none gap-2 mb-4 anim-fade-in">
             <div class="widget-chip widget-mobile flex-fill d-flex justify-content-center align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalKalender">
-                <i class="bi bi-clock-history text-warning" style="font-size: 0.95rem;"></i>
-                <span id="liveClockMobile" class="fw-bold text-white" style="font-size: 0.78rem;">--:--</span>
-                <i class="bi bi-chevron-down text-white-50 chevron-arrow" style="font-size: 0.7rem; opacity: 0.9;"></i>
+                <i class="bi bi-clock-history text-warning flex-shrink-0" style="font-size: 0.95rem;"></i>
+                <span id="liveClockMobile" class="fw-bold text-white text-truncate" style="font-size: 0.75rem;">--:--</span>
+                <i class="bi bi-chevron-down text-white-50 chevron-arrow flex-shrink-0" style="font-size: 0.7rem; opacity: 0.9;"></i>
             </div>
             <div class="widget-chip widget-mobile flex-fill d-flex justify-content-center align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalDetailCuaca">
-                <span id="weatherIconMobile"><i class="bi bi-sun-fill text-warning" style="font-size: 0.95rem;"></i></span>
-                <span id="weatherTempMobile" class="fw-bold text-white" style="font-size: 0.78rem;">--°C</span>
-                <span id="weatherDescMobile" class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25 rounded-pill px-1.5 py-0.5" style="font-size: 0.65rem;">--</span>
-                <i class="bi bi-chevron-down text-info chevron-arrow" style="font-size: 0.7rem; opacity: 0.9;"></i>
+                <span id="weatherIconMobile" class="flex-shrink-0"><i class="bi bi-sun-fill text-warning" style="font-size: 0.95rem;"></i></span>
+                <span id="weatherTempMobile" class="fw-bold text-white flex-shrink-0" style="font-size: 0.75rem;">--°C</span>
+                <span id="weatherDescMobile" class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25 rounded-pill px-2 py-0.5 text-truncate" style="font-size: 0.65rem;">--</span>
+                <i class="bi bi-chevron-down text-info chevron-arrow flex-shrink-0" style="font-size: 0.7rem; opacity: 0.9;"></i>
             </div>
         </div>
 
@@ -338,26 +393,26 @@
         <div class="hero-banner mb-4 anim-fade-in">
             <div class="row align-items-center g-3">
                 <div class="col-12 col-lg-8">
-                    <div class="d-flex align-items-center gap-3">
+                    <div class="d-flex align-items-start align-items-sm-center gap-2 gap-sm-3">
                         <div class="student-avatar-lg">
                             {{ siswa.nama[0]|upper }}
                         </div>
-                        <div>
+                        <div class="student-info-wrap">
                             <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
-                                <span class="badge bg-success bg-opacity-10 text-success fw-bold px-3 py-1 rounded-pill">
+                                <span class="badge bg-success bg-opacity-10 text-success fw-bold px-3 py-1 rounded-pill hero-badge">
                                     <i class="bi bi-patch-check-fill me-1"></i> {{ tahun_ajaran_full }}
                                 </span>
                                 {% if ns_ortu.belum_paraf > 0 %}
-                                    <span class="badge bg-warning text-dark fw-bold px-2.5 py-1 rounded-pill" style="font-size: 0.72rem;">
+                                    <span class="badge bg-warning text-dark fw-bold px-2 py-1 rounded-pill hero-badge" style="font-size: 0.72rem;">
                                         <i class="bi bi-bell-fill me-1"></i>{{ ns_ortu.belum_paraf }} Setoran Menunggu Paraf Rumah
                                     </span>
                                 {% else %}
-                                    <span class="badge bg-light text-success border fw-semibold px-2.5 py-1 rounded-pill" style="font-size: 0.72rem;">
+                                    <span class="badge bg-light text-success border fw-semibold px-2 py-1 rounded-pill hero-badge" style="font-size: 0.72rem;">
                                         <i class="bi bi-check2-all me-1"></i>Seluruh Muroja'ah Terparaf
                                     </span>
                                 {% endif %}
                             </div>
-                            <h3 class="fw-extrabold text-dark mb-1">{{ siswa.nama }}</h3>
+                            <h3 class="fw-extrabold text-dark mb-1 student-name-title">{{ siswa.nama }}</h3>
                             <p class="text-muted mb-0 small">
                                 NISN: <strong class="text-dark">{{ siswa.id }}</strong> • Kelas: <strong class="text-dark">{{ siswa.kelas }}</strong> • Status: <strong class="text-success">{{ siswa.status_clean }}</strong>
                             </p>
@@ -366,7 +421,7 @@
                 </div>
                 <div class="col-12 col-lg-4 text-lg-end">
                     <div class="d-flex flex-wrap gap-2 justify-content-lg-end align-items-center">
-                        <a href="{{ url_for('export.cetak_hafalan_siswa', id_siswa=siswa.id) }}" target="_blank" class="btn btn-success rounded-pill px-4 py-2 fw-bold shadow-sm">
+                        <a href="{{ url_for('export.cetak_hafalan_siswa', id_siswa=siswa.id) }}" target="_blank" class="btn btn-success rounded-pill px-4 py-2 fw-bold shadow-sm w-100 w-lg-auto">
                             <i class="bi bi-printer-fill me-1"></i> Cetak Rapor Digital PDF
                         </a>
                     </div>
@@ -383,13 +438,13 @@
         <div class="row g-3 g-lg-4 mb-4 anim-fade-in delay-1">
             <!-- KARTU SETORAN TERBARU TAHSIN -->
             <div class="col-12 col-lg-6">
-                <div class="card-modern latest-card-tahsin p-4 h-100 d-flex flex-column justify-content-between shadow-sm">
+                <div class="card-modern latest-card-tahsin p-3 p-sm-4 h-100 d-flex flex-column justify-content-between shadow-sm">
                     <div>
-                        <div class="d-flex align-items-center justify-content-between mb-3">
-                            <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 fw-bold px-3 py-1.5 rounded-pill">
+                        <div class="d-flex align-items-center justify-content-between gap-2 mb-3">
+                            <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 fw-bold px-3 py-1 rounded-pill">
                                 <i class="bi bi-book-half me-1"></i> Setoran Terbaru Tahsin
                             </span>
-                            <small class="text-muted fw-semibold"><i class="bi bi-calendar3 me-1"></i>{{ latest_t.tanggal|date_dmy if latest_t else '-' }}</small>
+                            <small class="text-muted fw-semibold flex-shrink-0"><i class="bi bi-calendar3 me-1"></i>{{ latest_t.tanggal|date_dmy if latest_t else '-' }}</small>
                         </div>
                         {% if latest_t %}
                             <h5 class="fw-bold text-dark mb-1">{{ latest_t.materi }}</h5>
@@ -432,13 +487,13 @@
 
             <!-- KARTU SETORAN TERBARU TAHFIDZ -->
             <div class="col-12 col-lg-6">
-                <div class="card-modern latest-card-tahfidz p-4 h-100 d-flex flex-column justify-content-between shadow-sm">
+                <div class="card-modern latest-card-tahfidz p-3 p-sm-4 h-100 d-flex flex-column justify-content-between shadow-sm">
                     <div>
-                        <div class="d-flex align-items-center justify-content-between mb-3">
-                            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 fw-bold px-3 py-1.5 rounded-pill">
+                        <div class="d-flex align-items-center justify-content-between gap-2 mb-3">
+                            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 fw-bold px-3 py-1 rounded-pill">
                                 <i class="bi bi-journal-bookmark-fill me-1"></i> Setoran Terbaru Tahfidz
                             </span>
-                            <small class="text-muted fw-semibold"><i class="bi bi-calendar3 me-1"></i>{{ latest_f.tanggal|date_dmy if latest_f else '-' }}</small>
+                            <small class="text-muted fw-semibold flex-shrink-0"><i class="bi bi-calendar3 me-1"></i>{{ latest_f.tanggal|date_dmy if latest_f else '-' }}</small>
                         </div>
                         {% if latest_f %}
                             <h5 class="fw-bold text-dark mb-1">{{ latest_f.materi }}</h5>
@@ -485,13 +540,13 @@
             
             <!-- KARTU PREDIKAT RAPOR DIGITAL -->
             <div class="col-12 col-lg-5 anim-fade-in delay-2">
-                <div class="card-modern p-4 h-100 d-flex flex-column justify-content-between shadow-sm">
+                <div class="card-modern p-3 p-sm-4 h-100 d-flex flex-column justify-content-between shadow-sm">
                     <div>
-                        <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                        <div class="d-flex align-items-center justify-content-between gap-2 mb-3 pb-2 border-bottom">
                             <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
                                 <i class="bi bi-award-fill text-warning"></i> Predikat Rapor Digital Ananda
                             </h6>
-                            <span class="badge {{ 'bg-success' if siswa.status_kelulusan_rata_rata == 'Lulus' else ('bg-danger' if siswa.status_kelulusan_rata_rata == 'Tidak Lulus' else 'bg-secondary') }} text-white rounded-pill px-3 py-1 fw-bold">
+                            <span class="badge {{ 'bg-success' if siswa.status_kelulusan_rata_rata == 'Lulus' else ('bg-danger' if siswa.status_kelulusan_rata_rata == 'Tidak Lulus' else 'bg-secondary') }} text-white rounded-pill px-3 py-1 fw-bold flex-shrink-0">
                                 {{ siswa.status_kelulusan_rata_rata }}
                             </span>
                         </div>
@@ -507,11 +562,11 @@
                             <div class="fw-bold text-dark small mt-1">{{ siswa.predikat_rata_rata_desc }}</div>
                             <div class="mt-2">
                                 {% if siswa.status_kelulusan_rata_rata == 'Lulus' %}
-                                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-3 py-1 fw-bold">
+                                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-3 py-1 fw-bold hero-badge">
                                         <i class="bi bi-check-circle-fill me-1"></i> STATUS: LULUS STANDAR SDIT
                                     </span>
                                 {% elif siswa.status_kelulusan_rata_rata == 'Tidak Lulus' %}
-                                    <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 rounded-pill px-3 py-1 fw-bold">
+                                    <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 rounded-pill px-3 py-1 fw-bold hero-badge">
                                         <i class="bi bi-x-circle-fill me-1"></i> STATUS: PERLU BIMBINGAN MUROJA'AH
                                     </span>
                                 {% else %}
@@ -546,10 +601,10 @@
 
                         <!-- Panduan Singkat Arti Predikat untuk Orang Tua -->
                         <div class="p-3 bg-light rounded-3 border">
-                            <small class="fw-bold text-dark d-block mb-1.5" style="font-size: 0.74rem;">
+                            <small class="fw-bold text-dark d-block mb-1" style="font-size: 0.74rem;">
                                 <i class="bi bi-info-circle-fill text-primary me-1"></i>Keterangan Standar Predikat:
                             </small>
-                            <div class="d-flex flex-wrap gap-1.5" style="font-size: 0.7rem;">
+                            <div class="d-flex flex-wrap gap-1" style="font-size: 0.7rem;">
                                 <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">A: Mumtaz (Lulus)</span>
                                 <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">B+: Jayyid Jiddan (Lulus)</span>
                                 <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25">B: Jayyid (Lulus)</span>
@@ -562,23 +617,23 @@
 
             <!-- KARTU RIWAYAT CAPAIAN BACAAN & HAFALAN TERAKHIR BESERTA NOTE GURU -->
             <div class="col-12 col-lg-7 anim-fade-in delay-2">
-                <div class="card-modern p-4 h-100 d-flex flex-column justify-content-between shadow-sm">
+                <div class="card-modern p-3 p-sm-4 h-100 d-flex flex-column justify-content-between shadow-sm">
                     <div>
-                        <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                        <div class="d-flex align-items-center justify-content-between gap-2 mb-3 pb-2 border-bottom">
                             <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
                                 <i class="bi bi-journal-check text-primary"></i> Ringkasan Evaluasi Musyrif Terbaru
                             </h6>
-                            <span class="badge bg-light text-secondary border">Catatan Pembimbing</span>
+                            <span class="badge bg-light text-secondary border flex-shrink-0">Catatan Pembimbing</span>
                         </div>
 
                         <!-- Capaian Bacaan Tahsin -->
                         <div class="mb-4">
-                            <div class="d-flex align-items-center justify-content-between mb-2">
-                                <span class="fw-bold small text-dark d-flex align-items-center gap-1.5">
+                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-1 mb-2">
+                                <span class="fw-bold small text-dark d-flex align-items-center gap-1">
                                     <i class="bi bi-book-half text-info fs-5"></i> Capaian Bacaan Tahsin Terakhir
                                 </span>
                                 {% if latest_t %}
-                                    <span class="badge {{ 'bg-success' if is_t_lulus else 'bg-danger' }} rounded-pill px-2.5 py-1">
+                                    <span class="badge {{ 'bg-success' if is_t_lulus else 'bg-danger' }} rounded-pill px-2 py-1">
                                         Grade {{ latest_t.grade }} • {{ latest_t.status_lulus }}
                                     </span>
                                 {% endif %}
@@ -586,11 +641,11 @@
 
                             {% if latest_t %}
                                 <div class="p-3 rounded-3 border bg-info bg-opacity-10 border-info border-opacity-25">
-                                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                                    <div class="d-flex flex-wrap justify-content-between align-items-baseline gap-1 mb-1">
                                         <h6 class="fw-bold text-dark mb-0">{{ latest_t.materi }}</h6>
                                         <small class="text-muted"><i class="bi bi-calendar-event me-1"></i>{{ latest_t.tanggal|date_dmy }}</small>
                                     </div>
-                                    <div class="mt-2 p-2.5 bg-white rounded-3 border border-info border-opacity-25">
+                                    <div class="mt-2 p-2 bg-white rounded-3 border border-info border-opacity-25">
                                         <div class="small fw-bold text-info mb-1">
                                             <i class="bi bi-chat-quote-fill me-1"></i>Note & Evaluasi Guru Tahsin:
                                         </div>
@@ -607,12 +662,12 @@
 
                         <!-- Capaian Hafalan Tahfidz -->
                         <div class="mb-3">
-                            <div class="d-flex align-items-center justify-content-between mb-2">
-                                <span class="fw-bold small text-dark d-flex align-items-center gap-1.5">
+                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-1 mb-2">
+                                <span class="fw-bold small text-dark d-flex align-items-center gap-1">
                                     <i class="bi bi-journal-bookmark-fill text-success fs-5"></i> Capaian Hafalan Tahfidz Terakhir
                                 </span>
                                 {% if latest_f %}
-                                    <span class="badge {{ 'bg-success' if is_f_lulus else 'bg-danger' }} rounded-pill px-2.5 py-1">
+                                    <span class="badge {{ 'bg-success' if is_f_lulus else 'bg-danger' }} rounded-pill px-2 py-1">
                                         Grade {{ latest_f.grade }} • {{ latest_f.status_lulus }}
                                     </span>
                                 {% endif %}
@@ -620,11 +675,11 @@
 
                             {% if latest_f %}
                                 <div class="p-3 rounded-3 border bg-success bg-opacity-10 border-success border-opacity-25">
-                                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                                    <div class="d-flex flex-wrap justify-content-between align-items-baseline gap-1 mb-1">
                                         <h6 class="fw-bold text-dark mb-0">{{ latest_f.materi }}</h6>
                                         <small class="text-muted"><i class="bi bi-calendar-event me-1"></i>{{ latest_f.tanggal|date_dmy }}</small>
                                     </div>
-                                    <div class="mt-2 p-2.5 bg-white rounded-3 border border-success border-opacity-25">
+                                    <div class="mt-2 p-2 bg-white rounded-3 border border-success border-opacity-25">
                                         <div class="small fw-bold text-success mb-1">
                                             <i class="bi bi-chat-quote-fill me-1"></i>Note & Evaluasi Guru Tahfidz:
                                         </div>
@@ -640,8 +695,8 @@
                         </div>
                     </div>
 
-                    <div class="p-2.5 bg-light rounded-3 border d-flex align-items-center gap-2 mt-2">
-                        <i class="bi bi-shield-check text-success fs-5"></i>
+                    <div class="p-2 bg-light rounded-3 border d-flex align-items-center gap-2 mt-2">
+                        <i class="bi bi-shield-check text-success fs-5 flex-shrink-0"></i>
                         <small class="text-muted" style="font-size: 0.75rem;">
                             Wali murid dapat memberikan paraf digital dan catatan pendampingan muroja'ah di bagian linimasa di bawah.
                         </small>
@@ -652,7 +707,7 @@
         </div>
 
         <!-- FILTER & LINIMASA CATATAN TAHSIN / TAHFIDZ + PARAF RUMAH -->
-        <div class="card-modern p-4 mb-4 anim-fade-in delay-3">
+        <div class="card-modern p-3 p-sm-4 mb-4 anim-fade-in delay-3">
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
                 <div>
                     <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
@@ -681,12 +736,12 @@
             
             <!-- LINIMASA TAHSIN -->
             <div class="col-12 col-lg-6 timeline-col" data-col-type="tahsin">
-                <div class="card-modern p-4 h-100">
-                    <div class="d-flex align-items-center justify-content-between mb-4 pb-2 border-bottom">
+                <div class="card-modern p-3 p-sm-4 h-100">
+                    <div class="d-flex align-items-center justify-content-between gap-2 mb-4 pb-2 border-bottom">
                         <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
                             <i class="bi bi-book text-info"></i> Linimasa Catatan & Evaluasi Tahsin
                         </h6>
-                        <span class="badge bg-info bg-opacity-10 text-info rounded-pill fw-bold">{{ siswa.tahsin|length }} Catatan</span>
+                        <span class="badge bg-info bg-opacity-10 text-info rounded-pill fw-bold flex-shrink-0">{{ siswa.tahsin|length }} Catatan</span>
                     </div>
 
                     {% if siswa.tahsin %}
@@ -697,10 +752,10 @@
                         <div class="timeline-item linimasa-card" data-jenis="tahsin" data-paraf="{{ 'yes' if t.ceklist_ortu else 'no' }}">
                             <div class="timeline-dot tahsin-dot {{ 'fail' if not t_pass else '' }}"></div>
                             <div class="p-3 bg-light rounded-3 border">
-                                <div class="d-flex flex-wrap justify-content-between align-items-center gap-1 mb-1.5">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center gap-1 mb-1">
                                     <span class="fw-bold text-dark small"><i class="bi bi-calendar3 me-1"></i>{{ t.tanggal|date_dmy }}</span>
-                                    <div class="d-flex align-items-center gap-1">
-                                        <span class="badge {{ 'bg-success' if t_pass else 'bg-danger' }} text-white px-2.5 py-1 rounded-pill" style="font-size: 0.72rem;">
+                                    <div class="d-flex flex-wrap align-items-center gap-1">
+                                        <span class="badge {{ 'bg-success' if t_pass else 'bg-danger' }} text-white px-2 py-1 rounded-pill" style="font-size: 0.72rem;">
                                             Grade {{ t_grade }}
                                         </span>
                                         <span class="badge {{ 'bg-success bg-opacity-10 text-success border border-success border-opacity-25' if t_pass else 'bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25' }} rounded-pill px-2 py-1" style="font-size: 0.7rem;">
@@ -709,11 +764,11 @@
                                     </div>
                                 </div>
 
-                                <div class="fw-bold text-dark mb-0.5" style="font-size: 0.9rem;">{{ t.halaman_akhir }}</div>
+                                <div class="fw-bold text-dark mb-1" style="font-size: 0.9rem;">{{ t.halaman_akhir }}</div>
                                 <small class="text-muted d-block mb-2" style="font-size: 0.72rem;">Predikat: {{ siswa.get_predikat_desc(t_grade) }}</small>
                                 
                                 <!-- Catatan Tajwid Guru -->
-                                <div class="p-2.5 bg-white rounded-2 border small text-muted mb-2">
+                                <div class="p-2 bg-white rounded-2 border small text-muted mb-2">
                                     <strong class="text-dark"><i class="bi bi-chat-quote me-1 text-info"></i>Evaluasi Tajwid Guru:</strong>
                                     {{ t.catatan or 'Fasih, panjang mad dan makhraj huruf sangat baik.' }}
                                 </div>
@@ -735,7 +790,7 @@
                                     </span>
                                 </div>
                                 {% if t.catatan_ortu %}
-                                    <div class="small text-success mt-1.5 p-2 bg-success bg-opacity-10 rounded-2 border border-success border-opacity-25">
+                                    <div class="small text-success mt-1 p-2 bg-success bg-opacity-10 rounded-2 border border-success border-opacity-25">
                                         <i class="bi bi-chat-heart me-1"></i><strong>Catatan Orang Tua:</strong> {{ t.catatan_ortu }}
                                     </div>
                                 {% endif %}
@@ -755,12 +810,12 @@
 
             <!-- LINIMASA TAHFIDZ -->
             <div class="col-12 col-lg-6 timeline-col" data-col-type="tahfidz">
-                <div class="card-modern p-4 h-100">
-                    <div class="d-flex align-items-center justify-content-between mb-4 pb-2 border-bottom">
+                <div class="card-modern p-3 p-sm-4 h-100">
+                    <div class="d-flex align-items-center justify-content-between gap-2 mb-4 pb-2 border-bottom">
                         <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
                             <i class="bi bi-journal-check text-success"></i> Linimasa Catatan & Evaluasi Tahfidz
                         </h6>
-                        <span class="badge bg-success bg-opacity-10 text-success rounded-pill fw-bold">{{ siswa.tahfidz|length }} Setoran</span>
+                        <span class="badge bg-success bg-opacity-10 text-success rounded-pill fw-bold flex-shrink-0">{{ siswa.tahfidz|length }} Setoran</span>
                     </div>
 
                     {% if siswa.tahfidz %}
@@ -771,10 +826,10 @@
                         <div class="timeline-item linimasa-card" data-jenis="tahfidz" data-paraf="{{ 'yes' if f.ceklist_ortu else 'no' }}">
                             <div class="timeline-dot {{ 'fail' if not f_pass else '' }}"></div>
                             <div class="p-3 bg-light rounded-3 border">
-                                <div class="d-flex flex-wrap justify-content-between align-items-center gap-1 mb-1.5">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center gap-1 mb-1">
                                     <span class="fw-bold text-dark small"><i class="bi bi-calendar3 me-1"></i>{{ f.tanggal|date_dmy }}</span>
-                                    <div class="d-flex align-items-center gap-1">
-                                        <span class="badge {{ 'bg-success' if f_pass else 'bg-danger' }} text-white px-2.5 py-1 rounded-pill" style="font-size: 0.72rem;">
+                                    <div class="d-flex flex-wrap align-items-center gap-1">
+                                        <span class="badge {{ 'bg-success' if f_pass else 'bg-danger' }} text-white px-2 py-1 rounded-pill" style="font-size: 0.72rem;">
                                             Grade {{ f_grade }}
                                         </span>
                                         <span class="badge {{ 'bg-success bg-opacity-10 text-success border border-success border-opacity-25' if f_pass else 'bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25' }} rounded-pill px-2 py-1" style="font-size: 0.7rem;">
@@ -783,11 +838,11 @@
                                     </div>
                                 </div>
 
-                                <div class="fw-bold text-dark mb-0.5" style="font-size: 0.9rem;">{{ f.hafalan_terakhir }}</div>
+                                <div class="fw-bold text-dark mb-1" style="font-size: 0.9rem;">{{ f.hafalan_terakhir }}</div>
                                 <small class="text-muted d-block mb-2" style="font-size: 0.72rem;">Predikat: {{ siswa.get_predikat_desc(f_grade) }}</small>
                                 
                                 <!-- Catatan Mutqin & Evaluasi Guru -->
-                                <div class="p-2.5 bg-white rounded-2 border small text-muted mb-2">
+                                <div class="p-2 bg-white rounded-2 border small text-muted mb-2">
                                     <strong class="text-dark"><i class="bi bi-chat-quote me-1 text-success"></i>Evaluasi Kelancaran Guru:</strong>
                                     {{ f.catatan or 'Hafalan lancar, mutqin, dan tajwid sesuai kaidah.' }}
                                 </div>
@@ -809,7 +864,7 @@
                                     </span>
                                 </div>
                                 {% if f.catatan_ortu %}
-                                    <div class="small text-success mt-1.5 p-2 bg-success bg-opacity-10 rounded-2 border border-success border-opacity-25">
+                                    <div class="small text-success mt-1 p-2 bg-success bg-opacity-10 rounded-2 border border-success border-opacity-25">
                                         <i class="bi bi-chat-heart me-1"></i><strong>Catatan Orang Tua:</strong> {{ f.catatan_ortu }}
                                     </div>
                                 {% endif %}
@@ -858,14 +913,14 @@
                     <div id="weatherHeroBg" class="p-4 rounded-4 mb-4 position-relative overflow-hidden text-white" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3);">
                         <div class="row align-items-center g-3">
                             <div class="col-12 col-md-5">
-                                <span class="badge rounded-pill px-3 py-1.5 small fw-bold mb-2 d-inline-flex align-items-center gap-1.5" style="background-color: rgba(255, 255, 255, 0.15); color: #ffffff;" id="modalDayNightBadge">
+                                <span class="badge rounded-pill px-3 py-1 small fw-bold mb-2 d-inline-flex align-items-center gap-1" style="background-color: rgba(255, 255, 255, 0.15); color: #ffffff;" id="modalDayNightBadge">
                                     <i class="bi bi-sun-fill text-warning"></i> Suasana Siang Hari
                                 </span>
                                 <div class="d-flex align-items-baseline gap-2 mt-1">
                                     <h1 class="display-3 fw-extrabold mb-0 tracking-tight" id="modalCurrentTemp">--°C</h1>
                                 </div>
                                 <div class="mt-2">
-                                    <span class="badge bg-warning text-dark fw-bold px-3 py-1.5 rounded-pill fs-6" id="modalCurrentDesc">Memuat...</span>
+                                    <span class="badge bg-warning text-dark fw-bold px-3 py-1 rounded-pill fs-6" id="modalCurrentDesc">Memuat...</span>
                                     <div class="small text-white-50 mt-2 fw-medium" id="modalFeelsLike">
                                         <i class="bi bi-thermometer-half me-1 text-warning"></i>Sensasi Terasa: --°C
                                     </div>
@@ -915,10 +970,10 @@
                         <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
                             <i class="bi bi-clock-history text-primary"></i> Prediksi Jam per Jam (Sawangan)
                         </h6>
-                        <span class="badge bg-light text-muted border px-2.5 py-1 rounded-pill" style="font-size: 0.7rem;">Pembaruan Otomatis</span>
+                        <span class="badge bg-light text-muted border px-2 py-1 rounded-pill" style="font-size: 0.7rem;">Pembaruan Otomatis</span>
                     </div>
                     
-                    <div class="row g-2.5" id="weather3hContainer">
+                    <div class="row g-2" id="weather3hContainer">
                         <div class="col-12 text-center py-4 text-muted">
                             <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
                             Sedang mengambil data cuaca terbaru...

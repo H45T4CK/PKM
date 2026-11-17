@@ -24,11 +24,15 @@
             print-color-adjust: exact !important;
         }
 
+        .page-wrapper {
+            padding: 0 12px;
+        }
+
         .action-bar {
             max-width: 900px;
-            margin: 20px auto 0;
+            margin: 16px auto 0;
             background: #ffffff;
-            padding: 14px 24px;
+            padding: 14px 20px;
             border-radius: 16px;
             box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
             border: 1px solid #e2e8f0;
@@ -39,7 +43,7 @@
             border: 1px solid #cbd5e1;
             border-top: 6px solid var(--primary);
             padding: 36px 40px;
-            margin: 20px auto 40px;
+            margin: 16px auto 40px;
             max-width: 900px;
             border-radius: 16px;
             box-shadow: 0 10px 30px rgba(15, 23, 42, 0.07);
@@ -51,6 +55,23 @@
             margin-bottom: 22px;
         }
 
+        .kop-logo {
+            height: 74px;
+            width: auto;
+            flex-shrink: 0;
+        }
+
+        .print-meta-pill {
+            display: inline-block;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 50rem;
+            padding: 4px 14px;
+            font-size: 0.75rem;
+            color: #475569;
+            margin-top: 6px;
+        }
+
         .identitas-box {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
@@ -59,9 +80,16 @@
             margin-bottom: 24px;
         }
 
+        .identitas-table td {
+            padding-top: 3px;
+            padding-bottom: 3px;
+            word-break: break-word;
+        }
+
         .table-rapor {
             border-color: #cbd5e1;
             font-size: 0.82rem;
+            margin-bottom: 0;
         }
         .table-tahsin thead th {
             background-color: var(--info-dark) !important;
@@ -72,6 +100,7 @@
             letter-spacing: 0.4px;
             padding: 10px 10px;
             border-color: var(--info-dark);
+            white-space: nowrap;
         }
         .table-tahfidz thead th {
             background-color: var(--primary-dark) !important;
@@ -82,6 +111,7 @@
             letter-spacing: 0.4px;
             padding: 10px 10px;
             border-color: var(--primary-dark);
+            white-space: nowrap;
         }
         .table-rapor tbody td {
             padding: 9px 10px;
@@ -97,6 +127,7 @@
             border-radius: 50rem;
             font-weight: 800;
             font-size: 0.74rem;
+            white-space: nowrap;
         }
         .grade-pass {
             background-color: #dcfce7;
@@ -109,16 +140,96 @@
             border: 1px solid #fca5a5;
         }
 
+        /* GARIS TANDA TANGAN RESPONSIF */
         .ttd-area {
             page-break-inside: avoid;
+        }
+        .ttd-space {
+            height: 64px;
+        }
+        .ttd-line-wrap {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 4px;
+            max-width: 240px;
+            margin: 0 auto;
+            font-weight: 700;
+        }
+        .ttd-blank {
+            flex: 1;
+            border-bottom: 1.5px solid #0f172a;
+            min-width: 50px;
+            height: 0.95em;
+        }
+        .ttd-nip-wrap {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 4px;
+            max-width: 220px;
+            margin: 3px auto 0;
+            font-size: 0.74rem;
+            color: #64748b;
+        }
+        .ttd-dots {
+            flex: 1;
+            border-bottom: 1px dotted #64748b;
+            min-width: 40px;
+            height: 0.85em;
+        }
+
+        @media (max-width: 767.98px) {
+            .table-rapor {
+                min-width: 640px;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .cetak-box {
+                padding: 20px 16px;
+                border-radius: 14px;
+            }
+            .identitas-box {
+                padding: 12px 14px;
+            }
+            .kop-logo {
+                height: 54px;
+            }
+            .kop-school-title {
+                font-size: 1rem !important;
+            }
+            .kop-sub-title {
+                font-size: 0.68rem !important;
+            }
+            .print-meta-pill {
+                border-radius: 10px;
+                font-size: 0.7rem;
+                padding: 5px 10px;
+            }
+            .ttd-space {
+                height: 52px;
+            }
+            .ttd-area {
+                font-size: 0.78rem !important;
+            }
         }
 
         @media print {
             body {
                 background: #ffffff !important;
             }
+            .page-wrapper {
+                padding: 0 !important;
+            }
             .no-print {
                 display: none !important;
+            }
+            .table-responsive {
+                overflow: visible !important;
+            }
+            .table-rapor {
+                min-width: 100% !important;
             }
             .cetak-box {
                 box-shadow: none !important;
@@ -138,240 +249,301 @@
 </head>
 <body>
 
-    <!-- BAR AKSI CETAK -->
-    <div class="action-bar d-flex flex-wrap align-items-center justify-content-between gap-2 no-print">
-        <div class="d-flex align-items-center gap-2">
-            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 rounded-pill fw-bold">
-                <i class="bi bi-journal-check me-1"></i> Rapor Digital Individu Murid
-            </span>
-            <small class="text-muted d-none d-md-inline">Pilih <strong>"Save as PDF"</strong> untuk menyimpan berkas rapor ananda.</small>
+    <div class="page-wrapper">
+        <!-- BAR AKSI CETAK -->
+        <div class="action-bar d-flex flex-wrap align-items-center justify-content-between gap-2 no-print">
+            <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 rounded-pill fw-bold">
+                    <i class="bi bi-journal-check me-1"></i> Rapor Digital Individu Murid
+                </span>
+                <small class="text-muted d-none d-md-inline">Pilih <strong>"Save as PDF"</strong> untuk menyimpan berkas rapor ananda.</small>
+            </div>
+            <div class="d-flex gap-2 w-100 w-sm-auto justify-content-end">
+                <button onclick="cetakDokumen()" class="btn btn-success btn-sm rounded-pill px-3 py-2 fw-bold shadow-sm flex-fill flex-sm-grow-0">
+                    <i class="bi bi-printer-fill me-1"></i> Cetak / Simpan PDF
+                </button>
+                <button onclick="window.close()" class="btn btn-outline-secondary btn-sm rounded-pill px-3 py-2 fw-semibold">
+                    Tutup
+                </button>
+            </div>
         </div>
-        <div class="d-flex gap-2">
-            <button onclick="window.print()" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm">
-                <i class="bi bi-printer-fill me-1"></i> Cetak / Simpan PDF
-            </button>
-            <button onclick="window.close()" class="btn btn-outline-secondary rounded-pill px-3 fw-semibold">
-                Tutup
-            </button>
-        </div>
-    </div>
 
-    <div class="cetak-box">
-        <!-- HEADER KOP SURAT RESMI -->
-        <div class="kop-surat d-flex align-items-center justify-content-between gap-3">
-            <div class="d-flex align-items-center gap-3">
-                <img src="{{ url_for('static', filename='img/logo-sdit.png') }}" height="74" alt="Logo SDIT" class="rounded-3" onerror="this.src='https://placehold.co/80x80/059669/ffffff?text=SDIT'">
-                <div>
-                    <div class="text-uppercase fw-bold text-success small" style="letter-spacing: 1px;">Yayasan Pendidikan Islam Bina Mulia</div>
-                    <h4 class="fw-extrabold text-dark mb-0" style="letter-spacing: -0.3px;">SD ISLAM TERPADU (SDIT) BINA MULIA</h4>
-                    <p class="text-muted small mb-0">Pasir Putih, Kec. Sawangan, Kota Depok, Jawa Barat • Kurikulum Al-Qur'an Metode Ummi</p>
+        <div class="cetak-box">
+            <!-- HEADER KOP SURAT RESMI -->
+            <div class="kop-surat d-flex align-items-center justify-content-between gap-3">
+                <div class="d-flex align-items-center gap-2 gap-sm-3">
+                    <img src="{{ url_for('static', filename='img/logo-sdit.png') }}" alt="Logo SDIT" class="rounded-3 kop-logo" onerror="this.src='https://placehold.co/80x80/059669/ffffff?text=SDIT'">
+                    <div>
+                        <div class="text-uppercase fw-bold text-success kop-sub-title" style="font-size: 0.74rem; letter-spacing: 0.8px;">Yayasan Pendidikan Islam Bina Mulia</div>
+                        <h4 class="fw-extrabold text-dark mb-0 kop-school-title" style="letter-spacing: -0.3px;">SD ISLAM TERPADU (SDIT) BINA MULIA</h4>
+                        <p class="text-muted small mb-0 kop-sub-title">Pasir Putih, Kec. Sawangan, Kota Depok, Jawa Barat • Kurikulum Al-Qur'an Metode Ummi</p>
+                    </div>
+                </div>
+                <div class="text-end d-none d-md-block flex-shrink-0">
+                    <span class="badge bg-success text-white px-3 py-1 rounded-pill fw-bold" style="font-size: 0.72rem;">RAPOR AL-QUR'AN</span>
+                    <div class="small text-muted mt-1">{{ tahun_ajaran or '2026/2027' }} ({{ semester or 'Ganjil' }})</div>
                 </div>
             </div>
-            <div class="text-end d-none d-sm-block">
-                <span class="badge bg-success text-white px-3 py-1.5 rounded-pill fw-bold" style="font-size: 0.72rem;">RAPOR AL-QUR'AN</span>
-                <div class="small text-muted mt-1">{{ tahun_ajaran or '2026/2027' }} ({{ semester or 'Ganjil' }})</div>
-            </div>
-        </div>
 
-        <!-- JUDUL RAPOR -->
-        <div class="text-center mb-3">
-            <h5 class="fw-extrabold text-dark text-uppercase mb-1" style="letter-spacing: 0.5px;">
-                LEMBAR LAPORAN CAPAIAN TAHSIN & TAHFIDZ AL-QUR'AN
-            </h5>
-            <div class="text-muted small fw-semibold">
-                {{ tahun_ajaran_full or 'Tahun Ajaran ' ~ (tahun_ajaran or '2026/2027') ~ ' – Semester ' ~ (semester or 'Ganjil') }}
-            </div>
-        </div>
-
-        <!-- IDENTITAS & RINGKASAN PREDIKAT MURID -->
-        {% set is_lulus_akhir = (siswa.status_kelulusan_rata_rata == 'Lulus') %}
-        <div class="identitas-box">
-            <div class="row g-2 small">
-                <div class="col-12 col-md-6">
-                    <table class="table table-borderless table-sm mb-0">
-                        <tr>
-                            <td width="34%" class="text-muted fw-semibold">Nama Lengkap</td>
-                            <td width="4%">:</td>
-                            <td class="fw-extrabold text-dark">{{ siswa.nama }}</td>
-                        </tr>
-                        <tr>
-                            <td class="text-muted fw-semibold">NISN / ID Murid</td>
-                            <td>:</td>
-                            <td class="font-monospace fw-bold">{{ siswa.id }}</td>
-                        </tr>
-                        <tr>
-                            <td class="text-muted fw-semibold">Kelas Binaan</td>
-                            <td>:</td>
-                            <td class="fw-bold">Kelas {{ siswa.kelas }}</td>
-                        </tr>
-                    </table>
+            <!-- JUDUL RAPOR & DETAIL WAKTU CETAK -->
+            <div class="text-center mb-3">
+                <h5 class="fw-extrabold text-dark text-uppercase mb-1" style="letter-spacing: 0.5px; font-size: clamp(0.95rem, 3.5vw, 1.15rem);">
+                    LEMBAR LAPORAN CAPAIAN TAHSIN & TAHFIDZ AL-QUR'AN
+                </h5>
+                <div class="text-muted small fw-semibold">
+                    {{ tahun_ajaran_full or 'Tahun Ajaran ' ~ (tahun_ajaran or '2026/2027') ~ ' – Semester ' ~ (semester or 'Ganjil') }}
                 </div>
-                <div class="col-12 col-md-6">
-                    <table class="table table-borderless table-sm mb-0">
-                        <tr>
-                            <td width="42%" class="text-muted fw-semibold">Predikat Tahsin</td>
-                            <td width="4%">:</td>
-                            <td class="fw-bold text-info">
-                                {{ 'Grade ' + siswa.grade_tahsin if siswa.grade_tahsin != '-' else 'Belum Dinilai' }}
-                                {% if siswa.predikat_tahsin_desc is defined and siswa.grade_tahsin != '-' %}
-                                    <span class="text-muted fw-normal">({{ siswa.predikat_tahsin_desc }})</span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-muted fw-semibold">Predikat Tahfidz</td>
-                            <td>:</td>
-                            <td class="fw-bold text-success">
-                                {{ 'Grade ' + siswa.grade_tahfidz if siswa.grade_tahfidz != '-' else 'Belum Dinilai' }}
-                                {% if siswa.predikat_tahfidz_desc is defined and siswa.grade_tahfidz != '-' %}
-                                    <span class="text-muted fw-normal">({{ siswa.predikat_tahfidz_desc }})</span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-muted fw-semibold">Predikat Akhir</td>
-                            <td>:</td>
-                            <td>
-                                {% if siswa.grade_rata_rata and siswa.grade_rata_rata != '-' %}
-                                    <span class="grade-pill {{ 'grade-pass' if is_lulus_akhir else 'grade-fail' }}">
-                                        Grade {{ siswa.grade_rata_rata }} • {{ 'LULUS' if is_lulus_akhir else 'PERLU BIMBINGAN' }}
-                                    </span>
-                                    {% if siswa.jumlah_c is defined and siswa.jumlah_c >= 5 %}
-                                        <div class="text-danger fw-bold mt-0.5" style="font-size: 0.7rem;">
-                                            Akumulasi {{ siswa.jumlah_c }}x Grade C
-                                        </div>
+                <div class="print-meta-pill">
+                    <i class="bi bi-clock-history text-success me-1"></i>Dicetak:
+                    <strong class="text-dark waktu-cetak-detail">{{ waktu_cetak if waktu_cetak is defined and waktu_cetak else (tanggal|date_dmy if tanggal is defined and tanggal else '-') }}</strong>
+                    {% if session.get('user') %} • Pencetak: <strong class="text-dark">{{ session.get('user') }}</strong>{% endif %}
+                </div>
+            </div>
+
+            <!-- IDENTITAS & RINGKASAN PREDIKAT MURID -->
+            {% set is_lulus_akhir = (siswa.status_kelulusan_rata_rata == 'Lulus') %}
+            <div class="identitas-box">
+                <div class="row g-2 small">
+                    <div class="col-12 col-md-6">
+                        <table class="table table-borderless table-sm identitas-table mb-0">
+                            <tr>
+                                <td width="38%" class="text-muted fw-semibold">Nama Lengkap</td>
+                                <td width="4%">:</td>
+                                <td class="fw-extrabold text-dark">{{ siswa.nama }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted fw-semibold">NISN / ID Murid</td>
+                                <td>:</td>
+                                <td class="font-monospace fw-bold">{{ siswa.id }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted fw-semibold">Kelas Binaan</td>
+                                <td>:</td>
+                                <td class="fw-bold">Kelas {{ siswa.kelas }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <table class="table table-borderless table-sm identitas-table mb-0">
+                            <tr>
+                                <td width="38%" class="text-muted fw-semibold">Predikat Tahsin</td>
+                                <td width="4%">:</td>
+                                <td class="fw-bold text-info">
+                                    {{ 'Grade ' + siswa.grade_tahsin if siswa.grade_tahsin != '-' else 'Belum Dinilai' }}
+                                    {% if siswa.predikat_tahsin_desc is defined and siswa.grade_tahsin != '-' %}
+                                        <span class="text-muted fw-normal">({{ siswa.predikat_tahsin_desc }})</span>
                                     {% endif %}
-                                {% else %}
-                                    <span class="text-muted fst-italic">Belum Dinilai</span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted fw-semibold">Predikat Tahfidz</td>
+                                <td>:</td>
+                                <td class="fw-bold text-success">
+                                    {{ 'Grade ' + siswa.grade_tahfidz if siswa.grade_tahfidz != '-' else 'Belum Dinilai' }}
+                                    {% if siswa.predikat_tahfidz_desc is defined and siswa.grade_tahfidz != '-' %}
+                                        <span class="text-muted fw-normal">({{ siswa.predikat_tahfidz_desc }})</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted fw-semibold">Predikat Akhir</td>
+                                <td>:</td>
+                                <td>
+                                    {% if siswa.grade_rata_rata and siswa.grade_rata_rata != '-' %}
+                                        <span class="grade-pill {{ 'grade-pass' if is_lulus_akhir else 'grade-fail' }}">
+                                            Grade {{ siswa.grade_rata_rata }} • {{ 'LULUS' if is_lulus_akhir else 'PERLU BIMBINGAN' }}
+                                        </span>
+                                        {% if siswa.jumlah_c is defined and siswa.jumlah_c >= 5 %}
+                                            <div class="text-danger fw-bold mt-1" style="font-size: 0.7rem;">
+                                                Akumulasi {{ siswa.jumlah_c }}x Grade C
+                                            </div>
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="text-muted fst-italic">Belum Dinilai</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- 1. TABEL RIWAYAT & EVALUASI TAHSIN -->
-        <div class="d-flex align-items-center justify-content-between mb-2">
-            <h6 class="fw-extrabold text-dark mb-0">
-                <i class="bi bi-book-half text-info me-1"></i> 1. Riwayat Capaian & Evaluasi Tahsin (Bacaan Al-Qur'an)
-            </h6>
-            <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 rounded-pill">
-                Total {{ siswa.tahsin|default([])|length }} Setoran
-            </span>
-        </div>
-        <table class="table table-bordered table-rapor table-tahsin align-middle text-center mb-4">
-            <thead>
-                <tr>
-                    <th width="5%">No</th>
-                    <th width="13%">Tanggal</th>
-                    <th width="26%" class="text-start">Materi / Jilid / Halaman</th>
-                    <th width="13%">Predikat</th>
-                    <th width="13%">Status</th>
-                    <th width="30%" class="text-start">Catatan Tajwid & Makhraj Guru</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for t in siswa.tahsin|default([]) %}
-                {% set t_grade = (t.grade or 'A')|upper %}
-                {% set is_lulus = (t_grade in ['A', 'B+', 'B']) %}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    <td>{{ t.tanggal|date_dmy }}</td>
-                    <td class="text-start fw-bold text-dark">{{ t.halaman_akhir }}</td>
-                    <td>
-                        <span class="grade-pill {{ 'grade-pass' if is_lulus else 'grade-fail' }}">
-                            Grade {{ t_grade }}
-                        </span>
-                    </td>
-                    <td>
-                        <span class="fw-bold small {{ 'text-success' if is_lulus else 'text-danger' }}">
-                            {{ 'LULUS' if is_lulus else 'BIMBINGAN' }}
-                        </span>
-                    </td>
-                    <td class="text-start text-muted">{{ t.catatan or 'Fasih, hukum tajwid dan makhraj huruf baik.' }}</td>
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="6" class="text-muted py-3 fst-italic">Belum ada catatan setoran Tahsin pada periode ini.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-        <!-- 2. TABEL RIWAYAT & EVALUASI TAHFIDZ -->
-        <div class="d-flex align-items-center justify-content-between mb-2">
-            <h6 class="fw-extrabold text-dark mb-0">
-                <i class="bi bi-journal-bookmark-fill text-success me-1"></i> 2. Riwayat Capaian & Setoran Tahfidz (Hafalan Al-Qur'an)
-            </h6>
-            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill">
-                Total {{ siswa.tahfidz|default([])|length }} Setoran
-            </span>
-        </div>
-        <table class="table table-bordered table-rapor table-tahfidz align-middle text-center mb-3">
-            <thead>
-                <tr>
-                    <th width="5%">No</th>
-                    <th width="13%">Tanggal</th>
-                    <th width="26%" class="text-start">Capaian Hafalan (Surah / Ayat)</th>
-                    <th width="13%">Predikat</th>
-                    <th width="13%">Status</th>
-                    <th width="30%" class="text-start">Catatan Kelancaran & Mutqin Guru</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for f in siswa.tahfidz|default([]) %}
-                {% set f_grade = (f.grade or 'A')|upper %}
-                {% set is_lulus = (f_grade in ['A', 'B+', 'B']) %}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    <td>{{ f.tanggal|date_dmy }}</td>
-                    <td class="text-start fw-bold text-dark">{{ f.hafalan_terakhir }}</td>
-                    <td>
-                        <span class="grade-pill {{ 'grade-pass' if is_lulus else 'grade-fail' }}">
-                            Grade {{ f_grade }}
-                        </span>
-                    </td>
-                    <td>
-                        <span class="fw-bold small {{ 'text-success' if is_lulus else 'text-danger' }}">
-                            {{ 'LULUS' if is_lulus else 'BIMBINGAN' }}
-                        </span>
-                    </td>
-                    <td class="text-start text-muted">{{ f.catatan or 'Hafalan lancar, mutqin, dan tartil.' }}</td>
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="6" class="text-muted py-3 fst-italic">Belum ada catatan setoran Tahfidz pada periode ini.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-        <!-- KETERANGAN STANDAR PREDIKAT -->
-        <div class="p-2.5 bg-light rounded-3 border mb-4" style="font-size: 0.72rem;">
-            <strong>Keterangan Standar Predikat Metode Ummi:</strong>
-            <span class="ms-2"><strong>Grade A</strong> = Sangat Baik / Mumtaz (Lulus)</span> •
-            <span><strong>Grade B+</strong> = Baik Sekali / Jayyid Jiddan (Lulus)</span> •
-            <span><strong>Grade B</strong> = Baik / Jayyid (Lulus)</span> •
-            <span><strong>Grade C</strong> = Cukup / Maqbul (Perlu Bimbingan & Muroja'ah; otomatis Tidak Lulus jika mendapat ≥5x Grade C)</span>
-        </div>
-
-        <!-- AREA TANDA TANGAN -->
-        <div class="row mt-4 pt-2 text-center ttd-area small">
-            <div class="col-6">
-                <p class="mb-0">Mengetahui,<br><strong>Orang Tua / Wali Murid</strong></p>
-                <div style="height: 68px;"></div>
-                <p class="fw-bold mb-0">( ____________________________________ )</p>
-                <small class="text-muted">Wali dari {{ siswa.nama }}</small>
+            <!-- 1. TABEL RIWAYAT & EVALUASI TAHSIN -->
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-1 mb-2">
+                <h6 class="fw-extrabold text-dark mb-0" style="font-size: 0.92rem;">
+                    <i class="bi bi-book-half text-info me-1"></i> 1. Riwayat Capaian & Evaluasi Tahsin (Bacaan Al-Qur'an)
+                </h6>
+                <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 rounded-pill">
+                    Total {{ siswa.tahsin|default([])|length }} Setoran
+                </span>
             </div>
-            <div class="col-6">
-                <p class="mb-0">Depok, {{ tanggal|date_dmy if tanggal is defined and tanggal else '' }}<br><strong>Guru Tahfidz / Musyrif Kelas {{ siswa.kelas }}</strong></p>
-                <div style="height: 68px;"></div>
-                <p class="fw-bold mb-0">( {{ nama_musyrif if nama_musyrif is defined and nama_musyrif else '____________________________________' }} )</p>
-                <small class="text-muted">NIP / NIY. ........................................</small>
+            <div class="table-responsive mb-4">
+                <table class="table table-bordered table-rapor table-tahsin align-middle text-center">
+                    <thead>
+                        <tr>
+                            <th width="5%">No</th>
+                            <th width="13%">Tanggal</th>
+                            <th width="26%" class="text-start">Materi / Jilid / Halaman</th>
+                            <th width="13%">Predikat</th>
+                            <th width="13%">Status</th>
+                            <th width="30%" class="text-start">Catatan Tajwid & Makhraj Guru</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for t in siswa.tahsin|default([]) %}
+                        {% set t_grade = (t.grade or 'A')|upper %}
+                        {% set is_lulus = (t_grade in ['A', 'B+', 'B']) %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td class="text-nowrap">{{ t.tanggal|date_dmy }}</td>
+                            <td class="text-start fw-bold text-dark">{{ t.halaman_akhir }}</td>
+                            <td>
+                                <span class="grade-pill {{ 'grade-pass' if is_lulus else 'grade-fail' }}">
+                                    Grade {{ t_grade }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="fw-bold small text-nowrap {{ 'text-success' if is_lulus else 'text-danger' }}">
+                                    {{ 'LULUS' if is_lulus else 'BIMBINGAN' }}
+                                </span>
+                            </td>
+                            <td class="text-start text-muted">{{ t.catatan or 'Fasih, hukum tajwid dan makhraj huruf baik.' }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="text-muted py-3 fst-italic">Belum ada catatan setoran Tahsin pada periode ini.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 2. TABEL RIWAYAT & EVALUASI TAHFIDZ -->
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-1 mb-2">
+                <h6 class="fw-extrabold text-dark mb-0" style="font-size: 0.92rem;">
+                    <i class="bi bi-journal-bookmark-fill text-success me-1"></i> 2. Riwayat Capaian & Setoran Tahfidz (Hafalan Al-Qur'an)
+                </h6>
+                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill">
+                    Total {{ siswa.tahfidz|default([])|length }} Setoran
+                </span>
+            </div>
+            <div class="table-responsive mb-3">
+                <table class="table table-bordered table-rapor table-tahfidz align-middle text-center">
+                    <thead>
+                        <tr>
+                            <th width="5%">No</th>
+                            <th width="13%">Tanggal</th>
+                            <th width="26%" class="text-start">Capaian Hafalan (Surah / Ayat)</th>
+                            <th width="13%">Predikat</th>
+                            <th width="13%">Status</th>
+                            <th width="30%" class="text-start">Catatan Kelancaran & Mutqin Guru</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for f in siswa.tahfidz|default([]) %}
+                        {% set f_grade = (f.grade or 'A')|upper %}
+                        {% set is_lulus = (f_grade in ['A', 'B+', 'B']) %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td class="text-nowrap">{{ f.tanggal|date_dmy }}</td>
+                            <td class="text-start fw-bold text-dark">{{ f.hafalan_terakhir }}</td>
+                            <td>
+                                <span class="grade-pill {{ 'grade-pass' if is_lulus else 'grade-fail' }}">
+                                    Grade {{ f_grade }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="fw-bold small text-nowrap {{ 'text-success' if is_lulus else 'text-danger' }}">
+                                    {{ 'LULUS' if is_lulus else 'BIMBINGAN' }}
+                                </span>
+                            </td>
+                            <td class="text-start text-muted">{{ f.catatan or 'Hafalan lancar, mutqin, dan tartil.' }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="text-muted py-3 fst-italic">Belum ada catatan setoran Tahfidz pada periode ini.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- KETERANGAN STANDAR PREDIKAT -->
+            <div class="p-3 bg-light rounded-3 border mb-4" style="font-size: 0.72rem; line-height: 1.5;">
+                <strong>Keterangan Standar Predikat Metode Ummi:</strong>
+                <span class="ms-1"><strong>Grade A</strong> = Sangat Baik / Mumtaz (Lulus)</span> •
+                <span><strong>Grade B+</strong> = Baik Sekali / Jayyid Jiddan (Lulus)</span> •
+                <span><strong>Grade B</strong> = Baik / Jayyid (Lulus)</span> •
+                <span><strong>Grade C</strong> = Cukup / Maqbul (Perlu Bimbingan & Muroja'ah; otomatis Tidak Lulus jika mendapat ≥5x Grade C)</span>
+            </div>
+
+            <!-- AREA TANDA TANGAN -->
+            <div class="row g-3 mt-4 pt-2 text-center ttd-area small">
+                <div class="col-6">
+                    <p class="mb-0">Mengetahui,<br><strong>Orang Tua / Wali Murid</strong></p>
+                    <div class="ttd-space"></div>
+                    <div class="ttd-line-wrap">
+                        <span>(</span>
+                        <span class="ttd-blank"></span>
+                        <span>)</span>
+                    </div>
+                    <small class="text-muted d-block mt-1" style="word-break: break-word;">Wali dari {{ siswa.nama }}</small>
+                </div>
+                <div class="col-6">
+                    <p class="mb-0">Depok, <span class="tanggal-surat-detail">{{ tanggal|date_dmy if tanggal is defined and tanggal else '' }}</span><br><strong>Guru Tahfidz / Musyrif Kelas {{ siswa.kelas }}</strong></p>
+                    <div class="ttd-space"></div>
+                    {% if nama_musyrif is defined and nama_musyrif %}
+                        <p class="fw-bold mb-0" style="word-break: break-word;">( {{ nama_musyrif }} )</p>
+                    {% else %}
+                        <div class="ttd-line-wrap">
+                            <span>(</span>
+                            <span class="ttd-blank"></span>
+                            <span>)</span>
+                        </div>
+                    {% endif %}
+                    <div class="ttd-nip-wrap">
+                        <span>NIP / NIY.</span>
+                        <span class="ttd-dots"></span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <script>
+        function perbaruiWaktuCetak() {
+            const now = new Date();
+            const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+            const hari = days[now.getDay()];
+            const tgl = now.getDate();
+            const bulan = months[now.getMonth()];
+            const tahun = now.getFullYear();
+            const jam = String(now.getHours()).padStart(2, '0');
+            const menit = String(now.getMinutes()).padStart(2, '0');
+            const detik = String(now.getSeconds()).padStart(2, '0');
+
+            const fullStr = `${hari}, ${tgl} ${bulan} ${tahun} • ${jam}:${menit}:${detik} WIB`;
+            const dateOnlyStr = `${tgl} ${bulan} ${tahun}`;
+
+            document.querySelectorAll('.waktu-cetak-detail').forEach(el => {
+                el.textContent = fullStr;
+            });
+            document.querySelectorAll('.tanggal-surat-detail').forEach(el => {
+                if (!el.textContent.trim()) {
+                    el.textContent = dateOnlyStr;
+                }
+            });
+        }
+
+        function cetakDokumen() {
+            perbaruiWaktuCetak();
+            window.print();
+        }
+
+        document.addEventListener('DOMContentLoaded', perbaruiWaktuCetak);
+        window.addEventListener('beforeprint', perbaruiWaktuCetak);
+    </script>
 </body>
 </html>

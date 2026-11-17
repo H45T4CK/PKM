@@ -194,6 +194,7 @@
             border-radius: 12px;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
             transition: all 0.2s ease;
         }
@@ -205,6 +206,34 @@
             color: #ffffff;
             background: var(--slate-900);
             box-shadow: 0 4px 12px rgba(15, 23, 42, 0.22);
+        }
+
+        .search-wrap-responsive {
+            min-width: 260px;
+        }
+
+        @media (max-width: 575.98px) {
+            .hero-banner {
+                padding: 20px 18px;
+            }
+            .nav-pills-modern {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+            }
+            .nav-pills-modern .nav-link {
+                width: 100%;
+                font-size: 0.84rem;
+                padding: 10px 14px;
+            }
+            .search-wrap-responsive {
+                min-width: 0;
+                width: 100%;
+            }
+            .btn-ta-setting {
+                width: 100%;
+                justify-content: space-between;
+            }
         }
 
         .table-custom { margin-bottom: 0; }
@@ -380,10 +409,10 @@
             </div>
         </div>
 
-        <!-- HERO BANNER ADMIN (BERSIH & FOKUS PADA KONTROL GLOBAL) -->
+        <!-- HERO BANNER ADMIN (KONTROL GLOBAL & REKAP MASTER) -->
         <div class="hero-banner mb-4 anim-fade-in">
             <div class="row align-items-center g-3">
-                <div class="col-12 col-lg-8">
+                <div class="col-12 col-lg-7">
                     <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
                         <span class="badge bg-dark text-white fw-bold px-3 py-1 rounded-pill">
                             <i class="bi bi-shield-check me-1"></i> Pusat Kontrol Administrator
@@ -397,18 +426,30 @@
                     </div>
                     <h3 class="fw-extrabold text-dark mb-1">Ahlan wa Sahlan, Administrator SIMA SDIT!</h3>
                     <p class="text-muted mb-0 small">
-                        Kelola akun Guru & Musyrif, pantau predikat capaian Al-Qur'an seluruh murid, serta atur Tahun Ajaran aktif sekolah.
+                        Kelola akun Guru & Musyrif, pantau predikat capaian Al-Qur'an seluruh murid, unduh rekap master, serta atur Tahun Ajaran aktif sekolah.
                     </p>
                 </div>
-                <div class="col-12 col-lg-4 text-lg-end">
-                    <button type="button" class="btn btn-ta-setting" data-bs-toggle="modal" data-bs-target="#modalSettingTA">
-                        <i class="bi bi-gear-fill fs-5 text-warning"></i>
-                        <div class="text-start lh-sm">
-                            <div class="small text-uppercase opacity-75" style="font-size: 0.65rem; letter-spacing: 0.4px;">Pengaturan Periode</div>
-                            <div>TA {{ tahun_ajaran or '2026/2027' }} ({{ semester or 'Ganjil' }})</div>
-                        </div>
-                        <i class="bi bi-chevron-right ms-1 opacity-75"></i>
-                    </button>
+                <div class="col-12 col-lg-5">
+                    <div class="d-flex flex-wrap align-items-center justify-content-lg-end gap-2">
+                        <a href="{{ url_for('export.export_master_excel') }}" class="btn btn-success btn-toolbar-clean shadow-sm flex-fill flex-sm-grow-0" title="Unduh Buku Kerja Excel Rekap Master Sekolah (.xlsx)">
+                            <i class="bi bi-file-earmark-spreadsheet-fill fs-6"></i>
+                            <span>Rekap Master (.xlsx)</span>
+                        </a>
+                        <a href="{{ url_for('export.export_pdf') }}" target="_blank" class="btn btn-outline-dark btn-toolbar-clean bg-white flex-fill flex-sm-grow-0" title="Pratinjau & Cetak Laporan Rekapitulasi Semua Murid">
+                            <i class="bi bi-printer-fill fs-6"></i>
+                            <span>Cetak Semua Laporan</span>
+                        </a>
+                        <button type="button" class="btn btn-ta-setting" data-bs-toggle="modal" data-bs-target="#modalSettingTA">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-gear-fill fs-5 text-warning"></i>
+                                <div class="text-start lh-sm">
+                                    <div class="small text-uppercase opacity-75" style="font-size: 0.65rem; letter-spacing: 0.4px;">Pengaturan Periode</div>
+                                    <div>TA {{ tahun_ajaran or '2026/2027' }} ({{ semester or 'Ganjil' }})</div>
+                                </div>
+                            </div>
+                            <i class="bi bi-chevron-right ms-1 opacity-75"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -519,7 +560,7 @@
         </div>
 
         <!-- TAB NAVIGATION & MASTER ACTIONS BAR -->
-        <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 mb-3 anim-fade-in delay-2">
+        <div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center justify-content-between gap-3 mb-3 anim-fade-in delay-2">
             <ul class="nav nav-pills nav-pills-modern" id="adminMainTabs" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="tab-guru-btn" data-bs-toggle="tab" data-bs-target="#tab-guru-pane" type="button" role="tab">
@@ -544,11 +585,11 @@
             <!-- PANE 1: DATA GURU & MUSYRIF -->
             <div class="tab-pane fade show active" id="tab-guru-pane" role="tabpanel">
                 <div class="card-modern overflow-hidden">
-                    <div class="p-4 border-bottom bg-white">
+                    <div class="p-3 p-md-4 border-bottom bg-white">
                         <!-- BARIS 1: JUDUL & TOMBOL AKSI GURU YANG RAPI & SERAGAM -->
                         <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
                             <div class="d-flex align-items-center gap-3">
-                                <div class="bg-dark text-white p-2.5 rounded-3 shadow-sm">
+                                <div class="bg-dark text-white p-2.5 rounded-3 shadow-sm flex-shrink-0">
                                     <i class="bi bi-person-badge fs-5"></i>
                                 </div>
                                 <div>
@@ -559,15 +600,15 @@
                             
                             <!-- Action Toolbar Guru (Template, Import Excel, Tambah Guru) -->
                             <div class="d-flex flex-wrap align-items-center gap-2">
-                                <a href="{{ url_for('admin.template_guru') }}" class="btn btn-outline-success btn-toolbar-clean bg-white" title="Unduh Template Resmi Excel Guru (.xlsx)">
+                                <a href="{{ url_for('admin.template_guru') }}" class="btn btn-outline-success btn-toolbar-clean bg-white flex-fill flex-sm-grow-0" title="Unduh Template Resmi Excel Guru (.xlsx)">
                                     <i class="bi bi-file-earmark-arrow-down-fill fs-6"></i>
                                     <span>Unduh Template</span>
                                 </a>
-                                <button type="button" class="btn btn-success btn-toolbar-clean shadow-sm" data-bs-toggle="modal" data-bs-target="#modalImportGuru" title="Import Banyak Guru Sekaligus dari Excel">
+                                <button type="button" class="btn btn-success btn-toolbar-clean shadow-sm flex-fill flex-sm-grow-0" data-bs-toggle="modal" data-bs-target="#modalImportGuru" title="Import Banyak Guru Sekaligus dari Excel">
                                     <i class="bi bi-file-earmark-excel-fill fs-6"></i>
                                     <span>Import Excel</span>
                                 </button>
-                                <button type="button" class="btn btn-dark btn-toolbar-clean shadow-sm" data-bs-toggle="modal" data-bs-target="#modalTambahGuru">
+                                <button type="button" class="btn btn-dark btn-toolbar-clean shadow-sm flex-fill flex-sm-grow-0" data-bs-toggle="modal" data-bs-target="#modalTambahGuru">
                                     <i class="bi bi-person-plus-fill fs-6"></i>
                                     <span>Tambah Guru</span>
                                 </button>
@@ -591,7 +632,7 @@
                                 </button>
                             </div>
 
-                            <div class="position-relative" style="min-width: 280px;">
+                            <div class="position-relative search-wrap-responsive">
                                 <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
                                 <input type="text" id="searchGuruInput" class="form-control rounded-pill ps-5 bg-light border" placeholder="Cari nama, username, kelas..." onkeyup="filterTabelGuru()">
                                 <button type="button" id="clearSearchGuruBtn" class="btn btn-sm text-muted position-absolute top-50 end-0 translate-middle-y me-2 d-none" onclick="clearSearchGuru()">
@@ -624,7 +665,7 @@
                                             </div>
                                             <div>
                                                 <div class="fw-bold text-dark fs-6">{{ g.nama }}</div>
-                                                <div class="small text-muted" style="font-size: 0.72rem;">ID Staf: G-{{ '%04d' % loop.index }}</div>
+                                                <div class="small text-muted" style="font-size: 0.72rem;">ID Staf: G-{{ '%04d' % g.id }}</div>
                                             </div>
                                         </div>
                                     </td>
@@ -712,11 +753,11 @@
             <!-- PANE 2: MONITORING DATA SELURUH MURID -->
             <div class="tab-pane fade" id="tab-siswa-pane" role="tabpanel">
                 <div class="card-modern overflow-hidden">
-                    <div class="p-4 border-bottom bg-white">
+                    <div class="p-3 p-md-4 border-bottom bg-white">
                         <div class="row align-items-center g-3">
                             <div class="col-12 col-lg-5">
                                 <div class="d-flex align-items-center gap-3">
-                                    <div class="bg-success text-white p-2.5 rounded-3 shadow-sm">
+                                    <div class="bg-success text-white p-2.5 rounded-3 shadow-sm flex-shrink-0">
                                         <i class="bi bi-mortarboard fs-5"></i>
                                     </div>
                                     <div>
@@ -737,7 +778,7 @@
                                     </select>
 
                                     <!-- Search Box Murid -->
-                                    <div class="position-relative flex-grow-1 flex-md-grow-0" style="min-width: 250px;">
+                                    <div class="position-relative search-wrap-responsive flex-grow-1 flex-md-grow-0">
                                         <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
                                         <input type="text" id="searchSiswaInput" class="form-control rounded-pill ps-5 bg-light border" placeholder="Cari nama, NISN, username..." onkeyup="filterTabelSiswaAdmin()">
                                         <button type="button" id="clearSearchSiswaBtn" class="btn btn-sm text-muted position-absolute top-50 end-0 translate-middle-y me-2 d-none" onclick="clearSearchSiswaAdmin()">
@@ -895,6 +936,15 @@
                                             </button>
                                             <a href="{{ url_for('export.cetak_hafalan_siswa', id_siswa=s.id) }}" target="_blank" class="btn btn-act btn-outline-success" title="Cetak Rapor Digital PDF">
                                                 <i class="bi bi-printer-fill"></i>
+                                            </a>
+                                            <a href="{{ url_for('admin.hapus_siswa', id_siswa=s.id) }}"
+                                               class="btn btn-act btn-outline-danger"
+                                               data-confirm="Apakah Anda yakin ingin menghapus data murid {{ s.nama }} beserta seluruh riwayat setoran dan akun walinya?"
+                                               data-confirm-title="Hapus Data Murid?"
+                                               data-confirm-ok="Ya, Hapus Permanen"
+                                               data-confirm-type="danger"
+                                               title="Hapus Data Murid">
+                                                <i class="bi bi-trash"></i>
                                             </a>
                                         </div>
                                     </td>
@@ -1794,7 +1844,7 @@
         }
     </script>
 
-<!-- MODAL HAPUS MASSAL / RESET DATA (LETAKKAN SEBELUM </body>) -->
+<!-- MODAL HAPUS MASSAL / RESET DATA -->
 <style>
     .reset-option-card {
         border: 1.5px solid #fecaca;
@@ -1853,7 +1903,7 @@
                 <div class="alert alert-warning border-0 rounded-3 small mb-3 d-flex align-items-start gap-2">
                     <i class="bi bi-shield-exclamation fs-5 text-warning mt-0.5"></i>
                     <div>
-                        Sebaiknya unduh <strong>Rekap Master (.xlsx)</strong> terlebih dahulu sebagai cadangan. Ketik kata <strong>HAPUS</strong> untuk membuka kunci tombol eksekusi.
+                        Sebaiknya unduh <a href="{{ url_for('export.export_master_excel') }}" class="fw-bold text-dark text-decoration-underline">Rekap Master (.xlsx)</a> terlebih dahulu sebagai cadangan. Ketik kata <strong>HAPUS</strong> untuk membuka kunci tombol eksekusi.
                     </div>
                 </div>
 

@@ -334,6 +334,33 @@ def edit_password_siswa(id_siswa):
     return redirect(url_for('admin.dashboard_admin'))
 
 
+@admin_bp.route('/hapus_siswa/<id_siswa>')
+@role_required('admin')
+def hapus_siswa(id_siswa):
+    siswa = Siswa.query.get_or_404(id_siswa)
+    nama = siswa.nama
+    ortu_id = siswa.user_id_ortu
+
+    try:
+        RecordsPoin.query.filter_by(siswa_id=siswa.id).delete(synchronize_session=False)
+        RecordsTahsin.query.filter_by(siswa_id=siswa.id).delete(synchronize_session=False)
+        RecordsTahfidz.query.filter_by(siswa_id=siswa.id).delete(synchronize_session=False)
+        db.session.delete(siswa)
+
+        if ortu_id:
+            ortu = User.query.get(ortu_id)
+            if ortu and ortu.role == 'ortu':
+                db.session.delete(ortu)
+
+        db.session.commit()
+        flash(f'Data murid {nama} beserta riwayat setoran dan akun walinya berhasil dihapus!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Gagal menghapus data murid: {str(e)}', 'danger')
+
+    return redirect(url_for('admin.dashboard_admin'))
+
+
 @admin_bp.route('/import_guru', methods=['POST'])
 @role_required('admin')
 def import_guru():
