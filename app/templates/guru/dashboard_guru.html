@@ -321,9 +321,6 @@
             box-shadow: 0 24px 60px -12px rgba(15, 23, 42, 0.25);
         }
 
-        /* =========================================================
-           DESAIN MODERN MODAL INPUT (GRADE CARDS & QUICK CHIPS)
-           ========================================================= */
         .modal-header-tahsin {
             background: linear-gradient(135deg, #0c4a6e 0%, #0284c7 100%);
         }
@@ -334,72 +331,108 @@
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 65%, #064e3b 100%);
         }
 
+        /* =========================================================
+           DESAIN MODERN MODAL INPUT TAHSIN & TAHFIDZ
+           ========================================================= */
+        .eval-modal .modal-content {
+            border-radius: 22px;
+            overflow: hidden;
+        }
+        .eval-modal .modal-header-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .eval-modal .student-avatar-box {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.05rem;
+            color: #ffffff;
+            flex-shrink: 0;
+        }
+        .eval-modal .form-control {
+            font-size: 0.88rem;
+            padding: 0.62rem 0.85rem;
+        }
+        .eval-modal .form-control::placeholder {
+            font-size: 0.84rem;
+            color: #94a3b8;
+        }
         .grade-option-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 11px 14px;
             border: 1.5px solid #e2e8f0;
             border-radius: 14px;
-            padding: 10px 12px;
             background: #ffffff;
             cursor: pointer;
-            transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
+            transition: all 0.18s ease;
             user-select: none;
         }
         .grade-option-card:hover {
-            border-color: #94a3b8;
+            border-color: #cbd5e1;
             background: #f8fafc;
-            transform: translateY(-1px);
         }
-        .grade-option-card.active-pass {
+        .grade-option-radio:checked + .grade-option-card.grade-pass {
             border-color: #059669;
             background: #ecfdf5;
-            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.15);
+            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.12);
         }
-        .grade-option-card.active-fail {
-            border-color: #e11d48;
-            background: #fff1f2;
-            box-shadow: 0 4px 12px rgba(225, 29, 72, 0.15);
+        .grade-option-radio:checked + .grade-option-card.grade-fail {
+            border-color: #ef4444;
+            background: #fef2f2;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.12);
         }
-        .grade-check-dot {
-            width: 18px;
-            height: 18px;
+        .grade-check-circle {
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
             border: 1.5px solid #cbd5e1;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.65rem;
+            font-size: 0.78rem;
             color: transparent;
-            transition: all 0.15s ease;
+            transition: all 0.18s ease;
+            flex-shrink: 0;
         }
-        .grade-option-card.active-pass .grade-check-dot {
+        .grade-option-radio:checked + .grade-option-card.grade-pass .grade-check-circle {
             background: #059669;
             border-color: #059669;
             color: #ffffff;
         }
-        .grade-option-card.active-fail .grade-check-dot {
-            background: #e11d48;
-            border-color: #e11d48;
+        .grade-option-radio:checked + .grade-option-card.grade-fail .grade-check-circle {
+            background: #ef4444;
+            border-color: #ef4444;
             color: #ffffff;
         }
-
-        .quick-chip {
-            font-size: 0.73rem;
+        .quick-chip-btn {
+            font-size: 0.76rem;
             font-weight: 600;
-            padding: 4px 11px;
-            border-radius: 50rem;
-            border: 1px solid #cbd5e1;
-            background: #ffffff;
             color: #334155;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 50rem;
+            padding: 4px 11px;
             cursor: pointer;
             transition: all 0.15s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
         }
-        .quick-chip:hover {
-            background: #0f172a;
-            color: #ffffff;
-            border-color: #0f172a;
+        .quick-chip-btn:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+            border-color: #94a3b8;
         }
 
         /* =========================================================
@@ -631,7 +664,7 @@
                     </div>
                     <h3 class="fw-bold text-dark mb-1">Ahlan wa Sahlan, {{ session.get('user', 'Ustadz / Ustadzah') }}! 🌟</h3>
                     <p class="text-muted mb-0 small">
-                        Pencatatan setoran Tahsin & Tahfidz menggunakan sistem predikat huruf (<strong class="text-success">A, B+, B: Lulus</strong> • <strong class="text-danger">C: Perlu Bimbingan</strong>) untuk kelas binaan <strong class="text-dark">{{ session.get('kelas', '1A') }}</strong>.
+                        Pencatatan setoran Tahsin & Tahfidz menggunakan sistem predikat huruf (<strong class="text-success">A, B+, B: Lulus</strong> • <strong class="text-danger">C / 5x Grade C: Perlu Bimbingan</strong>) untuk kelas binaan <strong class="text-dark">{{ session.get('kelas', '1A') }}</strong>.
                     </p>
                 </div>
                 <div class="col-12 col-lg-5 text-lg-end">
@@ -642,6 +675,11 @@
                         <button type="button" class="btn btn-tahfidz-emerald btn-sm rounded-pill px-3 py-2 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalTambahSiswa">
                             <i class="bi bi-person-plus-fill me-1"></i> Tambah Murid
                         </button>
+                        {% if siswa_list and siswa_list|length > 0 %}
+                        <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3 py-2 fw-bold shadow-sm bg-white" data-bs-toggle="modal" data-bs-target="#modalHapusSemuaSiswaGuru">
+                            <i class="bi bi-trash3-fill me-1"></i> Hapus Semua
+                        </button>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -733,7 +771,7 @@
                             </div>
                             <small class="{{ 'text-danger fw-bold' if belum_cnt > 0 else 'text-muted' }} d-block mt-1" style="font-size: 0.74rem;">
                                 <i class="bi {{ 'bi-exclamation-triangle-fill text-danger' if belum_cnt > 0 else 'bi-check-all text-success' }} me-1"></i>
-                                {{ belum_cnt }} Murid Perlu Bimbingan (Grade C)
+                                {{ belum_cnt }} Murid Perlu Bimbingan (Grade C / ≥5x C)
                             </small>
                         </div>
                         <div class="kpi-icon-wrap bg-warning bg-opacity-10 text-warning">
@@ -754,7 +792,7 @@
                             <h6 class="fw-bold mb-0 text-dark d-flex align-items-center gap-2">
                                 <i class="bi bi-bar-chart-line-fill text-success"></i> Grafik Distribusi Predikat & Kelulusan Murid
                             </h6>
-                            <small class="text-muted">Grade A, B+, B: Lulus • Grade C: Perlu Bimbingan (Tidak Lulus)</small>
+                            <small class="text-muted">Grade A, B+, B: Lulus • Grade C (atau ≥5x nilai C): Perlu Bimbingan (Tidak Lulus)</small>
                         </div>
                         <span class="badge bg-light text-dark border">
                             {{ total_siswa }} Data Murid
@@ -991,7 +1029,12 @@
                                             {{ s.status_kelulusan_rata_rata }}
                                         </span>
                                     </div>
-                                    <small class="text-muted d-block mt-0.5" style="font-size: 0.7rem;">{{ predikat_label_map.get(s.grade_rata_rata, '') }}</small>
+                                    <small class="text-muted d-block mt-0.5" style="font-size: 0.7rem;">
+                                        {{ predikat_label_map.get(s.grade_rata_rata, '') }}
+                                        {% if s.jumlah_c >= 5 %}
+                                            <span class="text-danger fw-bold">({{ s.jumlah_c }}x Grade C)</span>
+                                        {% endif %}
+                                    </small>
                                 {% else %}
                                     <span class="text-muted small fst-italic">Belum Ada Penilaian</span>
                                 {% endif %}
@@ -1072,135 +1115,137 @@
     <!-- ========================================== -->
 
     {% for s in siswa_list %}
-        <!-- 1. MODAL INPUT PREDIKAT TAHSIN (MODERN & INTERAKTIF) -->
-        <div class="modal fade" id="modalTahsin{{ s.id }}" tabindex="-1" aria-hidden="true">
+        <!-- 1. MODAL INPUT PREDIKAT TAHSIN -->
+        <div class="modal fade eval-modal" id="modalTahsin{{ s.id }}" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0 shadow-lg overflow-hidden">
+                <div class="modal-content border-0 shadow-lg">
                     <form action="/catat_tahsin/{{ s.id }}" method="POST">
-                        <div class="modal-header modal-header-tahsin text-white border-0 py-3 px-4">
-                            <div class="d-flex align-items-center gap-2.5">
-                                <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: rgba(255,255,255,0.16);">
-                                    <i class="bi bi-book-half fs-5"></i>
+                        <div class="modal-header text-white border-0 py-3 px-4" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="modal-header-icon">
+                                    <i class="bi bi-book-half"></i>
                                 </div>
                                 <div>
-                                    <h5 class="modal-title fw-bold mb-0 fs-6">Input Penilaian Tahsin Murid</h5>
-                                    <small class="text-white-50" style="font-size: 0.72rem;">Evaluasi bacaan Wafa / Al-Qur'an & Tajwid</small>
+                                    <h5 class="modal-title fw-bold mb-0" style="font-size: 1.05rem;">Input Penilaian Tahsin Murid</h5>
+                                    <small class="text-white-50 d-block" style="font-size: 0.76rem;">Evaluasi bacaan Wafa / Al-Qur'an &amp; Tajwid</small>
                                 </div>
                             </div>
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                         </div>
 
                         <div class="modal-body p-4">
-                            <!-- Kartu Identitas Murid -->
-                            <div class="d-flex align-items-center justify-content-between p-3 rounded-4 mb-3 border" style="background: #f0f9ff; border-color: #bae6fd !important;">
-                                <div class="d-flex align-items-center gap-2.5">
-                                    <div class="avatar-circle" style="width: 38px; height: 38px; font-size: 0.85rem; background: linear-gradient(135deg, #0284c7, #0369a1);">
-                                        {{ s.nama[0]|upper }}
+                            <!-- Identitas Murid -->
+                            <div class="d-flex align-items-center justify-content-between p-3 rounded-4 mb-3" style="background: #f0f9ff; border: 1px solid #bae6fd;">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="student-avatar-box" style="background: #0284c7;">
+                                        {{ s.nama[0]|upper if s.nama else 'M' }}
                                     </div>
                                     <div>
-                                        <div class="fw-bold text-dark small">{{ s.nama }}</div>
-                                        <div class="text-muted" style="font-size: 0.72rem;">NISN: <strong>{{ s.id }}</strong> • Kelas <strong>{{ s.kelas }}</strong></div>
+                                        <div class="fw-bold text-dark" style="font-size: 0.92rem;">{{ s.nama }}</div>
+                                        <small class="text-muted" style="font-size: 0.76rem;">NISN: <strong>{{ s.id }}</strong> • Kelas <strong>{{ s.kelas }}</strong></small>
                                     </div>
                                 </div>
-                                <span class="badge bg-white text-dark border rounded-pill px-2.5 py-1 fw-bold" style="font-size: 0.7rem;">
-                                    {{ 'Grade ' + s.grade_tahsin if s.grade_tahsin != '-' else 'Setoran Baru' }}
-                                </span>
-                            </div>
-                            
-                            <!-- Tanggal Setor -->
-                            <div class="mb-3">
-                                <label class="form-label fw-bold small text-dark mb-1">
-                                    <i class="bi bi-calendar3 text-primary me-1"></i> Tanggal Setor
-                                </label>
-                                <input type="date" name="tanggal" class="form-control rounded-3 bg-light border fw-semibold" value="{{ now_date }}" required>
+                                <span class="badge bg-white text-dark border rounded-pill px-3 py-1 fw-semibold" style="font-size: 0.72rem;">Setoran Baru</span>
                             </div>
 
-                            <!-- Pemilih Predikat Interaktif (Kartu 2x2) -->
+                            <!-- Tanggal Setor -->
                             <div class="mb-3">
-                                <div class="d-flex justify-content-between align-items-center mb-1.5">
-                                    <label class="form-label fw-bold small text-dark mb-0">
+                                <label class="form-label fw-bold text-dark mb-1" style="font-size: 0.82rem;">
+                                    <i class="bi bi-calendar-event text-primary me-1"></i> Tanggal Setor
+                                </label>
+                                <input type="date" name="tanggal" class="form-control rounded-3 bg-light border" value="{{ now_date }}" required>
+                            </div>
+
+                            <!-- Pilih Predikat (Grade) -->
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <label class="form-label fw-bold text-dark mb-0" style="font-size: 0.82rem;">
                                         <i class="bi bi-award text-primary me-1"></i> Pilih Predikat (Grade)
                                     </label>
-                                    <span id="labelStatusTahsin{{ s.id }}" class="badge bg-success text-white px-2.5 py-1 rounded-pill" style="font-size: 0.7rem;">
-                                        <i class="bi bi-check-circle-fill me-1"></i>Status: LULUS
+                                    <span id="labelStatusTahsin{{ s.id }}" class="badge bg-success text-white px-3 py-1 rounded-pill" style="font-size: 0.72rem;">
+                                        <i class="bi bi-check-circle-fill me-1"></i> Status: LULUS
                                     </span>
                                 </div>
-                                <input type="hidden" name="grade" id="inputGradeTahsin{{ s.id }}" value="A">
-                                <div class="row g-2" id="gradeCardsTahsin{{ s.id }}">
+
+                                <div class="row g-2">
                                     <div class="col-6">
-                                        <div class="grade-option-card active-pass" onclick="selectGradeCard('Tahsin{{ s.id }}', 'A', true, this)">
-                                            <div class="d-flex justify-content-between align-items-center mb-0.5">
-                                                <span class="fw-extrabold text-dark">Grade A</span>
-                                                <span class="grade-check-dot"><i class="bi bi-check-lg"></i></span>
+                                        <input type="radio" class="btn-check grade-option-radio" name="grade" id="tahsinGradeA_{{ s.id }}" value="A" checked onchange="updateGradeRadioStatus('A', 'labelStatusTahsin{{ s.id }}')">
+                                        <label class="grade-option-card grade-pass w-100" for="tahsinGradeA_{{ s.id }}">
+                                            <div>
+                                                <div class="fw-bold text-dark" style="font-size: 0.9rem;">Grade A</div>
+                                                <small class="text-muted" style="font-size: 0.72rem;">Sangat Baik • <strong>Mumtaz</strong></small>
                                             </div>
-                                            <div class="text-muted" style="font-size: 0.72rem;">Sangat Baik • <strong>Mumtaz</strong></div>
-                                        </div>
+                                            <span class="grade-check-circle"><i class="bi bi-check-lg"></i></span>
+                                        </label>
                                     </div>
                                     <div class="col-6">
-                                        <div class="grade-option-card" onclick="selectGradeCard('Tahsin{{ s.id }}', 'B+', true, this)">
-                                            <div class="d-flex justify-content-between align-items-center mb-0.5">
-                                                <span class="fw-extrabold text-dark">Grade B+</span>
-                                                <span class="grade-check-dot"><i class="bi bi-check-lg"></i></span>
+                                        <input type="radio" class="btn-check grade-option-radio" name="grade" id="tahsinGradeBPlus_{{ s.id }}" value="B+" onchange="updateGradeRadioStatus('B+', 'labelStatusTahsin{{ s.id }}')">
+                                        <label class="grade-option-card grade-pass w-100" for="tahsinGradeBPlus_{{ s.id }}">
+                                            <div>
+                                                <div class="fw-bold text-dark" style="font-size: 0.9rem;">Grade B+</div>
+                                                <small class="text-muted" style="font-size: 0.72rem;">Baik Sekali • <strong>Jayyid Jiddan</strong></small>
                                             </div>
-                                            <div class="text-muted" style="font-size: 0.72rem;">Baik Sekali • <strong>Jayyid Jiddan</strong></div>
-                                        </div>
+                                            <span class="grade-check-circle"><i class="bi bi-check-lg"></i></span>
+                                        </label>
                                     </div>
                                     <div class="col-6">
-                                        <div class="grade-option-card" onclick="selectGradeCard('Tahsin{{ s.id }}', 'B', true, this)">
-                                            <div class="d-flex justify-content-between align-items-center mb-0.5">
-                                                <span class="fw-extrabold text-dark">Grade B</span>
-                                                <span class="grade-check-dot"><i class="bi bi-check-lg"></i></span>
+                                        <input type="radio" class="btn-check grade-option-radio" name="grade" id="tahsinGradeB_{{ s.id }}" value="B" onchange="updateGradeRadioStatus('B', 'labelStatusTahsin{{ s.id }}')">
+                                        <label class="grade-option-card grade-pass w-100" for="tahsinGradeB_{{ s.id }}">
+                                            <div>
+                                                <div class="fw-bold text-dark" style="font-size: 0.9rem;">Grade B</div>
+                                                <small class="text-muted" style="font-size: 0.72rem;">Baik • <strong>Jayyid</strong></small>
                                             </div>
-                                            <div class="text-muted" style="font-size: 0.72rem;">Baik • <strong>Jayyid</strong></div>
-                                        </div>
+                                            <span class="grade-check-circle"><i class="bi bi-check-lg"></i></span>
+                                        </label>
                                     </div>
                                     <div class="col-6">
-                                        <div class="grade-option-card" onclick="selectGradeCard('Tahsin{{ s.id }}', 'C', false, this)">
-                                            <div class="d-flex justify-content-between align-items-center mb-0.5">
-                                                <span class="fw-extrabold text-dark">Grade C</span>
-                                                <span class="grade-check-dot"><i class="bi bi-check-lg"></i></span>
+                                        <input type="radio" class="btn-check grade-option-radio" name="grade" id="tahsinGradeC_{{ s.id }}" value="C" onchange="updateGradeRadioStatus('C', 'labelStatusTahsin{{ s.id }}')">
+                                        <label class="grade-option-card grade-fail w-100" for="tahsinGradeC_{{ s.id }}">
+                                            <div>
+                                                <div class="fw-bold text-dark" style="font-size: 0.9rem;">Grade C</div>
+                                                <small class="text-muted" style="font-size: 0.72rem;">Bimbingan • <strong>Maqbul</strong></small>
                                             </div>
-                                            <div class="text-muted" style="font-size: 0.72rem;">Bimbingan • <strong>Maqbul</strong></div>
-                                        </div>
+                                            <span class="grade-check-circle"><i class="bi bi-check-lg"></i></span>
+                                        </label>
                                     </div>
                                 </div>
-                                <small class="text-muted d-block mt-1.5" style="font-size: 0.71rem;">
-                                    <i class="bi bi-info-circle me-1"></i>Standar ketuntasan minimal SDIT: <strong>Grade B</strong>
+                                <small class="text-muted d-block mt-2" style="font-size: 0.73rem;">
+                                    <i class="bi bi-info-circle me-1"></i> Standar ketuntasan minimal SDIT: <strong>Grade B</strong> (jika mendapat Grade C sebanyak 5x otomatis Tidak Lulus)
                                 </small>
                             </div>
 
-                            <!-- Halaman / Jilid Akhir + Quick Chips -->
+                            <!-- Halaman / Jilid Akhir -->
                             <div class="mb-3">
-                                <label class="form-label fw-bold small text-dark mb-1">
-                                    <i class="bi bi-bookmark-star text-primary me-1"></i> Halaman / Jilid Akhir
+                                <label class="form-label fw-bold text-dark mb-1" style="font-size: 0.82rem;">
+                                    <i class="bi bi-bookmark text-primary me-1"></i> Halaman / Jilid Akhir
                                 </label>
-                                <input type="text" id="inputMateriTahsin{{ s.id }}" name="halaman_akhir" class="form-control rounded-3 bg-light border fw-medium" placeholder="Contoh: Wafa Jilid 3 Hal. 15 / Al-Qur'an Juz 1" required>
-                                <div class="d-flex flex-wrap gap-1.5 mt-1.5">
-                                    <span class="quick-chip" onclick="fillPresetInput('inputMateriTahsin{{ s.id }}', 'Wafa Jilid 1 Hal. ')">+ Wafa Jilid 1</span>
-                                    <span class="quick-chip" onclick="fillPresetInput('inputMateriTahsin{{ s.id }}', 'Wafa Jilid 2 Hal. ')">+ Wafa Jilid 2</span>
-                                    <span class="quick-chip" onclick="fillPresetInput('inputMateriTahsin{{ s.id }}', 'Wafa Jilid 3 Hal. ')">+ Wafa Jilid 3</span>
-                                    <span class="quick-chip" onclick="fillPresetInput('inputMateriTahsin{{ s.id }}', 'Al-Qur\'an Juz 1 Hal. ')">+ Al-Qur'an Juz 1</span>
+                                <input type="text" id="inputMateriTahsin{{ s.id }}" name="halaman_akhir" class="form-control rounded-3 bg-light border" placeholder="Contoh: Wafa Jilid 3 Hal. 15 / Al-Qur'an Juz 1" required>
+                                <div class="d-flex flex-wrap gap-2 mt-2">
+                                    <button type="button" class="quick-chip-btn" onclick="fillQuickInput('inputMateriTahsin{{ s.id }}', 'Wafa Jilid 1 Hal. ')">+ Wafa Jilid 1</button>
+                                    <button type="button" class="quick-chip-btn" onclick="fillQuickInput('inputMateriTahsin{{ s.id }}', 'Wafa Jilid 2 Hal. ')">+ Wafa Jilid 2</button>
+                                    <button type="button" class="quick-chip-btn" onclick="fillQuickInput('inputMateriTahsin{{ s.id }}', 'Wafa Jilid 3 Hal. ')">+ Wafa Jilid 3</button>
+                                    <button type="button" class="quick-chip-btn" onclick="fillQuickInput('inputMateriTahsin{{ s.id }}', 'Al-Qur\'an Juz 1 Hal. ')">+ Al-Qur'an Juz 1</button>
                                 </div>
                             </div>
 
-                            <!-- Catatan Tajwid + Quick Chips -->
+                            <!-- Catatan Tajwid & Makhorijul Huruf -->
                             <div class="mb-1">
-                                <label class="form-label fw-bold small text-dark mb-1">
-                                    <i class="bi bi-chat-square-text text-primary me-1"></i> Catatan Tajwid & Makhorijul Huruf
+                                <label class="form-label fw-bold text-dark mb-1" style="font-size: 0.82rem;">
+                                    <i class="bi bi-chat-square-text text-primary me-1"></i> Catatan Tajwid &amp; Makhorijul Huruf
                                 </label>
                                 <textarea id="inputCatatanTahsin{{ s.id }}" name="catatan" class="form-control rounded-3 bg-light border" rows="2" placeholder="Tulis evaluasi bacaan murid atau pilih template di bawah..."></textarea>
-                                <div class="d-flex flex-wrap gap-1.5 mt-1.5">
-                                    <span class="quick-chip" onclick="fillPresetInput('inputCatatanTahsin{{ s.id }}', 'Bacaan fasih, makharijul huruf dan hukum tajwid sudah tepat.')">Fasih & tepat</span>
-                                    <span class="quick-chip" onclick="fillPresetInput('inputCatatanTahsin{{ s.id }}', 'Mad thobi\'i sudah baik, perhatikan panjang pendek dan gunnah.')">Perhatikan mad & gunnah</span>
-                                    <span class="quick-chip" onclick="fillPresetInput('inputCatatanTahsin{{ s.id }}', 'Perlu muroja\'ah pelafalan huruf hijaiyah di rumah bersama orang tua.')">Perlu muroja'ah</span>
+                                <div class="d-flex flex-wrap gap-2 mt-2">
+                                    <button type="button" class="quick-chip-btn" onclick="appendQuickNote('inputCatatanTahsin{{ s.id }}', 'Fasih &amp; tepat sesuai kaidah tajwid.')">Fasih &amp; tepat</button>
+                                    <button type="button" class="quick-chip-btn" onclick="appendQuickNote('inputCatatanTahsin{{ s.id }}', 'Perhatikan panjang pendek mad &amp; gunnah.')">Perhatikan mad &amp; gunnah</button>
+                                    <button type="button" class="quick-chip-btn" onclick="appendQuickNote('inputCatatanTahsin{{ s.id }}', 'Perlu muroja\'ah kembali di rumah.')">Perlu muroja'ah</button>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="modal-footer border-0 px-4 pb-4 pt-0 gap-2">
+                        <div class="modal-footer border-0 px-4 pb-4 pt-1 d-flex justify-content-end gap-2">
                             <button type="button" class="btn btn-light border rounded-pill fw-bold px-4" data-bs-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-tahsin-sky rounded-pill fw-bold px-4 shadow-sm">
-                                <i class="bi bi-check2-circle me-1"></i> Simpan Predikat Tahsin
+                            <button type="submit" class="btn text-white rounded-pill fw-bold px-4 shadow-sm" style="background: #0284c7;">
+                                <i class="bi bi-check-circle me-1"></i> Simpan Predikat Tahsin
                             </button>
                         </div>
                     </form>
@@ -1208,149 +1253,151 @@
             </div>
         </div>
 
-        <!-- 2. MODAL INPUT PREDIKAT TAHFIDZ (MODERN & INTERAKTIF) -->
-        <div class="modal fade" id="modalTahfidz{{ s.id }}" tabindex="-1" aria-hidden="true">
+        <!-- 2. MODAL INPUT SETORAN TAHFIDZ -->
+        <div class="modal fade eval-modal" id="modalTahfidz{{ s.id }}" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0 shadow-lg overflow-hidden">
+                <div class="modal-content border-0 shadow-lg">
                     <form action="/catat_tahfidz/{{ s.id }}" method="POST">
-                        <div class="modal-header modal-header-tahfidz text-white border-0 py-3 px-4">
-                            <div class="d-flex align-items-center gap-2.5">
-                                <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: rgba(255,255,255,0.16);">
-                                    <i class="bi bi-journal-bookmark-fill fs-5"></i>
+                        <div class="modal-header text-white border-0 py-3 px-4" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="modal-header-icon">
+                                    <i class="bi bi-journal-bookmark-fill"></i>
                                 </div>
                                 <div>
-                                    <h5 class="modal-title fw-bold mb-0 fs-6">Input Setoran Tahfidz Murid</h5>
-                                    <small class="text-white-50" style="font-size: 0.72rem;">Pencatatan hafalan surah & kelancaran mutqin</small>
+                                    <h5 class="modal-title fw-bold mb-0" style="font-size: 1.05rem;">Input Setoran Tahfidz Murid</h5>
+                                    <small class="text-white-50 d-block" style="font-size: 0.76rem;">Pencatatan hafalan surah &amp; kelancaran mutqin</small>
                                 </div>
                             </div>
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                         </div>
 
                         <div class="modal-body p-4">
-                            <!-- Kartu Identitas Murid -->
-                            <div class="d-flex align-items-center justify-content-between p-3 rounded-4 mb-3 border" style="background: #ecfdf5; border-color: #a7f3d0 !important;">
-                                <div class="d-flex align-items-center gap-2.5">
-                                    <div class="avatar-circle" style="width: 38px; height: 38px; font-size: 0.85rem;">
-                                        {{ s.nama[0]|upper }}
+                            <!-- Identitas Murid -->
+                            <div class="d-flex align-items-center justify-content-between p-3 rounded-4 mb-3" style="background: #ecfdf5; border: 1px solid #a7f3d0;">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="student-avatar-box" style="background: #059669;">
+                                        {{ s.nama[0]|upper if s.nama else 'M' }}
                                     </div>
                                     <div>
-                                        <div class="fw-bold text-dark small">{{ s.nama }}</div>
-                                        <div class="text-muted" style="font-size: 0.72rem;">NISN: <strong>{{ s.id }}</strong> • Kelas <strong>{{ s.kelas }}</strong></div>
+                                        <div class="fw-bold text-dark" style="font-size: 0.92rem;">{{ s.nama }}</div>
+                                        <small class="text-muted" style="font-size: 0.76rem;">NISN: <strong>{{ s.id }}</strong> • Kelas <strong>{{ s.kelas }}</strong></small>
                                     </div>
                                 </div>
-                                <span class="badge bg-white text-success border rounded-pill px-2.5 py-1 fw-bold" style="font-size: 0.7rem;">
-                                    {{ 'Grade ' + s.grade_tahfidz if s.grade_tahfidz != '-' else 'Setoran Baru' }}
-                                </span>
-                            </div>
-                            
-                            <!-- Tanggal Setor -->
-                            <div class="mb-3">
-                                <label class="form-label fw-bold small text-dark mb-1">
-                                    <i class="bi bi-calendar3 text-success me-1"></i> Tanggal Setor
-                                </label>
-                                <input type="date" name="tanggal" class="form-control rounded-3 bg-light border fw-semibold" value="{{ now_date }}" required>
+                                <span class="badge bg-white text-success border border-success border-opacity-25 rounded-pill px-3 py-1 fw-semibold" style="font-size: 0.72rem;">Setoran Baru</span>
                             </div>
 
-                            <!-- Pemilih Predikat Interaktif (Kartu 2x2) -->
+                            <!-- Tanggal Setor -->
                             <div class="mb-3">
-                                <div class="d-flex justify-content-between align-items-center mb-1.5">
-                                    <label class="form-label fw-bold small text-dark mb-0">
+                                <label class="form-label fw-bold text-dark mb-1" style="font-size: 0.82rem;">
+                                    <i class="bi bi-calendar-event text-success me-1"></i> Tanggal Setor
+                                </label>
+                                <input type="date" name="tanggal" class="form-control rounded-3 bg-light border" value="{{ now_date }}" required>
+                            </div>
+
+                            <!-- Pilih Predikat (Grade) -->
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <label class="form-label fw-bold text-dark mb-0" style="font-size: 0.82rem;">
                                         <i class="bi bi-award text-success me-1"></i> Pilih Predikat (Grade)
                                     </label>
-                                    <span id="labelStatusTahfidz{{ s.id }}" class="badge bg-success text-white px-2.5 py-1 rounded-pill" style="font-size: 0.7rem;">
-                                        <i class="bi bi-check-circle-fill me-1"></i>Status: LULUS
+                                    <span id="labelStatusTahfidz{{ s.id }}" class="badge bg-success text-white px-3 py-1 rounded-pill" style="font-size: 0.72rem;">
+                                        <i class="bi bi-check-circle-fill me-1"></i> Status: LULUS
                                     </span>
                                 </div>
-                                <input type="hidden" name="grade" id="inputGradeTahfidz{{ s.id }}" value="A">
-                                <div class="row g-2" id="gradeCardsTahfidz{{ s.id }}">
+
+                                <div class="row g-2">
                                     <div class="col-6">
-                                        <div class="grade-option-card active-pass" onclick="selectGradeCard('Tahfidz{{ s.id }}', 'A', true, this)">
-                                            <div class="d-flex justify-content-between align-items-center mb-0.5">
-                                                <span class="fw-extrabold text-dark">Grade A</span>
-                                                <span class="grade-check-dot"><i class="bi bi-check-lg"></i></span>
+                                        <input type="radio" class="btn-check grade-option-radio" name="grade" id="tahfidzGradeA_{{ s.id }}" value="A" checked onchange="updateGradeRadioStatus('A', 'labelStatusTahfidz{{ s.id }}')">
+                                        <label class="grade-option-card grade-pass w-100" for="tahfidzGradeA_{{ s.id }}">
+                                            <div>
+                                                <div class="fw-bold text-dark" style="font-size: 0.9rem;">Grade A</div>
+                                                <small class="text-muted" style="font-size: 0.72rem;">Sangat Baik • <strong>Mumtaz</strong></small>
                                             </div>
-                                            <div class="text-muted" style="font-size: 0.72rem;">Sangat Baik • <strong>Mumtaz</strong></div>
-                                        </div>
+                                            <span class="grade-check-circle"><i class="bi bi-check-lg"></i></span>
+                                        </label>
                                     </div>
                                     <div class="col-6">
-                                        <div class="grade-option-card" onclick="selectGradeCard('Tahfidz{{ s.id }}', 'B+', true, this)">
-                                            <div class="d-flex justify-content-between align-items-center mb-0.5">
-                                                <span class="fw-extrabold text-dark">Grade B+</span>
-                                                <span class="grade-check-dot"><i class="bi bi-check-lg"></i></span>
+                                        <input type="radio" class="btn-check grade-option-radio" name="grade" id="tahfidzGradeBPlus_{{ s.id }}" value="B+" onchange="updateGradeRadioStatus('B+', 'labelStatusTahfidz{{ s.id }}')">
+                                        <label class="grade-option-card grade-pass w-100" for="tahfidzGradeBPlus_{{ s.id }}">
+                                            <div>
+                                                <div class="fw-bold text-dark" style="font-size: 0.9rem;">Grade B+</div>
+                                                <small class="text-muted" style="font-size: 0.72rem;">Baik Sekali • <strong>Jayyid Jiddan</strong></small>
                                             </div>
-                                            <div class="text-muted" style="font-size: 0.72rem;">Baik Sekali • <strong>Jayyid Jiddan</strong></div>
-                                        </div>
+                                            <span class="grade-check-circle"><i class="bi bi-check-lg"></i></span>
+                                        </label>
                                     </div>
                                     <div class="col-6">
-                                        <div class="grade-option-card" onclick="selectGradeCard('Tahfidz{{ s.id }}', 'B', true, this)">
-                                            <div class="d-flex justify-content-between align-items-center mb-0.5">
-                                                <span class="fw-extrabold text-dark">Grade B</span>
-                                                <span class="grade-check-dot"><i class="bi bi-check-lg"></i></span>
+                                        <input type="radio" class="btn-check grade-option-radio" name="grade" id="tahfidzGradeB_{{ s.id }}" value="B" onchange="updateGradeRadioStatus('B', 'labelStatusTahfidz{{ s.id }}')">
+                                        <label class="grade-option-card grade-pass w-100" for="tahfidzGradeB_{{ s.id }}">
+                                            <div>
+                                                <div class="fw-bold text-dark" style="font-size: 0.9rem;">Grade B</div>
+                                                <small class="text-muted" style="font-size: 0.72rem;">Baik • <strong>Jayyid</strong></small>
                                             </div>
-                                            <div class="text-muted" style="font-size: 0.72rem;">Baik • <strong>Jayyid</strong></div>
-                                        </div>
+                                            <span class="grade-check-circle"><i class="bi bi-check-lg"></i></span>
+                                        </label>
                                     </div>
                                     <div class="col-6">
-                                        <div class="grade-option-card" onclick="selectGradeCard('Tahfidz{{ s.id }}', 'C', false, this)">
-                                            <div class="d-flex justify-content-between align-items-center mb-0.5">
-                                                <span class="fw-extrabold text-dark">Grade C</span>
-                                                <span class="grade-check-dot"><i class="bi bi-check-lg"></i></span>
+                                        <input type="radio" class="btn-check grade-option-radio" name="grade" id="tahfidzGradeC_{{ s.id }}" value="C" onchange="updateGradeRadioStatus('C', 'labelStatusTahfidz{{ s.id }}')">
+                                        <label class="grade-option-card grade-fail w-100" for="tahfidzGradeC_{{ s.id }}">
+                                            <div>
+                                                <div class="fw-bold text-dark" style="font-size: 0.9rem;">Grade C</div>
+                                                <small class="text-muted" style="font-size: 0.72rem;">Bimbingan • <strong>Maqbul</strong></small>
                                             </div>
-                                            <div class="text-muted" style="font-size: 0.72rem;">Bimbingan • <strong>Maqbul</strong></div>
-                                        </div>
+                                            <span class="grade-check-circle"><i class="bi bi-check-lg"></i></span>
+                                        </label>
                                     </div>
                                 </div>
-                                <small class="text-muted d-block mt-1.5" style="font-size: 0.71rem;">
-                                    <i class="bi bi-info-circle me-1"></i>Standar ketuntasan minimal SDIT: <strong>Grade B</strong>
+                                <small class="text-muted d-block mt-2" style="font-size: 0.73rem;">
+                                    <i class="bi bi-info-circle me-1"></i> Standar ketuntasan minimal SDIT: <strong>Grade B</strong> (jika mendapat Grade C sebanyak 5x otomatis Tidak Lulus)
                                 </small>
                             </div>
 
-                            <!-- Surah / Ayat Terakhir + Quick Chips -->
+                            <!-- Surah / Ayat Terakhir -->
                             <div class="mb-3">
-                                <label class="form-label fw-bold small text-dark mb-1">
-                                    <i class="bi bi-bookmark-check text-success me-1"></i> Surah / Ayat Terakhir
+                                <label class="form-label fw-bold text-dark mb-1" style="font-size: 0.82rem;">
+                                    <i class="bi bi-bookmark text-success me-1"></i> Surah / Ayat Terakhir
                                 </label>
-                                <input type="text" id="inputMateriTahfidz{{ s.id }}" name="hafalan_terakhir" class="form-control rounded-3 bg-light border fw-medium" placeholder="Contoh: Juz 30 - Surah An-Naba' Ayat 1-20" required>
-                                <div class="d-flex flex-wrap gap-1.5 mt-1.5">
-                                    <span class="quick-chip" onclick="fillPresetInput('inputMateriTahfidz{{ s.id }}', 'Juz 30 - Surah An-Naba\' Ayat ')">+ An-Naba'</span>
-                                    <span class="quick-chip" onclick="fillPresetInput('inputMateriTahfidz{{ s.id }}', 'Juz 30 - Surah An-Nazi\'at Ayat ')">+ An-Nazi'at</span>
-                                    <span class="quick-chip" onclick="fillPresetInput('inputMateriTahfidz{{ s.id }}', 'Juz 30 - Surah \'Abasa Ayat ')">+ 'Abasa</span>
-                                    <span class="quick-chip" onclick="fillPresetInput('inputMateriTahfidz{{ s.id }}', 'Juz 29 - Surah Al-Mulk Ayat ')">+ Al-Mulk</span>
+                                <input type="text" id="inputMateriTahfidz{{ s.id }}" name="hafalan_terakhir" class="form-control rounded-3 bg-light border" placeholder="Contoh: Juz 30 - Surah An-Naba' Ayat 1–20" required>
+                                <div class="d-flex flex-wrap gap-2 mt-2">
+                                    <button type="button" class="quick-chip-btn" onclick="fillQuickInput('inputMateriTahfidz{{ s.id }}', 'Juz 30 - Surah An-Naba\' Ayat ')">+ An-Naba'</button>
+                                    <button type="button" class="quick-chip-btn" onclick="fillQuickInput('inputMateriTahfidz{{ s.id }}', 'Juz 30 - Surah An-Nazi\'at Ayat ')">+ An-Nazi'at</button>
+                                    <button type="button" class="quick-chip-btn" onclick="fillQuickInput('inputMateriTahfidz{{ s.id }}', 'Juz 30 - Surah \'Abasa Ayat ')">+ 'Abasa</button>
+                                    <button type="button" class="quick-chip-btn" onclick="fillQuickInput('inputMateriTahfidz{{ s.id }}', 'Juz 29 - Surah Al-Mulk Ayat ')">+ Al-Mulk</button>
                                 </div>
                             </div>
 
-                            <!-- Catatan Kelancaran + Quick Chips -->
+                            <!-- Catatan Kelancaran & Mutqin -->
                             <div class="mb-1">
-                                <label class="form-label fw-bold small text-dark mb-1">
-                                    <i class="bi bi-chat-square-text text-success me-1"></i> Catatan Kelancaran & Mutqin
+                                <label class="form-label fw-bold text-dark mb-1" style="font-size: 0.82rem;">
+                                    <i class="bi bi-chat-square-text text-success me-1"></i> Catatan Kelancaran &amp; Mutqin
                                 </label>
                                 <textarea id="inputCatatanTahfidz{{ s.id }}" name="catatan" class="form-control rounded-3 bg-light border" rows="2" placeholder="Tulis evaluasi hafalan murid atau pilih template di bawah..."></textarea>
-                                <div class="d-flex flex-wrap gap-1.5 mt-1.5">
-                                    <span class="quick-chip" onclick="fillPresetInput('inputCatatanTahfidz{{ s.id }}', 'Hafalan sangat lancar, mutqin, tajwid dan tartil terjaga.')">Lancar & mutqin</span>
-                                    <span class="quick-chip" onclick="fillPresetInput('inputCatatanTahfidz{{ s.id }}', 'Hafalan baik, perhatikan sambungan antar ayat agar lebih mantap.')">Perhatikan sambungan ayat</span>
-                                    <span class="quick-chip" onclick="fillPresetInput('inputCatatanTahfidz{{ s.id }}', 'Perlu muroja\'ah kembali ayat terakhir di rumah sebelum lanjut.')">Muroja'ah ulang</span>
+                                <div class="d-flex flex-wrap gap-2 mt-2">
+                                    <button type="button" class="quick-chip-btn" onclick="appendQuickNote('inputCatatanTahfidz{{ s.id }}', 'Hafalan lancar, mutqin, dan tartil.')">Lancar &amp; mutqin</button>
+                                    <button type="button" class="quick-chip-btn" onclick="appendQuickNote('inputCatatanTahfidz{{ s.id }}', 'Perhatikan kelancaran sambungan antar ayat.')">Perhatikan sambungan ayat</button>
+                                    <button type="button" class="quick-chip-btn" onclick="appendQuickNote('inputCatatanTahfidz{{ s.id }}', 'Perlu muroja\'ah ulang sebelum lanjut ayat baru.')">Muroja'ah ulang</button>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="modal-footer border-0 px-4 pb-4 pt-0 gap-2">
+                        <div class="modal-footer border-0 px-4 pb-4 pt-1 d-flex justify-content-end gap-2">
                             <button type="button" class="btn btn-light border rounded-pill fw-bold px-4" data-bs-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-tahfidz-emerald rounded-pill fw-bold px-4 shadow-sm">
-                                <i class="bi bi-check2-circle me-1"></i> Simpan Predikat Tahfidz
+                            <button type="submit" class="btn btn-success text-white rounded-pill fw-bold px-4 shadow-sm">
+                                <i class="bi bi-check-circle me-1"></i> Simpan Predikat Tahfidz
                             </button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-
+        
         <!-- 3. MODAL EDIT DATA MURID & USERNAME -->
         <div class="modal fade" id="modalEditMurid{{ s.id }}" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow-lg overflow-hidden">
                     <form action="/edit_siswa/{{ s.id }}" method="POST">
                         <div class="modal-header modal-header-histori text-white border-0 py-3 px-4">
-                            <div class="d-flex align-items-center gap-2.5">
+                            <div class="d-flex align-items-center gap-3">
                                 <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: rgba(255,255,255,0.14);">
                                     <i class="bi bi-pencil-square fs-5 text-warning"></i>
                                 </div>
@@ -1515,7 +1562,7 @@
                                 </li>
                             </ul>
 
-                            <div class="d-flex gap-1.5">
+                            <div class="d-flex gap-2">
                                 <button type="button" class="btn btn-sm btn-tahsin-sky rounded-pill px-3 fw-bold" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalTahsin{{ s.id }}">
                                     <i class="bi bi-plus-lg"></i> Tahsin
                                 </button>
@@ -1808,7 +1855,7 @@
             <div class="modal-content border-0 shadow-lg overflow-hidden">
                 <form action="/tambah_siswa" method="POST">
                     <div class="modal-header modal-header-tahfidz text-white border-0 py-3 px-4">
-                        <div class="d-flex align-items-center gap-2.5">
+                        <div class="d-flex align-items-center gap-3">
                             <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: rgba(255,255,255,0.16);">
                                 <i class="bi bi-person-plus-fill fs-5"></i>
                             </div>
@@ -1869,7 +1916,7 @@
             <div class="modal-content border-0 shadow-lg overflow-hidden">
                 <form action="/import_excel" method="POST" enctype="multipart/form-data">
                     <div class="modal-header modal-header-tahfidz text-white border-0 py-3 px-4">
-                        <div class="d-flex align-items-center gap-2.5">
+                        <div class="d-flex align-items-center gap-3">
                             <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: rgba(255,255,255,0.16);">
                                 <i class="bi bi-file-earmark-excel-fill fs-5"></i>
                             </div>
@@ -1939,38 +1986,40 @@
             }
         }
 
-        // Pemilih Kartu Grade Interaktif di Modal Tahsin & Tahfidz
-        function selectGradeCard(targetSuffix, gradeVal, isPass, cardEl) {
-            const hiddenInput = document.getElementById('inputGrade' + targetSuffix);
-            if (hiddenInput) hiddenInput.value = gradeVal;
+        const gradeMap = {
+            'A':  { status: 'LULUS', isPass: true },
+            'B+': { status: 'LULUS', isPass: true },
+            'B':  { status: 'LULUS', isPass: true },
+            'C':  { status: 'TIDAK LULUS', isPass: false }
+        };
 
-            const container = document.getElementById('gradeCards' + targetSuffix);
-            if (container) {
-                container.querySelectorAll('.grade-option-card').forEach(c => {
-                    c.classList.remove('active-pass', 'active-fail');
-                });
-            }
-            if (cardEl) {
-                cardEl.classList.add(isPass ? 'active-pass' : 'active-fail');
-            }
-
-            const labelEl = document.getElementById('labelStatus' + targetSuffix);
+        function updateGradeRadioStatus(gradeVal, labelId) {
+            const data = gradeMap[gradeVal] || { status: 'LULUS', isPass: true };
+            const labelEl = document.getElementById(labelId);
             if (labelEl) {
-                if (isPass) {
-                    labelEl.className = 'badge bg-success text-white px-2.5 py-1 rounded-pill';
-                    labelEl.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>Status: LULUS';
-                } else {
-                    labelEl.className = 'badge bg-danger text-white px-2.5 py-1 rounded-pill';
-                    labelEl.innerHTML = '<i class="bi bi-exclamation-circle-fill me-1"></i>Status: PERLU BIMBINGAN';
-                }
+                labelEl.innerHTML = data.isPass
+                    ? `<i class="bi bi-check-circle-fill me-1"></i> Status: ${data.status}`
+                    : `<i class="bi bi-exclamation-circle-fill me-1"></i> Status: ${data.status}`;
+                labelEl.className = 'badge px-3 py-1 rounded-pill ' + (data.isPass ? 'bg-success text-white' : 'bg-danger text-white');
             }
         }
 
-        // Quick-Fill Chip untuk Materi & Catatan Evaluasi
-        function fillPresetInput(inputId, textValue) {
+        function fillQuickInput(inputId, prefixText) {
             const el = document.getElementById(inputId);
             if (!el) return;
-            el.value = textValue;
+            el.value = prefixText;
+            el.focus();
+        }
+
+        function appendQuickNote(textareaId, noteText) {
+            const el = document.getElementById(textareaId);
+            if (!el) return;
+            const current = el.value.trim();
+            if (!current) {
+                el.value = noteText;
+            } else if (!current.includes(noteText)) {
+                el.value = current + ' ' + noteText;
+            }
             el.focus();
         }
 
@@ -2420,5 +2469,107 @@
             </div>
         </div>
     </div>
+
+    <!-- MODAL HAPUS SEMUA MURID (PORTAL GURU) -->
+    <div class="modal fade" id="modalHapusSemuaSiswaGuru" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 22px; overflow: hidden;">
+                <form action="{{ url_for('guru.hapus_semua_siswa') }}" method="POST" onsubmit="return syncKonfirmasiHapusGuru(this)">
+                    <div class="modal-header bg-danger text-white border-0 py-3 px-4">
+                        <div class="d-flex align-items-center gap-2.5">
+                            <i class="bi bi-exclamation-triangle-fill fs-4"></i>
+                            <div>
+                                <h5 class="modal-title fw-bold mb-0 fs-6">Hapus Massal Data Murid</h5>
+                                <small class="text-white-50" style="font-size: 0.72rem;">Menghapus murid, akun wali, & riwayat Tahsin/Tahfidz</small>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body p-4">
+                        <div class="alert alert-warning border-0 rounded-3 small mb-3 d-flex align-items-start gap-2">
+                            <i class="bi bi-shield-exclamation fs-5 text-warning mt-0.5"></i>
+                            <div>
+                                Tindakan ini permanen dan tidak dapat dibatalkan. Disarankan mengunduh <strong>Rekap Excel (.xlsx)</strong> terlebih dahulu sebagai cadangan.
+                            </div>
+                        </div>
+
+                        {% if all_classes|length > 1 %}
+                        <div class="mb-3">
+                            <label for="selectKelasHapusGuru" class="form-label fw-bold small text-dark">Target Kelas Binaan</label>
+                            <select name="kelas_target" id="selectKelasHapusGuru" class="form-select rounded-3 bg-light border fw-bold">
+                                <option value="ALL">Semua Kelas Binaan ({{ all_classes|join(', ') }})</option>
+                                {% for c in all_classes %}
+                                    <option value="{{ c }}">Hanya Kelas {{ c }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        {% else %}
+                        <input type="hidden" name="kelas_target" value="ALL">
+                        {% endif %}
+
+                        <div class="mb-1">
+                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                <label for="inputKonfirmasiHapusGuru" class="form-label fw-bold small text-dark mb-0">Ketik kata <strong>HAPUS</strong> untuk konfirmasi</label>
+                                <span id="badgeKunciHapusGuru" class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 rounded-pill px-2.5 py-1" style="font-size: 0.7rem;">
+                                    <i class="bi bi-lock-fill me-1"></i> Terkunci
+                                </span>
+                            </div>
+                            <input type="text" name="konfirmasi" id="inputKonfirmasiHapusGuru" class="form-control rounded-3 bg-light border fw-bold" placeholder="Ketik HAPUS di sini..." oninput="validasiKetikHapusGuru()" autocomplete="off" required>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer border-0 px-4 pb-4 pt-0">
+                        <button type="button" class="btn btn-light border rounded-pill fw-bold px-4" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" id="btnEksekusiHapusGuru" class="btn btn-danger rounded-pill fw-bold px-4 shadow-sm" disabled>
+                            <i class="bi bi-trash3-fill me-1"></i> Hapus Semua Murid
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function validasiKetikHapusGuru() {
+        const input = document.getElementById('inputKonfirmasiHapusGuru');
+        const badge = document.getElementById('badgeKunciHapusGuru');
+        const btn = document.getElementById('btnEksekusiHapusGuru');
+        if (!input || !btn) return;
+
+        const isUnlocked = (input.value.trim().toUpperCase() === 'HAPUS');
+        btn.disabled = !isUnlocked;
+
+        if (badge) {
+            if (isUnlocked) {
+                badge.className = 'badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-2.5 py-1';
+                badge.innerHTML = '<i class="bi bi-unlock-fill me-1"></i> Siap Eksekusi';
+            } else {
+                badge.className = 'badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 rounded-pill px-2.5 py-1';
+                badge.innerHTML = '<i class="bi bi-lock-fill me-1"></i> Terkunci';
+            }
+        }
+    }
+
+    function syncKonfirmasiHapusGuru(formEl) {
+        const input = document.getElementById('inputKonfirmasiHapusGuru');
+        const val = (input?.value || '').trim().toUpperCase();
+        if (val !== 'HAPUS') {
+            input?.focus();
+            return false;
+        }
+        input.value = val;
+        return true;
+    }
+
+    document.getElementById('modalHapusSemuaSiswaGuru')?.addEventListener('hidden.bs.modal', function () {
+        const input = document.getElementById('inputKonfirmasiHapusGuru');
+        if (input) {
+            input.value = '';
+            validasiKetikHapusGuru();
+        }
+    });
+    </script>
+
 </body>
 </html>

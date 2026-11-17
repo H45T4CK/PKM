@@ -236,6 +236,11 @@
                                     <span class="grade-pill {{ 'grade-pass' if is_lulus_akhir else 'grade-fail' }}">
                                         Grade {{ siswa.grade_rata_rata }} • {{ 'LULUS' if is_lulus_akhir else 'PERLU BIMBINGAN' }}
                                     </span>
+                                    {% if siswa.jumlah_c is defined and siswa.jumlah_c >= 5 %}
+                                        <div class="text-danger fw-bold mt-0.5" style="font-size: 0.7rem;">
+                                            Akumulasi {{ siswa.jumlah_c }}x Grade C
+                                        </div>
+                                    {% endif %}
                                 {% else %}
                                     <span class="text-muted fst-italic">Belum Dinilai</span>
                                 {% endif %}
@@ -348,7 +353,7 @@
             <span class="ms-2"><strong>Grade A</strong> = Sangat Baik / Mumtaz (Lulus)</span> •
             <span><strong>Grade B+</strong> = Baik Sekali / Jayyid Jiddan (Lulus)</span> •
             <span><strong>Grade B</strong> = Baik / Jayyid (Lulus)</span> •
-            <span><strong>Grade C</strong> = Cukup / Maqbul (Perlu Bimbingan & Muroja'ah)</span>
+            <span><strong>Grade C</strong> = Cukup / Maqbul (Perlu Bimbingan & Muroja'ah; otomatis Tidak Lulus jika mendapat ≥5x Grade C)</span>
         </div>
 
         <!-- AREA TANDA TANGAN -->
@@ -360,9 +365,9 @@
                 <small class="text-muted">Wali dari {{ siswa.nama }}</small>
             </div>
             <div class="col-6">
-                <p class="mb-0">Depok, {{ tanggal|date_dmy if tanggal is defined else '' }}<br><strong>Guru Tahfidz / Musyrif Kelas {{ siswa.kelas }}</strong></p>
+                <p class="mb-0">Depok, {{ tanggal|date_dmy if tanggal is defined and tanggal else '' }}<br><strong>Guru Tahfidz / Musyrif Kelas {{ siswa.kelas }}</strong></p>
                 <div style="height: 68px;"></div>
-                <p class="fw-bold mb-0">( ____________________________________ )</p>
+                <p class="fw-bold mb-0">( {{ nama_musyrif if nama_musyrif is defined and nama_musyrif else '____________________________________' }} )</p>
                 <small class="text-muted">NIP / NIY. ........................................</small>
             </div>
         </div>

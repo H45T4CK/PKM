@@ -271,7 +271,12 @@
                                 Grade {{ s.grade_rata_rata }} • {{ 'LULUS' if is_lulus else 'BIMBINGAN' }}
                             </span>
                             {% if s.predikat_rata_rata_desc is defined and s.predikat_rata_rata_desc %}
-                                <div class="text-muted mt-0.5" style="font-size: 0.68rem;">{{ s.predikat_rata_rata_desc }}</div>
+                                <div class="text-muted mt-0.5" style="font-size: 0.68rem;">
+                                    {{ s.predikat_rata_rata_desc }}
+                                    {% if s.jumlah_c is defined and s.jumlah_c >= 5 %}
+                                        <span class="text-danger fw-bold">({{ s.jumlah_c }}x C)</span>
+                                    {% endif %}
+                                </div>
                             {% endif %}
                         {% else %}
                             <span class="grade-pill grade-none">Belum Dinilai</span>
@@ -292,7 +297,7 @@
             <span class="ms-2"><strong>Grade A</strong> = Sangat Baik / Mumtaz (Lulus)</span> •
             <span><strong>Grade B+</strong> = Baik Sekali / Jayyid Jiddan (Lulus)</span> •
             <span><strong>Grade B</strong> = Baik / Jayyid (Lulus)</span> •
-            <span><strong>Grade C</strong> = Cukup / Maqbul (Perlu Bimbingan & Muroja'ah)</span>
+            <span><strong>Grade C</strong> = Cukup / Maqbul (Perlu Bimbingan & Muroja'ah; otomatis Tidak Lulus jika mendapat ≥5x Grade C)</span>
         </div>
 
         <!-- AREA TANDA TANGAN -->

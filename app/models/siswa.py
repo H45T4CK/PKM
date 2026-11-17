@@ -38,8 +38,7 @@ class Siswa(db.Model):
         return PREDIKAT_LABELS.get(g, 'Belum Dinilai')
 
     @staticmethod
-    def _calc_grade_from_records(records):
-        GRADE_WEIGHTS = {'A': 4.0, 'B+': 3.0, 'B': 2.0, 'C': 1.0}
+    def _extract_grades(records):
         grades = []
         for r in records:
             g = getattr(r, 'grade', None)
@@ -47,18 +46,46 @@ class Siswa(db.Model):
                 grades.append(str(g).strip().upper())
             elif getattr(r, 'nilai', None) is not None:
                 n = r.nilai
-                if n >= 90: grades.append('A')
-                elif n >= 80: grades.append('B+')
-                elif n >= 70: grades.append('B')
-                else: grades.append('C')
+                if n >= 90:
+                    grades.append('A')
+                elif n >= 80:
+                    grades.append('B+')
+                elif n >= 70:
+                    grades.append('B')
+                else:
+                    grades.append('C')
+        return grades
+
+    @classmethod
+    def _calc_grade_from_records(cls, records):
+        GRADE_WEIGHTS = {'A': 4.0, 'B+': 3.0, 'B': 2.0, 'C': 1.0}
+        grades = cls._extract_grades(records)
         if not grades:
             return '-'
+        # Aturan kelulusan: jika mendapat nilai C sebanyak 5 kali atau lebih, otomatis C (Tidak Lulus)
+        if grades.count('C') >= 5:
+            return 'C'
         weights = [GRADE_WEIGHTS.get(g, 1.0) for g in grades]
         avg = sum(weights) / len(weights)
-        if avg >= 3.5: return 'A'
-        if avg >= 2.5: return 'B+'
-        if avg >= 1.5: return 'B'
+        if avg >= 3.5:
+            return 'A'
+        if avg >= 2.5:
+            return 'B+'
+        if avg >= 1.5:
+            return 'B'
         return 'C'
+
+    @property
+    def jumlah_c_tahsin(self):
+        return self._extract_grades(self.tahsin).count('C')
+
+    @property
+    def jumlah_c_tahfidz(self):
+        return self._extract_grades(self.tahfidz).count('C')
+
+    @property
+    def jumlah_c(self):
+        return self._extract_grades(list(self.tahsin) + list(self.tahfidz)).count('C')
 
     @property
     def grade_tahsin(self):
@@ -71,8 +98,10 @@ class Siswa(db.Model):
     @property
     def status_lulus_tahsin(self):
         g = self.grade_tahsin
-        if g in ['A', 'B+', 'B']: return 'Lulus'
-        if g == 'C': return 'Tidak Lulus'
+        if g in ['A', 'B+', 'B']:
+            return 'Lulus'
+        if g == 'C':
+            return 'Tidak Lulus'
         return 'Belum Dinilai'
 
     @property
@@ -91,8 +120,10 @@ class Siswa(db.Model):
     @property
     def status_lulus_tahfidz(self):
         g = self.grade_tahfidz
-        if g in ['A', 'B+', 'B']: return 'Lulus'
-        if g == 'C': return 'Tidak Lulus'
+        if g in ['A', 'B+', 'B']:
+            return 'Lulus'
+        if g == 'C':
+            return 'Tidak Lulus'
         return 'Belum Dinilai'
 
     @property
@@ -112,8 +143,10 @@ class Siswa(db.Model):
     @property
     def status_kelulusan_rata_rata(self):
         g = self.grade_rata_rata
-        if g in ['A', 'B+', 'B']: return 'Lulus'
-        if g == 'C': return 'Tidak Lulus'
+        if g in ['A', 'B+', 'B']:
+            return 'Lulus'
+        if g == 'C':
+            return 'Tidak Lulus'
         return 'Belum Dinilai'
 
     @property
@@ -270,6 +303,7 @@ class Siswa(db.Model):
             "kelas": self.kelas,
             "poin": self.poin,
             "status": self.status_clean,
+            "jumlah_c": self.jumlah_c,
             "grade_tahsin": self.grade_tahsin,
             "predikat_tahsin": self.predikat_tahsin_desc,
             "status_lulus_tahsin": self.status_lulus_tahsin,
@@ -300,5 +334,6 @@ class Siswa(db.Model):
         if key == 'has_catatan_ortu': return self.has_catatan_ortu
         if key == 'has_paraf_ortu': return self.has_paraf_ortu
         if key == 'total_catatan_ortu': return self.total_catatan_ortu
+        if key == 'jumlah_c': return self.jumlah_c
         if key == 'status': return self.status_clean
         return getattr(self, key)

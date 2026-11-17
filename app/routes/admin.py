@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, send_file
 from app.models.user import User, AppSetting
 from app.models.siswa import Siswa
+from app.models.record import RecordsTahsin, RecordsTahfidz, RecordsPoin
 from app import db
 from app.utils.decorators import role_required
 import pandas as pd
@@ -46,8 +47,8 @@ def dashboard_admin():
     semester = AppSetting.get_val('semester', 'Ganjil')
     tahun_ajaran_full = f"Tahun Ajaran {tahun_ajaran} – Semester {semester}"
 
-    guru_list = User.query.filter_by(role='guru').all()
-    siswa_list = Siswa.query.all()
+    guru_list = User.query.filter_by(role='guru').order_by(User.id.asc()).all()
+    siswa_list = Siswa.query.order_by(Siswa.kelas.asc(), Siswa.nama.asc()).all()
 
     return render_template(
         'admin/dashboard_admin.html',
@@ -342,7 +343,6 @@ def import_guru():
         return redirect(url_for('admin.dashboard_admin'))
 
     try:
-        # Baca file sekali ke memori BytesIO agar tidak habis saat dibaca 2x oleh pandas
         file_bytes = io.BytesIO(file.read())
         file_bytes.seek(0)
         df_raw = pd.read_excel(file_bytes, header=None, dtype=str)
@@ -370,7 +370,6 @@ def import_guru():
         file_bytes.seek(0)
         df = pd.read_excel(file_bytes, skiprows=header_row_idx, dtype=str)
 
-        # Normalisasi nama kolom (huruf kecil & tanpa spasi berlebih)
         col_map = {str(col).strip().lower(): col for col in df.columns}
 
         def get_col_val(row, aliases, default=''):
@@ -435,5 +434,84 @@ def import_guru():
     except Exception as e:
         db.session.rollback()
         flash(f'Gagal mengimpor file Excel: {str(e)}', 'danger')
+
+    return redirect(url_for('admin.dashboard_admin'))
+
+
+# =========================================================================
+# FITUR HAPUS MASSAL / RESET DATA (SISWA, GURU, & SEMUA DATA)
+# =========================================================================
+
+def _cek_konfirmasi_massal():
+    if request.method == 'POST' and 'konfirmasi' in request.form:
+        if request.form.get('konfirmasi', '').strip().upper() != 'HAPUS':
+            return False
+    return True
+
+
+@admin_bp.route('/hapus_semua_siswa', methods=['POST', 'GET'])
+@role_required('admin')
+def hapus_semua_siswa():
+    if not _cek_konfirmasi_massal():
+        flash('Konfirmasi gagal! Ketik "HAPUS" untuk menghapus semua data murid.', 'danger')
+        return redirect(url_for('admin.dashboard_admin'))
+
+    try:
+        jml_siswa = Siswa.query.count()
+        RecordsPoin.query.delete(synchronize_session=False)
+        RecordsTahsin.query.delete(synchronize_session=False)
+        RecordsTahfidz.query.delete(synchronize_session=False)
+        Siswa.query.delete(synchronize_session=False)
+        User.query.filter_by(role='ortu').delete(synchronize_session=False)
+        db.session.commit()
+        flash(f'Seluruh data murid ({jml_siswa} murid), riwayat setoran, dan akun wali murid berhasil dihapus!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Gagal menghapus semua data murid: {str(e)}', 'danger')
+
+    return redirect(url_for('admin.dashboard_admin'))
+
+
+@admin_bp.route('/hapus_semua_guru', methods=['POST', 'GET'])
+@role_required('admin')
+def hapus_semua_guru():
+    if not _cek_konfirmasi_massal():
+        flash('Konfirmasi gagal! Ketik "HAPUS" untuk menghapus semua data guru.', 'danger')
+        return redirect(url_for('admin.dashboard_admin'))
+
+    try:
+        jml_guru = User.query.filter_by(role='guru').count()
+        User.query.filter_by(role='guru').delete(synchronize_session=False)
+        db.session.commit()
+        flash(f'Seluruh akun guru & musyrif ({jml_guru} guru) berhasil dihapus dari sistem!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Gagal menghapus semua data guru: {str(e)}', 'danger')
+
+    return redirect(url_for('admin.dashboard_admin'))
+
+
+@admin_bp.route('/hapus_semua_data', methods=['POST', 'GET'])
+@role_required('admin')
+def hapus_semua_data():
+    if not _cek_konfirmasi_massal():
+        flash('Konfirmasi gagal! Ketik "HAPUS" untuk mereset seluruh data sekolah.', 'danger')
+        return redirect(url_for('admin.dashboard_admin'))
+
+    try:
+        jml_siswa = Siswa.query.count()
+        jml_guru = User.query.filter_by(role='guru').count()
+
+        RecordsPoin.query.delete(synchronize_session=False)
+        RecordsTahsin.query.delete(synchronize_session=False)
+        RecordsTahfidz.query.delete(synchronize_session=False)
+        Siswa.query.delete(synchronize_session=False)
+        User.query.filter(User.role.in_(['guru', 'ortu'])).delete(synchronize_session=False)
+        db.session.commit()
+
+        flash(f'Reset total berhasil! {jml_guru} data guru, {jml_siswa} data murid, dan seluruh riwayat setoran telah dibersihkan.', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Gagal mereset seluruh data: {str(e)}', 'danger')
 
     return redirect(url_for('admin.dashboard_admin'))

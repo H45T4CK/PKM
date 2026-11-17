@@ -518,8 +518,8 @@
             </div>
         </div>
 
-        <!-- TAB NAVIGATION (GURU & MURID) -->
-        <div class="mb-3 anim-fade-in delay-2">
+        <!-- TAB NAVIGATION & MASTER ACTIONS BAR -->
+        <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 mb-3 anim-fade-in delay-2">
             <ul class="nav nav-pills nav-pills-modern" id="adminMainTabs" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="tab-guru-btn" data-bs-toggle="tab" data-bs-target="#tab-guru-pane" type="button" role="tab">
@@ -532,6 +532,11 @@
                     </button>
                 </li>
             </ul>
+
+            <button type="button" class="btn btn-outline-danger btn-toolbar-clean bg-white shadow-sm" data-bs-toggle="modal" data-bs-target="#modalResetDataAdmin">
+                <i class="bi bi-trash3-fill"></i>
+                <span>Hapus Semua / Reset Data</span>
+            </button>
         </div>
 
         <div class="tab-content" id="adminTabContent">
@@ -619,7 +624,7 @@
                                             </div>
                                             <div>
                                                 <div class="fw-bold text-dark fs-6">{{ g.nama }}</div>
-                                                <div class="small text-muted" style="font-size: 0.72rem;">ID Staf: G-00{{ g.id }}</div>
+                                                <div class="small text-muted" style="font-size: 0.72rem;">ID Staf: G-{{ '%04d' % loop.index }}</div>
                                             </div>
                                         </div>
                                     </td>
@@ -1788,5 +1793,167 @@
             filterTabelSiswaAdmin();
         }
     </script>
+
+<!-- MODAL HAPUS MASSAL / RESET DATA (LETAKKAN SEBELUM </body>) -->
+<style>
+    .reset-option-card {
+        border: 1.5px solid #fecaca;
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 14px 16px;
+        transition: all 0.2s ease;
+        color: #991b1b;
+    }
+    .reset-option-card:not(:disabled):hover {
+        background: #fef2f2;
+        border-color: #dc2626;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(220, 38, 38, 0.12);
+    }
+    .reset-option-card:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+        background: #f8fafc;
+        border-color: #e2e8f0;
+        color: #64748b;
+    }
+    .reset-option-danger {
+        border: none;
+        background: linear-gradient(135deg, #dc2626, #b91c1c);
+        border-radius: 14px;
+        padding: 14px 16px;
+        transition: all 0.2s ease;
+        color: #ffffff;
+    }
+    .reset-option-danger:not(:disabled):hover {
+        background: linear-gradient(135deg, #b91c1c, #991b1b);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(185, 28, 28, 0.25);
+    }
+    .reset-option-danger:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+</style>
+
+<div class="modal fade" id="modalResetDataAdmin" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 22px; overflow: hidden;">
+            <div class="modal-header bg-danger text-white border-0 py-3 px-4">
+                <div class="d-flex align-items-center gap-2.5">
+                    <i class="bi bi-exclamation-triangle-fill fs-4"></i>
+                    <div>
+                        <h5 class="modal-title fw-bold mb-0 fs-6">Manajemen Hapus Massal & Reset Data</h5>
+                        <small class="text-white-50" style="font-size: 0.72rem;">Tindakan ini permanen dan tidak dapat dibatalkan</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="alert alert-warning border-0 rounded-3 small mb-3 d-flex align-items-start gap-2">
+                    <i class="bi bi-shield-exclamation fs-5 text-warning mt-0.5"></i>
+                    <div>
+                        Sebaiknya unduh <strong>Rekap Master (.xlsx)</strong> terlebih dahulu sebagai cadangan. Ketik kata <strong>HAPUS</strong> untuk membuka kunci tombol eksekusi.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                        <label for="inputKonfirmasiHapus" class="form-label fw-bold small text-dark mb-0">Kata Kunci Konfirmasi</label>
+                        <span id="badgeStatusKunciHapus" class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 rounded-pill px-2.5 py-1" style="font-size: 0.7rem;">
+                            <i class="bi bi-lock-fill me-1"></i> Terkunci
+                        </span>
+                    </div>
+                    <input type="text" id="inputKonfirmasiHapus" class="form-control rounded-3 bg-light border fw-bold" placeholder="Ketik kata HAPUS di sini..." oninput="validasiKetikHapus()" autocomplete="off">
+                </div>
+
+                <div class="d-flex flex-column gap-2.5">
+                    <form action="{{ url_for('admin.hapus_semua_siswa') }}" method="POST" onsubmit="return syncKonfirmasiHapus(this)">
+                        <input type="hidden" name="konfirmasi">
+                        <button type="submit" class="reset-option-card btn-eksekusi-hapus w-100 text-start d-flex align-items-center justify-content-between gap-3" disabled>
+                            <div>
+                                <div class="fw-bold small">1. Hapus Semua Data Murid</div>
+                                <small class="text-muted d-block mt-0.5" style="font-size: 0.73rem;">Menghapus seluruh murid, setoran Tahsin/Tahfidz, dan akun wali murid</small>
+                            </div>
+                            <i class="bi bi-people-fill fs-4 flex-shrink-0"></i>
+                        </button>
+                    </form>
+
+                    <form action="{{ url_for('admin.hapus_semua_guru') }}" method="POST" onsubmit="return syncKonfirmasiHapus(this)">
+                        <input type="hidden" name="konfirmasi">
+                        <button type="submit" class="reset-option-card btn-eksekusi-hapus w-100 text-start d-flex align-items-center justify-content-between gap-3" disabled>
+                            <div>
+                                <div class="fw-bold small">2. Hapus Semua Data Guru & Musyrif</div>
+                                <small class="text-muted d-block mt-0.5" style="font-size: 0.73rem;">Menghapus seluruh akun guru (data murid dan admin tetap tersimpan)</small>
+                            </div>
+                            <i class="bi bi-person-badge-fill fs-4 flex-shrink-0"></i>
+                        </button>
+                    </form>
+
+                    <form action="{{ url_for('admin.hapus_semua_data') }}" method="POST" onsubmit="return syncKonfirmasiHapus(this)">
+                        <input type="hidden" name="konfirmasi">
+                        <button type="submit" class="reset-option-danger btn-eksekusi-hapus w-100 text-start d-flex align-items-center justify-content-between gap-3 shadow-sm" disabled>
+                            <div>
+                                <div class="fw-bold small">3. Reset Total Semua Data (Guru + Murid)</div>
+                                <small class="text-white text-opacity-75 d-block mt-0.5" style="font-size: 0.73rem;">Membersihkan seluruh data guru, murid, wali, dan riwayat setoran</small>
+                            </div>
+                            <i class="bi bi-arrow-counterclockwise fs-4 flex-shrink-0"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer border-0 px-4 pb-4 pt-0">
+                <button type="button" class="btn btn-light border rounded-pill fw-bold px-4" data-bs-dismiss="modal">Batal</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function validasiKetikHapus() {
+    const input = document.getElementById('inputKonfirmasiHapus');
+    const badge = document.getElementById('badgeStatusKunciHapus');
+    const btns = document.querySelectorAll('.btn-eksekusi-hapus');
+    if (!input) return;
+
+    const val = input.value.trim().toUpperCase();
+    const isUnlocked = (val === 'HAPUS');
+
+    btns.forEach(btn => { btn.disabled = !isUnlocked; });
+
+    if (badge) {
+        if (isUnlocked) {
+            badge.className = 'badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-2.5 py-1';
+            badge.innerHTML = '<i class="bi bi-unlock-fill me-1"></i> Siap Eksekusi';
+        } else {
+            badge.className = 'badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 rounded-pill px-2.5 py-1';
+            badge.innerHTML = '<i class="bi bi-lock-fill me-1"></i> Terkunci';
+        }
+    }
+}
+
+function syncKonfirmasiHapus(formEl) {
+    const input = document.getElementById('inputKonfirmasiHapus');
+    const val = (input?.value || '').trim().toUpperCase();
+    if (val !== 'HAPUS') {
+        input?.focus();
+        return false;
+    }
+    const hiddenInput = formEl.querySelector('input[name="konfirmasi"]');
+    if (hiddenInput) {
+        hiddenInput.value = val;
+    }
+    return true;
+}
+
+document.getElementById('modalResetDataAdmin')?.addEventListener('hidden.bs.modal', function () {
+    const input = document.getElementById('inputKonfirmasiHapus');
+    if (input) {
+        input.value = '';
+        validasiKetikHapus();
+    }
+});
+</script>
+
 </body>
 </html>
