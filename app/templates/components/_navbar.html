@@ -1,0 +1,59 @@
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top py-2 mb-4">
+    <div class="container-fluid px-3 px-lg-4 flex-nowrap gap-2">
+        <a class="navbar-brand d-flex align-items-center gap-2 gap-sm-3 fw-bold me-0 flex-grow-1 flex-xl-grow-0" style="min-width: 0;" href="#">
+            <img src="{{ url_for('static', filename='img/logo-sdit.png') }}" height="40" class="bg-white p-1 rounded-3 shadow-sm flex-shrink-0" alt="Logo SDIT" onerror="this.src='https://placehold.co/80x80/059669/ffffff?text=SDIT'">
+            <div style="min-width: 0;">
+                <div class="fs-5 lh-1 text-white fw-extrabold tracking-tight navbar-brand-title text-truncate">SDIT BINA MULIA</div>
+                <small class="text-white-50 d-block text-truncate navbar-brand-sub" style="font-size: 0.72rem; letter-spacing: 0.3px;">
+                    {{ nav_subtitle or 'Portal Evaluasi, Tahsin & Tahfidz' }}
+                </small>
+            </div>
+        </a>
+
+        <!-- Header Jam Realtime & Cuaca Sawangan -->
+        <div class="d-none d-xl-flex align-items-center gap-2 mx-auto">
+            <div class="widget-chip d-flex align-items-center gap-2" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modalKalender" title="Klik untuk membuka Kalender Interaktif">
+                <i class="bi bi-clock-history text-warning"></i>
+                <span id="liveClock" class="fw-semibold">Memuat waktu...</span>
+                <i class="bi bi-chevron-down chevron-arrow text-warning ms-1"></i>
+            </div>
+
+            <div class="widget-chip d-flex align-items-center gap-2" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modalDetailCuaca" title="Klik untuk melihat Rincian Cuaca 3 Jam">
+                <span id="weatherIcon"><i class="bi bi-sun-fill text-warning"></i></span>
+                <span id="weatherTemp" class="fw-bold">--°C</span>
+                <span id="weatherDesc" class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25 rounded-pill px-2" style="font-size: 0.68rem;">Memuat...</span>
+                <small class="text-white text-opacity-75 ms-1" style="font-size: 0.72rem;"><i class="bi bi-geo-alt-fill text-danger me-1"></i>Sawangan</small>
+                <i class="bi bi-chevron-down chevron-arrow text-info ms-1"></i>
+            </div>
+        </div>
+
+        <!-- Profile & Logout -->
+        <div class="d-flex align-items-center gap-2 gap-md-3 flex-shrink-0">
+            <div class="d-none d-sm-block text-end text-white">
+                <div class="fw-bold fs-6 lh-1">{{ session.get('user', 'Musyrif') }}</div>
+                {% if nav_show_kelas is not defined or nav_show_kelas %}
+                <div class="d-flex align-items-center justify-content-end gap-1 mt-1">
+                    <span class="badge bg-success bg-opacity-75 text-white" style="font-size: 0.65rem;">
+                        <i class="bi bi-person-check-fill me-1"></i>{{ nav_role_label or 'Musyrif Guru' }}
+                    </span>
+                    <span class="badge bg-white text-dark fw-bold" style="font-size: 0.65rem;">
+                        Kelas {{ session.get('kelas', '1A') }}
+                    </span>
+                </div>
+                {% else %}
+                <small class="text-white-50" style="font-size: 0.7rem;">{{ nav_role_label or 'Orang Tua / Wali' }}</small>
+                {% endif %}
+            </div>
+            <a href="/logout"
+               class="btn btn-light btn-sm rounded-pill px-3 py-2 fw-bold text-success shadow-sm d-inline-flex align-items-center gap-1 gap-sm-2 btn-logout-mobile"
+               style="font-size: 0.82rem;"
+               data-confirm="{{ nav_logout_confirm or 'Apakah Anda yakin ingin keluar dari Portal SIMA SDIT?' }}"
+               data-confirm-title="Keluar dari Sistem?"
+               data-confirm-ok="Ya, Keluar"
+               data-confirm-type="warning">
+                <i class="bi bi-box-arrow-right"></i>
+                <span class="{{ '' if nav_logout_always_text else 'd-none d-md-inline' }}">Keluar</span>
+            </a>
+        </div>
+    </div>
+</nav>

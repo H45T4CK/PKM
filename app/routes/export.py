@@ -633,7 +633,7 @@ def export_master_excel():
                 g_classes = [x.strip().upper() for x in (g.kelas or '').replace('/', ',').replace(';', ',').split(',') if x.strip() and x.strip() != '-']
                 jml_binaan = sum(1 for s in siswa_list if (s.kelas or '').upper() in g_classes)
                 g_status = g.status or 'Aktif'
-                staf_code = f"G-{g.id:04d}"
+                staf_code = f"G-{idx:03d}"
 
                 vals = [idx, staf_code, g.nama or '-', g.username, g.kelas or '-', jml_binaan, g_status]
                 for c_i, v in enumerate(vals, start=1):

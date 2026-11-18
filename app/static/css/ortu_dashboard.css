@@ -1,0 +1,343 @@
+.navbar-custom {
+    background: linear-gradient(135deg, #064e3b 0%, #059669 65%, #10b981 100%);
+    box-shadow: 0 8px 24px -4px rgba(5, 150, 105, 0.32);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Soft Mobile Status Pill */
+.widget-chip.widget-mobile {
+    background: #ffffff !important;
+    border: 1px solid rgba(15, 23, 42, 0.08) !important;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
+    border-radius: 12px !important;
+    padding: 7px 12px !important;
+    min-width: 0;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.widget-chip.widget-mobile:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(5, 150, 105, 0.1) !important;
+}
+
+.mobile-chip-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+/* Hero Banner Profil Murid */
+.hero-banner {
+    background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 65%, #dcfce7 100%);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    border-radius: var(--radius-lg);
+    padding: 22px 26px;
+    box-shadow: 0 6px 20px -6px rgba(5, 150, 105, 0.12);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-decor-circle {
+    position: absolute;
+    right: -45px;
+    top: -55px;
+    width: 210px;
+    height: 210px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.14) 0%, rgba(16, 185, 129, 0) 72%);
+    pointer-events: none;
+}
+
+.student-avatar-lg {
+    width: 58px;
+    height: 58px;
+    border-radius: 17px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: #ffffff;
+    background: linear-gradient(135deg, #047857 0%, #10b981 100%);
+    box-shadow: 0 8px 20px rgba(5, 150, 105, 0.28);
+    border: 3px solid rgba(255, 255, 255, 0.85);
+    flex-shrink: 0;
+}
+
+.student-info-wrap {
+    min-width: 0;
+    flex: 1;
+}
+
+.hero-badge {
+    white-space: normal;
+    text-align: left;
+    line-height: 1.35;
+}
+
+.student-name-title {
+    font-size: clamp(1.2rem, 4.2vw, 1.5rem);
+    line-height: 1.25;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.meta-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    border-radius: 50rem;
+    padding: 4px 12px;
+    font-size: 0.78rem;
+    color: #475569;
+}
+
+.btn-cetak-rapor {
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    border: none;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.btn-cetak-rapor:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(5, 150, 105, 0.3) !important;
+}
+
+/* Section Icon Box */
+.section-icon-box {
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.92rem;
+    flex-shrink: 0;
+}
+
+/* Kartu Rapor Showcase */
+.rapor-showcase-box {
+    background: linear-gradient(180deg, #f8fafc 0%, #ecfdf5 100%);
+    border: 1px solid rgba(16, 185, 129, 0.22);
+}
+
+.score-mini-card {
+    background: #ffffff;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.score-mini-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
+}
+
+.score-tahsin {
+    border-top: 3px solid #0284c7;
+}
+
+.score-tahfidz {
+    border-top: 3px solid #059669;
+}
+
+/* Sorotan Setoran Terakhir */
+.latest-highlight-box {
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.latest-highlight-box:hover {
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.05);
+}
+
+.highlight-tahsin {
+    background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%);
+    border-left: 4px solid #0284c7;
+}
+
+.highlight-tahfidz {
+    background: linear-gradient(135deg, #ecfdf5 0%, #ffffff 100%);
+    border-left: 4px solid #059669;
+}
+
+/* Status Badge */
+.status-badge-lg {
+    padding: 6px 16px;
+    border-radius: 50rem;
+    font-weight: 800;
+    font-size: 0.74rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    letter-spacing: 0.4px;
+}
+
+.status-badge-pass {
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.24);
+}
+
+.status-badge-fail {
+    background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.24);
+}
+
+/* Filter Pill Linimasa */
+.timeline-filter-pill {
+    padding: 7px 14px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border-radius: 50rem;
+    border: 1px solid var(--border-subtle);
+    background: #ffffff;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.timeline-filter-pill .filter-count {
+    background: #f1f5f9;
+    color: #475569;
+    padding: 1px 7px;
+    border-radius: 50rem;
+    font-size: 0.7rem;
+    font-weight: 800;
+}
+
+.timeline-filter-pill:hover {
+    background: #f8fafc;
+    color: var(--text-main);
+}
+
+.timeline-filter-pill.active {
+    background: var(--primary);
+    color: #ffffff;
+    border-color: var(--primary);
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+}
+
+.timeline-filter-pill.active i {
+    color: #ffffff !important;
+}
+
+.timeline-filter-pill.active .filter-count {
+    background: rgba(255, 255, 255, 0.22);
+    color: #ffffff;
+}
+
+/* Linimasa Setoran */
+.timeline-container {
+    position: relative;
+    padding-left: 26px;
+}
+
+.timeline-container::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 10px;
+    bottom: 10px;
+    width: 2px;
+    background: #e2e8f0;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 18px;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-dot {
+    position: absolute;
+    left: -26px;
+    top: 12px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 3px solid var(--primary);
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.18);
+}
+
+.timeline-dot.tahsin-dot {
+    border-color: #0284c7;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.18);
+}
+
+.timeline-dot.fail {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.18);
+}
+
+.timeline-entry-card {
+    background: #f8fafc;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.timeline-entry-card:hover {
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.05);
+}
+
+.entry-pending-paraf {
+    background: #fffbeb;
+    border-color: rgba(245, 158, 11, 0.35);
+    border-left: 4px solid #f59e0b;
+}
+
+.entry-verified {
+    background: #f8fafc;
+}
+
+/* Penyesuaian Layar Mobile */
+@media (max-width: 575.98px) {
+    .navbar-brand-title {
+        font-size: 1rem !important;
+    }
+    .navbar-brand-sub {
+        font-size: 0.66rem !important;
+    }
+    .btn-logout-mobile {
+        padding: 0.4rem 0.75rem !important;
+        font-size: 0.78rem !important;
+        white-space: nowrap;
+    }
+    .hero-banner {
+        padding: 18px 16px;
+        border-radius: 18px;
+    }
+    .student-avatar-lg {
+        width: 50px;
+        height: 50px;
+        border-radius: 15px;
+        font-size: 1.3rem;
+    }
+    .timeline-container {
+        padding-left: 22px;
+    }
+    .timeline-dot {
+        left: -22px;
+        width: 14px;
+        height: 14px;
+    }
+    .timeline-container::before {
+        left: 6px;
+    }
+}

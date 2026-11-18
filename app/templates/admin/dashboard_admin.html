@@ -8,387 +8,27 @@
     <!-- Bootstrap 5.3 & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    
+
     <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
 
-    <style>
-        :root {
-            --primary: #059669;
-            --primary-dark: #065f46;
-            --primary-light: #10b981;
-            --primary-soft: #ecfdf5;
-            --slate-900: #0f172a;
-            --slate-800: #1e293b;
-            --slate-700: #334155;
-            --bg-body: #f8fafc;
-            --card-bg: #ffffff;
-            --border-subtle: #e2e8f0;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --radius-lg: 22px;
-            --radius-md: 14px;
-            --shadow-subtle: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
-            --shadow-hover: 0 12px 32px -4px rgba(15, 23, 42, 0.11);
-        }
-
-        * { box-sizing: border-box; }
-
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(16px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .anim-fade-in { animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .delay-1 { animation-delay: 0.06s; }
-        .delay-2 { animation-delay: 0.12s; }
-        .delay-3 { animation-delay: 0.18s; }
-        .delay-4 { animation-delay: 0.24s; }
-
-        .navbar-custom {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 65%, #064e3b 100%);
-            box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.35);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-        }
-
-        /* Widget Chip Interaktif */
-        .widget-chip {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            border-radius: 50rem;
-            padding: 6px 16px;
-            color: #ffffff;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-            user-select: none;
-        }
-        .widget-chip:hover {
-            background: rgba(255, 255, 255, 0.22);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.25);
-            border-color: rgba(255, 255, 255, 0.35);
-        }
-        .widget-chip .chevron-arrow {
-            font-size: 0.75rem;
-            transition: transform 0.2s ease;
-            opacity: 0.75;
-        }
-        .widget-chip:hover .chevron-arrow {
-            transform: translateY(2px);
-            opacity: 1;
-        }
-        
-        /* Widget Mobile */
-        .widget-mobile {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            padding: 10px 14px;
-            border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
-        }
-
-        .hero-banner {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 60%, #ecfdf5 100%);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-lg);
-            padding: 26px 28px;
-            box-shadow: var(--shadow-subtle);
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Tombol Toolbar Seragam & Rapi */
-        .btn-toolbar-clean {
-            height: 40px;
-            padding: 0 16px;
-            border-radius: 12px;
-            font-size: 0.82rem;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 7px;
-            white-space: nowrap;
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .btn-toolbar-clean:hover {
-            transform: translateY(-1px);
-        }
-
-        .btn-ta-setting {
-            background: #fffbeb;
-            color: #92400e;
-            border: 1.5px solid #fcd34d;
-            border-radius: 14px;
-            padding: 10px 18px;
-            font-weight: 700;
-            font-size: 0.85rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.12);
-            transition: all 0.2s ease;
-        }
-        .btn-ta-setting:hover {
-            background: #fef3c7;
-            color: #78350f;
-            border-color: #f59e0b;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.2);
-        }
-
-        .card-modern {
-            background: var(--card-bg);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-subtle);
-            transition: transform 0.25s ease, box-shadow 0.25s ease;
-        }
-        .card-modern:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .kpi-card { padding: 22px; position: relative; overflow: hidden; }
-        .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; height: 4px; width: 100%; }
-        .kpi-card.kpi-dark::before { background: linear-gradient(90deg, #334155, #0f172a); }
-        .kpi-card.kpi-emerald::before { background: linear-gradient(90deg, #10b981, #059669); }
-        .kpi-card.kpi-amber::before { background: linear-gradient(90deg, #f59e0b, #d97706); }
-        .kpi-card.kpi-blue::before { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
-
-        .kpi-icon-wrap {
-            width: 54px; height: 54px; border-radius: var(--radius-md);
-            display: flex; align-items: center; justify-content: center; font-size: 1.55rem;
-            flex-shrink: 0;
-        }
-
-        /* Modern Pill Tabs */
-        .nav-pills-modern {
-            background: #ffffff;
-            padding: 6px;
-            border-radius: 16px;
-            border: 1px solid var(--border-subtle);
-            display: inline-flex;
-            gap: 6px;
-            box-shadow: var(--shadow-subtle);
-        }
-        .nav-pills-modern .nav-link {
-            border: none;
-            color: var(--text-muted);
-            font-weight: 700;
-            font-size: 0.88rem;
-            padding: 10px 20px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.2s ease;
-        }
-        .nav-pills-modern .nav-link:hover {
-            color: var(--slate-900);
-            background: #f1f5f9;
-        }
-        .nav-pills-modern .nav-link.active {
-            color: #ffffff;
-            background: var(--slate-900);
-            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.22);
-        }
-
-        .search-wrap-responsive {
-            min-width: 260px;
-        }
-
-        @media (max-width: 575.98px) {
-            .hero-banner {
-                padding: 20px 18px;
-            }
-            .nav-pills-modern {
-                display: flex;
-                flex-direction: column;
-                width: 100%;
-            }
-            .nav-pills-modern .nav-link {
-                width: 100%;
-                font-size: 0.84rem;
-                padding: 10px 14px;
-            }
-            .search-wrap-responsive {
-                min-width: 0;
-                width: 100%;
-            }
-            .btn-ta-setting {
-                width: 100%;
-                justify-content: space-between;
-            }
-        }
-
-        .table-custom { margin-bottom: 0; }
-        .table-custom thead th {
-            background-color: #f8fafc;
-            color: var(--text-muted);
-            font-size: 0.74rem;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            font-weight: 700;
-            border-bottom: 2px solid #e2e8f0;
-            padding: 14px 18px;
-            white-space: nowrap;
-        }
-        .table-custom tbody td {
-            padding: 15px 18px;
-            vertical-align: middle;
-            border-bottom: 1px solid #f1f5f9;
-            font-size: 0.9rem;
-        }
-        .table-custom tbody tr:hover {
-            background-color: #f8fafc;
-        }
-
-        .btn-act {
-            border-radius: 10px; font-weight: 600; font-size: 0.8rem; padding: 6px 12px;
-            display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s ease;
-        }
-        .btn-act:hover { transform: translateY(-1px); }
-
-        .filter-pill {
-            padding: 6px 14px; font-size: 0.8rem; font-weight: 600; border-radius: 50rem;
-            border: 1px solid var(--border-subtle); background: #ffffff; color: var(--text-muted);
-            cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px;
-        }
-        .filter-pill:hover {
-            background: #f1f5f9;
-            color: var(--slate-900);
-        }
-        .filter-pill.active {
-            background: #0f172a; color: #ffffff; border-color: #0f172a;
-            box-shadow: 0 3px 10px rgba(15, 23, 42, 0.2);
-        }
-
-        .avatar-circle {
-            width: 42px; height: 42px; border-radius: 13px; display: flex; align-items: center;
-            justify-content: center; font-weight: 800; font-size: 0.95rem; color: #fff;
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            box-shadow: 0 4px 10px rgba(15, 23, 42, 0.15); flex-shrink: 0;
-        }
-
-        .modal-content { border-radius: 22px; border: 1px solid rgba(226, 232, 240, 0.8); }
-
-        .class-badge-btn {
-            border: 1px solid #cbd5e1;
-            background: #f8fafc;
-            color: #334155;
-            border-radius: 8px;
-            padding: 4px 10px;
-            font-weight: 700;
-            font-size: 0.78rem;
-            cursor: pointer;
-            transition: all 0.15s ease;
-        }
-        .class-badge-btn:hover { background: #e2e8f0; }
-        .class-badge-btn.selected {
-            background: #059669; color: #ffffff; border-color: #059669;
-            box-shadow: 0 2px 6px rgba(5, 150, 105, 0.3);
-        }
-
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 6px;
-            text-align: center;
-        }
-        .calendar-day-header {
-            font-size: 0.75rem;
-            font-weight: 800;
-            color: #64748b;
-            padding: 6px 0;
-            text-transform: uppercase;
-        }
-        .calendar-cell {
-            padding: 10px 0;
-            font-size: 0.88rem;
-            font-weight: 600;
-            border-radius: 10px;
-            background: #f8fafc;
-            color: #334155;
-        }
-        .calendar-cell.today {
-            background: #059669;
-            color: #ffffff;
-            font-weight: 800;
-            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.35);
-        }
-    </style>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
 </head>
 <body>
 
-    <!-- NAVBAR RESMI ADMINISTRATOR -->
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top py-2 mb-3 mb-md-4">
-        <div class="container-fluid px-3 px-lg-4">
-            <a class="navbar-brand d-flex align-items-center gap-3 fw-bold" href="#">
-                <img src="{{ url_for('static', filename='img/logo-sdit.png') }}" height="42" class="bg-white p-1 rounded-3 shadow-sm" alt="Logo SDIT" onerror="this.src='https://placehold.co/80x80/0f172a/ffffff?text=SDIT'">
-                <div>
-                    <div class="fs-5 lh-1 mt-1 text-white fw-extrabold tracking-tight">SDIT BINA MULIA</div>
-                    <small class="text-white-50 fw-normal" style="font-size: 0.72rem; letter-spacing: 0.3px;">Panel Administrator Sistem</small>
-                </div>
-            </a>
+    {% set nav_subtitle = 'Panel Administrasi & Manajemen Data' %}
+    {% set nav_role_label = 'Administrator' %}
+    {% set nav_show_kelas = False %}
+    {% set nav_logout_confirm = 'Apakah Anda yakin ingin keluar dari Panel Admin SIMA SDIT?' %}
+    {% include 'components/_navbar.html' %}
 
-            <!-- WIDGET DESKTOP -->
-            <div class="d-none d-xl-flex align-items-center gap-2">
-                <div class="widget-chip d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalKalender" title="Klik untuk membuka Kalender Interaktif">
-                    <i class="bi bi-clock-history text-warning"></i>
-                    <span id="liveClock" class="fw-semibold">Memuat waktu...</span>
-                    <i class="bi bi-chevron-down chevron-arrow text-warning ms-1"></i>
-                </div>
-                
-                <div class="widget-chip d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalDetailCuaca" title="Klik untuk melihat Rincian Cuaca 3 Jam">
-                    <span id="weatherIcon"><i class="bi bi-sun-fill text-warning"></i></span>
-                    <span id="weatherTemp" class="fw-bold">--°C</span>
-                    <span id="weatherDesc" class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25 rounded-pill px-2" style="font-size: 0.68rem;">Memuat...</span>
-                    <small class="text-white-50 ms-1" style="font-size: 0.72rem;"><i class="bi bi-geo-alt-fill text-danger me-0.5"></i>Sawangan</small>
-                    <i class="bi bi-chevron-down chevron-arrow text-info ms-1"></i>
-                </div>
-            </div>
-
-            <div class="d-flex align-items-center gap-2 gap-md-3">
-                <div class="d-none d-sm-block text-end text-white">
-                    <div class="fw-bold fs-6 lh-1">{{ session.get('user', 'Administrator') }}</div>
-                    <div class="d-flex align-items-center justify-content-end gap-1 mt-1">
-                        <span class="badge bg-success text-white" style="font-size: 0.65rem;">
-                            <i class="bi bi-shield-lock-fill me-1"></i>Super Admin
-                        </span>
-                    </div>
-                </div>
-                <a href="/logout"
-                   class="btn btn-light btn-sm rounded-pill px-3 py-2 fw-bold text-dark shadow-sm d-flex align-items-center gap-2"
-                   style="font-size: 0.82rem;"
-                   data-confirm="Apakah Anda yakin ingin keluar dari Panel Administrator SIMA SDIT?"
-                   data-confirm-title="Keluar dari Sistem?"
-                   data-confirm-ok="Ya, Keluar"
-                   data-confirm-type="warning">
-                    <i class="bi bi-box-arrow-right"></i> <span class="d-none d-md-inline">Keluar</span>
-                </a>
-            </div>
-        </div>
-    </nav>
 
     <!-- MAIN CONTAINER -->
     <div class="container-fluid px-3 px-lg-4 mb-5">
 
-        <!-- COMPONENT NOTIFIKASI TOAST & CONFIRM DIALOG CUSTOM -->
         {% include 'components/alerts.html' ignore missing %}
 
         <!-- WIDGET KHUSUS TAMPILAN HP / TABLET -->
@@ -398,7 +38,7 @@
                 <span id="liveClockMobile" class="fw-bold text-white" style="font-size: 0.78rem;">--:--</span>
                 <i class="bi bi-chevron-down text-white-50 chevron-arrow" style="font-size: 0.7rem; opacity: 0.9;"></i>
             </div>
-            
+
             <div class="widget-chip widget-mobile flex-fill d-flex justify-content-center align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalDetailCuaca">
                 <span id="weatherIconMobile" style="font-size: 0.95rem;"><i class="bi bi-sun-fill text-warning"></i></span>
                 <div class="d-flex align-items-center gap-1">
@@ -409,7 +49,7 @@
             </div>
         </div>
 
-        <!-- HERO BANNER ADMIN (KONTROL GLOBAL & REKAP MASTER) -->
+        <!-- HERO BANNER ADMIN -->
         <div class="hero-banner mb-4 anim-fade-in">
             <div class="row align-items-center g-3">
                 <div class="col-12 col-lg-7">
@@ -435,7 +75,7 @@
                             <i class="bi bi-file-earmark-spreadsheet-fill fs-6"></i>
                             <span>Rekap Master (.xlsx)</span>
                         </a>
-                        <a href="{{ url_for('export.export_pdf') }}" target="_blank" class="btn btn-outline-dark btn-toolbar-clean bg-white flex-fill flex-sm-grow-0" title="Pratinjau & Cetak Laporan Rekapitulasi Semua Murid">
+                        <a href="{{ url_for('export.export_pdf') }}" target="_blank" class="btn btn-outline-dark btn-toolbar-clean flex-fill flex-sm-grow-0" title="Pratinjau & Cetak Laporan Rekapitulasi Semua Murid">
                             <i class="bi bi-printer-fill fs-6"></i>
                             <span>Cetak Semua Laporan</span>
                         </a>
@@ -458,7 +98,7 @@
         {% set total_guru = guru_list|length if guru_list else 0 %}
         {% set total_siswa = siswa_list|length if siswa_list else 0 %}
         {% set ns_admin = namespace(guru_aktif=0, siswa_aktif=0, siswa_lulus=0, kelas_set=[]) %}
-        
+
         {% for g in guru_list %}
             {% if g.status == 'Aktif' or g.status is not defined or g.status == True %}
                 {% set ns_admin.guru_aktif = ns_admin.guru_aktif + 1 %}
@@ -574,19 +214,18 @@
                 </li>
             </ul>
 
-            <button type="button" class="btn btn-outline-danger btn-toolbar-clean bg-white shadow-sm" data-bs-toggle="modal" data-bs-target="#modalResetDataAdmin">
+            <button type="button" class="btn btn-outline-danger btn-toolbar-clean shadow-sm" data-bs-toggle="modal" data-bs-target="#modalResetDataAdmin">
                 <i class="bi bi-trash3-fill"></i>
                 <span>Hapus Semua / Reset Data</span>
             </button>
         </div>
 
         <div class="tab-content" id="adminTabContent">
-            
+
             <!-- PANE 1: DATA GURU & MUSYRIF -->
             <div class="tab-pane fade show active" id="tab-guru-pane" role="tabpanel">
                 <div class="card-modern overflow-hidden">
                     <div class="p-3 p-md-4 border-bottom bg-white">
-                        <!-- BARIS 1: JUDUL & TOMBOL AKSI GURU YANG RAPI & SERAGAM -->
                         <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
                             <div class="d-flex align-items-center gap-3">
                                 <div class="bg-dark text-white p-2.5 rounded-3 shadow-sm flex-shrink-0">
@@ -597,10 +236,9 @@
                                     <small class="text-muted">Total {{ total_guru }} akun guru terdaftar dalam sistem</small>
                                 </div>
                             </div>
-                            
-                            <!-- Action Toolbar Guru (Template, Import Excel, Tambah Guru) -->
+
                             <div class="d-flex flex-wrap align-items-center gap-2">
-                                <a href="{{ url_for('admin.template_guru') }}" class="btn btn-outline-success btn-toolbar-clean bg-white flex-fill flex-sm-grow-0" title="Unduh Template Resmi Excel Guru (.xlsx)">
+                                <a href="{{ url_for('admin.template_guru') }}" class="btn btn-outline-success btn-toolbar-clean flex-fill flex-sm-grow-0" title="Unduh Template Resmi Excel Guru (.xlsx)">
                                     <i class="bi bi-file-earmark-arrow-down-fill fs-6"></i>
                                     <span>Unduh Template</span>
                                 </a>
@@ -615,7 +253,6 @@
                             </div>
                         </div>
 
-                        <!-- BARIS 2: FILTER KEAKTIFAN & PENCARIAN GURU -->
                         <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mt-3 pt-3 border-top">
                             <div class="d-flex flex-wrap align-items-center gap-2">
                                 <span class="small fw-bold text-muted me-1"><i class="bi bi-funnel me-1"></i>Status Mengajar:</span>
@@ -642,7 +279,6 @@
                         </div>
                     </div>
 
-                    <!-- Table Data Guru -->
                     <div class="table-responsive">
                         <table class="table table-custom align-middle" id="tableGuru">
                             <thead>
@@ -665,7 +301,7 @@
                                             </div>
                                             <div>
                                                 <div class="fw-bold text-dark fs-6">{{ g.nama }}</div>
-                                                <div class="small text-muted" style="font-size: 0.72rem;">ID Staf: G-{{ '%04d' % g.id }}</div>
+                                                <div class="small text-muted" style="font-size: 0.72rem;">ID Staf: G-{{ '%03d' % loop.index }}</div>
                                             </div>
                                         </div>
                                     </td>
@@ -766,10 +402,9 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="col-12 col-lg-7">
                                 <div class="d-flex flex-wrap align-items-center justify-content-lg-end gap-2">
-                                    <!-- Dropdown Filter Kelas -->
                                     <select id="filterKelasSiswaSelect" class="form-select form-select-sm rounded-pill bg-light border fw-bold text-dark px-3" style="width: auto; min-width: 150px; height: 38px;" onchange="filterTabelSiswaAdmin()">
                                         <option value="all">Semua Kelas ({{ ns_admin.kelas_set|length }})</option>
                                         {% for k in ns_admin.kelas_set|sort %}
@@ -777,7 +412,6 @@
                                         {% endfor %}
                                     </select>
 
-                                    <!-- Search Box Murid -->
                                     <div class="position-relative search-wrap-responsive flex-grow-1 flex-md-grow-0">
                                         <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
                                         <input type="text" id="searchSiswaInput" class="form-control rounded-pill ps-5 bg-light border" placeholder="Cari nama, NISN, username..." onkeyup="filterTabelSiswaAdmin()">
@@ -789,7 +423,6 @@
                             </div>
                         </div>
 
-                        <!-- Filter Status Keaktifan & Predikat Kelulusan -->
                         <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-3 pt-3 border-top">
                             <div class="d-flex flex-wrap align-items-center gap-2">
                                 <span class="small fw-bold text-muted me-1"><i class="bi bi-funnel me-1"></i>Keaktifan:</span>
@@ -819,7 +452,6 @@
                         </div>
                     </div>
 
-                    <!-- Table Data Siswa -->
                     <div class="table-responsive">
                         <table class="table table-custom align-middle" id="tableSiswaAdmin">
                             <thead>
@@ -839,11 +471,11 @@
                                 {% set is_siswa_active = (s.status_clean == 'Aktif') %}
                                 {% set is_lulus_akhir = (s.status_kelulusan_rata_rata == 'Lulus') %}
                                 {% set is_tidak_lulus = (s.status_kelulusan_rata_rata == 'Tidak Lulus') %}
-                                <tr class="siswa-admin-row" 
-                                    data-id="{{ s.id }}" 
-                                    data-nama="{{ s.nama|lower }}" 
+                                <tr class="siswa-admin-row"
+                                    data-id="{{ s.id }}"
+                                    data-nama="{{ s.nama|lower }}"
                                     data-username="{{ s.ortu_username|lower if s.ortu_username else '' }}"
-                                    data-kelas="{{ s.kelas|lower }}" 
+                                    data-kelas="{{ s.kelas|lower }}"
                                     data-status="{{ 'aktif' if is_siswa_active else 'nonaktif' }}"
                                     data-lulus="{{ 'lulus' if is_lulus_akhir else ('bimbingan' if is_tidak_lulus else 'belum') }}">
                                     <td class="ps-4">
@@ -974,1036 +606,12 @@
 
     </div>
 
-    <!-- MODAL POP-UP 1: RINCIAN CUACA MODERN & PRESISI SAWANGAN -->
-    <div class="modal fade" id="modalDetailCuaca" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content border-0 shadow-lg" style="border-radius: 24px; overflow: hidden; background: #ffffff;">
-                <div class="modal-header bg-dark text-white border-0 py-3 px-4 d-flex align-items-center justify-content-between">
-                    <div class="d-flex align-items-center gap-2.5">
-                        <i class="bi bi-cloud-sun-fill text-warning fs-4"></i>
-                        <div>
-                            <h5 class="modal-title fw-bold mb-0">Prakiraan Cuaca Sawangan</h5>
-                            <small class="text-white-50" style="font-size: 0.72rem;">Pasir Putih, Sawangan, Kota Depok • Open-Meteo Live API</small>
-                        </div>
-                    </div>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
+    {% include 'components/_modals_widgets.html' %}
+    {% include 'admin/partials/_modals_crud.html' %}
 
-                <div class="modal-body p-4">
-                    <div id="weatherHeroBg" class="p-4 rounded-4 mb-4 position-relative overflow-hidden text-white" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3);">
-                        <div class="row align-items-center g-3">
-                            <div class="col-12 col-md-5">
-                                <span class="badge rounded-pill px-3 py-1.5 small fw-bold mb-2 d-inline-flex align-items-center gap-1.5" style="background-color: rgba(255, 255, 255, 0.15); color: #ffffff;" id="modalDayNightBadge">
-                                    <i class="bi bi-moon-stars-fill text-warning"></i> Suasana Malam Hari
-                                </span>
-                                <div class="d-flex align-items-baseline gap-2 mt-1">
-                                    <h1 class="display-3 fw-extrabold mb-0 tracking-tight" id="modalCurrentTemp">--°C</h1>
-                                </div>
-                                <div class="mt-2">
-                                    <span class="badge bg-warning text-dark fw-bold px-3 py-1.5 rounded-pill fs-6" id="modalCurrentDesc">Memuat...</span>
-                                    <div class="small text-white-50 mt-2 fw-medium" id="modalFeelsLike">
-                                        <i class="bi bi-thermometer-half me-1 text-warning"></i>Sensasi Terasa: --°C
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-7">
-                                <div class="row g-2">
-                                    <div class="col-6">
-                                        <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);">
-                                            <div class="small fw-semibold mb-1" style="color: #cbd5e1; font-size: 0.75rem;">
-                                                <i class="bi bi-droplet-fill text-info me-1"></i> Kelembaban
-                                            </div>
-                                            <div class="fw-extrabold fs-5 text-white" id="metricHumidity">--%</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);">
-                                            <div class="small fw-semibold mb-1" style="color: #cbd5e1; font-size: 0.75rem;">
-                                                <i class="bi bi-wind text-warning me-1"></i> Kecepatan Angin
-                                            </div>
-                                            <div class="fw-extrabold fs-5 text-white" id="metricWind">-- km/j</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);">
-                                            <div class="small fw-semibold mb-1" style="color: #cbd5e1; font-size: 0.75rem;">
-                                                <i class="bi bi-cloud-rain-fill text-primary me-1"></i> Peluang Hujan
-                                            </div>
-                                            <div class="fw-extrabold fs-5 text-white" id="metricRainProb">--%</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);">
-                                            <div class="small fw-semibold mb-1" style="color: #cbd5e1; font-size: 0.75rem;">
-                                                <i class="bi bi-sun-fill text-warning me-1"></i> Indeks UV
-                                            </div>
-                                            <div class="fw-extrabold fs-5 text-white" id="metricUV">--</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="d-flex align-items-center justify-content-between mb-3 px-1">
-                        <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
-                            <i class="bi bi-clock-history text-primary"></i> Prediksi Jam per Jam (Sawangan)
-                        </h6>
-                        <span class="badge bg-light text-muted border px-2.5 py-1 rounded-pill" style="font-size: 0.7rem;">Pembaruan Otomatis</span>
-                    </div>
-                    
-                    <div class="row g-2.5" id="weather3hContainer">
-                        <div class="col-12 text-center py-4 text-muted">
-                            <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
-                            Sedang mengambil data cuaca terbaru...
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal-footer border-0 p-4 pt-0">
-                    <button type="button" class="btn btn-dark rounded-3 fw-bold px-4 ms-auto" data-bs-dismiss="modal">Tutup</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL POP-UP 2: KALENDER INTERAKTIF -->
-    <div class="modal fade" id="modalKalender" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg">
-                <div class="modal-header bg-dark text-white border-0 py-3" style="border-radius: 20px 20px 0 0;">
-                    <div class="d-flex align-items-center gap-2">
-                        <i class="bi bi-calendar-week-fill text-warning fs-4"></i>
-                        <div>
-                            <h5 class="modal-title fw-bold mb-0" id="calendarMonthTitle">Kalender Sistem</h5>
-                            <small class="text-white-50" style="font-size: 0.72rem;">Waktu Operasional SDIT Bina Mulia</small>
-                        </div>
-                    </div>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <div class="text-center bg-success bg-opacity-10 border border-success border-opacity-25 rounded-4 p-3 mb-4">
-                        <span class="text-success fw-bold small text-uppercase d-block mb-1">Hari Ini</span>
-                        <h4 class="fw-bold text-dark mb-0" id="calendarTodayHeader">--</h4>
-                    </div>
-
-                    <div class="calendar-grid mb-2">
-                        <div class="calendar-day-header text-danger">Aha</div>
-                        <div class="calendar-day-header">Sen</div>
-                        <div class="calendar-day-header">Sel</div>
-                        <div class="calendar-day-header">Rab</div>
-                        <div class="calendar-day-header">Kam</div>
-                        <div class="calendar-day-header text-success">Jum</div>
-                        <div class="calendar-day-header">Sab</div>
-                    </div>
-
-                    <div class="calendar-grid" id="calendarDaysGrid"></div>
-                </div>
-                <div class="modal-footer border-0 p-4 pt-0">
-                    <button type="button" class="btn btn-dark rounded-3 fw-bold px-4" data-bs-dismiss="modal">Tutup</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL PENGATURAN TAHUN AJARAN & SEMESTER -->
-    <div class="modal fade" id="modalSettingTA" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg">
-                <form action="/admin/update_tahun_ajaran" method="POST">
-                    <div class="modal-header bg-dark text-white border-0 py-3" style="border-radius: 20px 20px 0 0;">
-                        <h5 class="modal-title fw-bold mb-0">
-                            <i class="bi bi-gear-fill me-2 text-warning"></i> Pengaturan Tahun Ajaran & Semester
-                        </h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body p-4">
-                        <div class="mb-3">
-                            <label class="form-label fw-bold small text-muted">Tahun Ajaran Aktif</label>
-                            <input type="text" name="tahun_ajaran" class="form-control rounded-3 bg-light border fw-bold text-dark" value="{{ tahun_ajaran or '2026/2027' }}" placeholder="Contoh: 2026/2027" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold small text-muted">Semester Aktif</label>
-                            <select name="semester" class="form-select rounded-3 bg-light border fw-bold text-dark">
-                                <option value="Ganjil" {{ 'selected' if semester == 'Ganjil' else '' }}>Semester Ganjil</option>
-                                <option value="Genap" {{ 'selected' if semester == 'Genap' else '' }}>Semester Genap</option>
-                            </select>
-                        </div>
-                        <small class="text-muted d-block" style="font-size: 0.73rem;">
-                            <i class="bi bi-info-circle me-1"></i>Perubahan ini akan otomatis memperbarui tampilan di seluruh portal Admin, Guru, Wali Murid, dan berkas Laporan.
-                        </small>
-                    </div>
-                    <div class="modal-footer border-0 p-4 pt-0">
-                        <button type="button" class="btn btn-light rounded-3 fw-bold" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-dark rounded-3 fw-bold px-4">
-                            <i class="bi bi-save me-1"></i> Simpan Pengaturan
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL EDIT DATA GURU -->
-    {% for g in guru_list %}
-        {% set is_active = (g.status == 'Aktif' or g.status is not defined or g.status == True or g.status == 'aktif') %}
-        {% set assigned_classes = [] %}
-        {% if g.kelas and g.kelas != '-' %}
-            {% for c in g.kelas.replace(';', ',').split(',') %}
-                {% if c.strip() %}
-                    {% set _ = assigned_classes.append(c.strip().upper()) %}
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-        <div class="modal fade" id="modalEditGuru{{ g.id }}" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0 shadow-lg">
-                    <form action="/admin/edit_guru/{{ g.id }}" method="POST">
-                        <div class="modal-header bg-dark text-white border-0 py-3" style="border-radius: 20px 20px 0 0;">
-                            <h5 class="modal-title fw-bold mb-0">
-                                <i class="bi bi-pencil-square me-2"></i> Ubah Data Guru / Musyrif
-                            </h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                        </div>
-                        <div class="modal-body p-4">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold small text-muted">Nama Lengkap Guru</label>
-                                <input type="text" name="nama" class="form-control rounded-3 bg-light border" value="{{ g.nama }}" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label fw-bold small text-muted">Username Login</label>
-                                <input type="text" name="username" class="form-control rounded-3 bg-light border" value="{{ g.username }}" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label fw-bold small text-muted">Password Baru (Biarkan kosong jika tidak diubah)</label>
-                                <div class="position-relative">
-                                    <input type="password" id="inputPassEditGuru{{ g.id }}" name="password" class="form-control rounded-3 bg-light border pe-5" placeholder="Masukkan password baru..." minlength="4">
-                                    <button type="button" class="btn btn-link position-absolute top-50 end-0 translate-middle-y text-muted pe-3 text-decoration-none" onclick="toggleGenericPassword('inputPassEditGuru{{ g.id }}', 'iconPassEditGuru{{ g.id }}')">
-                                        <i class="bi bi-eye-slash-fill" id="iconPassEditGuru{{ g.id }}"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label fw-bold small text-muted">Kelas Binaan (Dapat lebih dari 1, pisahkan dengan koma)</label>
-                                <div class="d-flex flex-wrap gap-1 mb-2">
-                                    {% for level in range(1, 7) %}
-                                        {% for alpha in ['A', 'B', 'C', 'D'] %}
-                                            {% set k_code = level ~ alpha %}
-                                            <button type="button" class="class-badge-btn {{ 'selected' if k_code in assigned_classes else '' }}" onclick="toggleClassInInput('inputKelasEdit{{ g.id }}', '{{ k_code }}', this)">
-                                                {{ k_code }}
-                                            </button>
-                                        {% endfor %}
-                                    {% endfor %}
-                                </div>
-                                <input type="text" id="inputKelasEdit{{ g.id }}" name="kelas" class="form-control rounded-3 bg-light border" value="{{ g.kelas if g.kelas and g.kelas != '-' else '' }}" placeholder="Contoh: 1A, 2B">
-                                <small class="text-muted" style="font-size: 0.73rem;"><i class="bi bi-info-circle me-1"></i>Klik tombol kelas di atas untuk memilih/menghapus atau ketik langsung dipisah koma.</small>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label fw-bold small text-muted">Status Keaktifan</label>
-                                <select name="status" class="form-select rounded-3 bg-light border">
-                                    <option value="Aktif" {{ 'selected' if is_active else '' }}>Aktif Mengajar</option>
-                                    <option value="Tidak Aktif" {{ 'selected' if not is_active else '' }}>Tidak Aktif di SDIT</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="modal-footer border-0 p-4 pt-0">
-                            <button type="button" class="btn btn-light rounded-3 fw-bold" data-bs-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-dark rounded-3 fw-bold px-4">
-                                <i class="bi bi-save me-1"></i> Simpan Perubahan
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    {% endfor %}
-
-    <!-- MODAL EDIT DATA MURID OLEH ADMIN -->
-    {% for s in siswa_list %}
-        <div class="modal fade" id="modalEditMuridAdmin{{ s.id }}" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0 shadow-lg">
-                    <form action="/admin/edit_siswa/{{ s.id }}" method="POST">
-                        <div class="modal-header bg-dark text-white border-0 py-3" style="border-radius: 20px 20px 0 0;">
-                            <h5 class="modal-title fw-bold mb-0">
-                                <i class="bi bi-pencil-square me-2"></i> Ubah Data Murid & Akun Wali
-                            </h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                        </div>
-                        <div class="modal-body p-4">
-                            <div class="alert alert-light border small text-dark mb-3">
-                                NISN / ID Murid: <strong>{{ s.id }}</strong> (Identitas tetap di database)
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label fw-bold small text-muted">Nama Lengkap Murid</label>
-                                <input type="text" name="nama" class="form-control rounded-3 bg-light border" value="{{ s.nama }}" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label fw-bold small text-muted">Username Login Murid / Wali</label>
-                                <input type="text" name="username" class="form-control rounded-3 bg-light border" value="{{ s.ortu_username }}" required>
-                                <small class="text-muted" style="font-size: 0.72rem;">Digunakan orang tua / murid untuk login ke sistem.</small>
-                            </div>
-
-                            <div class="row g-2 mb-3">
-                                <div class="col-6">
-                                    <label class="form-label fw-bold small text-muted">Kelas Binaan</label>
-                                    <input type="text" name="kelas" class="form-control rounded-3 bg-light border fw-bold" value="{{ s.kelas }}" required>
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label fw-bold small text-muted">Status Murid</label>
-                                    <select name="status" class="form-select rounded-3 bg-light border">
-                                        <option value="Aktif" {{ 'selected' if s.status_clean == 'Aktif' else '' }}>Aktif</option>
-                                        <option value="Tidak Aktif" {{ 'selected' if s.status_clean != 'Aktif' else '' }}>Tidak Aktif</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer border-0 p-4 pt-0">
-                            <button type="button" class="btn btn-light rounded-3 fw-bold" data-bs-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-dark rounded-3 fw-bold px-4">
-                                <i class="bi bi-save me-1"></i> Simpan Data Murid
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    {% endfor %}
-
-    <!-- MODAL EDIT PASSWORD SISWA / WALI -->
-    {% for s in siswa_list %}
-        <div class="modal fade" id="modalPassSiswa{{ s.id }}" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0 shadow-lg">
-                    <form action="/admin/edit_password_siswa/{{ s.id }}" method="POST">
-                        <div class="modal-header bg-dark text-white border-0 py-3" style="border-radius: 20px 20px 0 0;">
-                            <h5 class="modal-title fw-bold mb-0">
-                                <i class="bi bi-shield-lock-fill text-warning me-2"></i> Edit Password Murid / Wali
-                            </h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                        </div>
-                        <div class="modal-body p-4">
-                            <div class="alert alert-light border small text-dark mb-3">
-                                <div class="fw-bold">{{ s.nama }} (NISN: {{ s.id }})</div>
-                                <div class="text-muted">Kelas: {{ s.kelas }} • Akun Wali: <strong>{{ s.ortu_username }}</strong></div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label fw-bold small text-muted">Password Baru untuk Murid / Wali</label>
-                                <div class="position-relative">
-                                    <input type="password" id="inputPassSiswa{{ s.id }}" name="password" class="form-control rounded-3 bg-light border pe-5" placeholder="Masukkan password baru..." required minlength="4">
-                                    <button type="button" class="btn btn-link position-absolute top-50 end-0 translate-middle-y text-muted pe-3 text-decoration-none" onclick="toggleGenericPassword('inputPassSiswa{{ s.id }}', 'iconPassSiswa{{ s.id }}')">
-                                        <i class="bi bi-eye-slash-fill" id="iconPassSiswa{{ s.id }}"></i>
-                                    </button>
-                                </div>
-                                <small class="text-muted" style="font-size: 0.73rem;">Password ini akan digunakan murid / orang tua untuk login ke portal SIMA SDIT.</small>
-                            </div>
-                        </div>
-                        <div class="modal-footer border-0 p-4 pt-0">
-                            <button type="button" class="btn btn-light rounded-3 fw-bold" data-bs-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-dark rounded-3 fw-bold px-4">
-                                <i class="bi bi-check-lg me-1"></i> Perbarui Password
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    {% endfor %}
-
-    <!-- MODAL TAMBAH GURU -->
-    <div class="modal fade" id="modalTambahGuru" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg">
-                <form action="/admin/tambah_guru" method="POST">
-                    <div class="modal-header bg-dark text-white border-0 py-3" style="border-radius: 20px 20px 0 0;">
-                        <h5 class="modal-title fw-bold mb-0">
-                            <i class="bi bi-person-plus-fill me-2"></i> Tambah Staf Guru Baru
-                        </h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body p-4">
-                        <div class="mb-3">
-                            <label class="form-label fw-bold small text-muted">Nama Lengkap Guru / Musyrif</label>
-                            <input type="text" name="nama" class="form-control rounded-3 bg-light border" placeholder="Contoh: Ustadz Ahmad Fauzi, S.Pd." required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label fw-bold small text-muted">Username untuk Login</label>
-                            <input type="text" name="username" class="form-control rounded-3 bg-light border" placeholder="Contoh: ahmad_fauzi" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label fw-bold small text-muted">Password Akun Initial</label>
-                            <div class="position-relative">
-                                <input type="password" id="inputTambahGuruPass" name="password" class="form-control rounded-3 bg-light border pe-5" placeholder="Buat password akun guru..." required minlength="4">
-                                <button type="button" class="btn btn-link position-absolute top-50 end-0 translate-middle-y text-muted pe-3 text-decoration-none" onclick="toggleGenericPassword('inputTambahGuruPass', 'iconTambahGuruPass')">
-                                    <i class="bi bi-eye-slash-fill" id="iconTambahGuruPass"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                <label class="form-label fw-bold small text-muted mb-0">Kelas Binaan (Dapat Pilih Lebih dari 1)</label>
-                                <small class="text-muted" style="font-size: 0.72rem;">1 kelas hanya 1 guru</small>
-                            </div>
-                            <div class="d-flex flex-wrap gap-1 mb-2">
-                                {% for level in range(1, 7) %}
-                                    {% for alpha in ['A', 'B', 'C', 'D'] %}
-                                        {% set k_code = level ~ alpha %}
-                                        <button type="button" class="class-badge-btn" onclick="toggleClassInInput('inputKelasTambahGuru', '{{ k_code }}', this)">
-                                            {{ k_code }}
-                                        </button>
-                                    {% endfor %}
-                                {% endfor %}
-                            </div>
-                            <input type="text" id="inputKelasTambahGuru" name="kelas" class="form-control rounded-3 bg-light border" placeholder="Contoh: 1A, 2B" required>
-                            <small class="text-muted" style="font-size: 0.73rem;">Pilih kelas binaan di atas (misal guru mengajar kelas 1A dan 2B).</small>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label fw-bold small text-muted">Status Keaktifan</label>
-                            <select name="status" class="form-select rounded-3 bg-light border">
-                                <option value="Aktif" selected>Aktif Mengajar</option>
-                                <option value="Tidak Aktif">Tidak Aktif</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer border-0 p-4 pt-0">
-                        <button type="button" class="btn btn-light rounded-3 fw-bold" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-dark rounded-3 fw-bold px-4">
-                            <i class="bi bi-check-lg me-1"></i> Simpan Guru
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL IMPORT EXCEL GURU (.XLSX) -->
-    <div class="modal fade" id="modalImportGuru" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg">
-                <form action="/admin/import_guru" method="POST" enctype="multipart/form-data">
-                    <div class="modal-header bg-dark text-white border-0 py-3" style="border-radius: 20px 20px 0 0;">
-                        <h5 class="modal-title fw-bold mb-0">
-                            <i class="bi bi-file-earmark-excel me-2"></i> Import Data Guru dari Excel
-                        </h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body p-4">
-                        <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-light rounded-3 border">
-                            <div>
-                                <h6 class="fw-bold mb-0 text-dark">Template Resmi Excel Guru (.xlsx)</h6>
-                                <small class="text-muted">Unduh format khusus Guru & Musyrif</small>
-                            </div>
-                            <a href="{{ url_for('admin.template_guru') }}" class="btn btn-success btn-sm fw-bold px-3 rounded-pill text-decoration-none shadow-sm">
-                                <i class="bi bi-download me-1"></i> Unduh Template
-                            </a>
-                        </div>
-
-                        <div class="alert alert-info bg-info bg-opacity-10 border-0 text-dark small mb-3">
-                            <i class="bi bi-info-circle-fill text-info me-1"></i> Pastikan memakai <strong>Template Guru</strong> (bukan Template Murid) dengan kolom: <strong>No</strong>, <strong>Nama Lengkap</strong>, <strong>Username</strong>, <strong>Password Initial</strong>, dan <strong>Kelas Binaan</strong> (misal: <code>1A, 2B</code>).
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label fw-bold small text-muted">Pilih File Spreadsheet Guru (.xlsx / .xls)</label>
-                            <input type="file" name="file_excel_guru" class="form-control bg-light rounded-3 border" accept=".xlsx, .xls" required>
-                        </div>
-                    </div>
-                    <div class="modal-footer border-0 p-4 pt-0">
-                        <button type="button" class="btn btn-light rounded-3 fw-bold" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-dark rounded-3 fw-bold px-4">
-                            <i class="bi bi-cloud-arrow-up-fill me-1"></i> Upload & Proses
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- SCRIPTS DAN JS LOGIC -->
+    <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            updateLiveClock();
-            setInterval(updateLiveClock, 1000);
-            fetchWeatherSawangan();
-            generateInteractiveCalendar();
-        });
-
-        function updateLiveClock() {
-            const now = new Date();
-            const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-            const shortMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
-            
-            const hours = String(now.getHours()).padStart(2, '0');
-            const mins = String(now.getMinutes()).padStart(2, '0');
-            const secs = String(now.getSeconds()).padStart(2, '0');
-            
-            const clockEl = document.getElementById('liveClock');
-            if (clockEl) {
-                clockEl.textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()} • ${hours}:${mins}:${secs} WIB`;
-            }
-
-            const clockElMobile = document.getElementById('liveClockMobile');
-            if (clockElMobile) {
-                clockElMobile.textContent = `${hours}:${mins} WIB • ${now.getDate()} ${shortMonths[now.getMonth()]}`;
-            }
-        }
-
-        function generateInteractiveCalendar() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = now.getMonth();
-            const todayDate = now.getDate();
-
-            const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-
-            const monthTitle = document.getElementById('calendarMonthTitle');
-            const todayHeader = document.getElementById('calendarTodayHeader');
-            const daysGrid = document.getElementById('calendarDaysGrid');
-
-            if (monthTitle) monthTitle.textContent = `Kalender ${months[month]} ${year}`;
-            if (todayHeader) todayHeader.textContent = `${days[now.getDay()]}, ${todayDate} ${months[month]} ${year}`;
-
-            if (!daysGrid) return;
-            daysGrid.innerHTML = '';
-
-            const firstDay = new Date(year, month, 1).getDay();
-            const totalDays = new Date(year, month + 1, 0).getDate();
-
-            for (let i = 0; i < firstDay; i++) {
-                const emptyCell = document.createElement('div');
-                emptyCell.className = 'calendar-cell bg-transparent';
-                daysGrid.appendChild(emptyCell);
-            }
-
-            for (let d = 1; d <= totalDays; d++) {
-                const cell = document.createElement('div');
-                cell.className = `calendar-cell ${d === todayDate ? 'today' : ''}`;
-                cell.textContent = d;
-                daysGrid.appendChild(cell);
-            }
-        }
-
-        function getWeatherDetails(code, isNight) {
-            let desc = "Cerah";
-            let iconClass = isNight ? "bi-moon-stars-fill text-warning" : "bi-sun-fill text-warning";
-
-            if (code === 0) {
-                desc = isNight ? "Cerah (Malam)" : "Cerah";
-                iconClass = isNight ? "bi-moon-stars-fill text-warning" : "bi-sun-fill text-warning";
-            } else if (code >= 1 && code <= 3) {
-                desc = "Berawan";
-                iconClass = isNight ? "bi-cloud-moon-fill text-info" : "bi-cloud-sun-fill text-info";
-            } else if (code >= 45 && code <= 48) {
-                desc = "Berkabut";
-                iconClass = "bi-cloud-haze2-fill text-secondary";
-            } else if (code >= 51 && code <= 67) {
-                desc = "Hujan Ringan";
-                iconClass = "bi-cloud-drizzle-fill text-primary";
-            } else if (code >= 71 && code <= 77) {
-                desc = "Hujan Sedang";
-                iconClass = "bi-cloud-rain-fill text-primary";
-            } else if (code >= 80 && code <= 99) {
-                desc = "Hujan Badai";
-                iconClass = "bi-cloud-lightning-rain-fill text-danger";
-            }
-
-            return { desc, iconClass };
-        }
-
-        function fetchWeatherSawangan() {
-            const url = 'https://api.open-meteo.com/v1/forecast?latitude=-6.417&longitude=106.783&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,weather_code,precipitation_probability,wind_speed_10m,uv_index&timezone=Asia%2FJakarta';
-            
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 6000);
-
-            fetch(url, { signal: controller.signal })
-                .then(response => {
-                    clearTimeout(timeoutId);
-                    if (!response.ok) throw new Error("API Response Error: " + response.status);
-                    return response.json();
-                })
-                .then(data => {
-                    if (data && data.current) {
-                        const cur = data.current;
-                        const temp = Math.round(cur.temperature_2m);
-                        const feelsLike = Math.round(cur.apparent_temperature);
-                        const humidity = cur.relative_humidity_2m;
-                        const windSpeed = Math.round(cur.wind_speed_10m);
-                        const isNight = (cur.is_day === 0);
-                        const weatherInfo = getWeatherDetails(cur.weather_code, isNight);
-
-                        const now = new Date();
-                        const currentISO = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}T${String(now.getHours()).padStart(2,'0')}:00`;
-                        
-                        let targetIdx = 0;
-                        if (data.hourly && data.hourly.time) {
-                            const foundIdx = data.hourly.time.findIndex(t => t.startsWith(currentISO));
-                            if (foundIdx !== -1) targetIdx = foundIdx;
-                            else targetIdx = now.getHours();
-                        }
-
-                        const rainProb = (data.hourly && data.hourly.precipitation_probability) ? (data.hourly.precipitation_probability[targetIdx] || 0) : 0;
-                        const uvVal = (data.hourly && data.hourly.uv_index) ? Math.round(data.hourly.uv_index[targetIdx] || 0) : 0;
-
-                        const wTemp = document.getElementById('weatherTemp');
-                        const wDesc = document.getElementById('weatherDesc');
-                        const wIcon = document.getElementById('weatherIcon');
-                        const mTempMob = document.getElementById('weatherTempMobile');
-                        const mDescMob = document.getElementById('weatherDescMobile');
-                        const mIconMob = document.getElementById('weatherIconMobile');
-
-                        if (wTemp) wTemp.textContent = `${temp}°C`;
-                        if (wDesc) wDesc.textContent = weatherInfo.desc;
-                        if (wIcon) wIcon.innerHTML = `<i class="bi ${weatherInfo.iconClass}"></i>`;
-
-                        if (mTempMob) mTempMob.textContent = `${temp}°C`;
-                        if (mDescMob) mDescMob.textContent = weatherInfo.desc;
-                        if (mIconMob) mIconMob.innerHTML = `<i class="bi ${weatherInfo.iconClass}"></i>`;
-
-                        const mTemp = document.getElementById('modalCurrentTemp');
-                        const mDesc = document.getElementById('modalCurrentDesc');
-                        const heroBg = document.getElementById('weatherHeroBg');
-                        const dayNightBadge = document.getElementById('modalDayNightBadge');
-
-                        if (mTemp) mTemp.textContent = `${temp}°C`;
-                        if (mDesc) mDesc.textContent = weatherInfo.desc;
-
-                        if (isNight) {
-                            if (dayNightBadge) dayNightBadge.innerHTML = `<i class="bi bi-moon-stars-fill text-warning me-1"></i> Suasana Malam Hari`;
-                            if (heroBg) heroBg.style.background = 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)';
-                        } else {
-                            if (dayNightBadge) dayNightBadge.innerHTML = `<i class="bi bi-sun-fill text-warning me-1"></i> Suasana Siang Hari`;
-                            if (heroBg) heroBg.style.background = 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)';
-                        }
-
-                        const elFeelsLike = document.getElementById('modalFeelsLike');
-                        const elHumidity = document.getElementById('metricHumidity');
-                        const elWind = document.getElementById('metricWind');
-                        const elRainProb = document.getElementById('metricRainProb');
-                        const elUV = document.getElementById('metricUV');
-
-                        if (elFeelsLike) elFeelsLike.innerHTML = `<i class="bi bi-thermometer-half me-1 text-warning"></i>Sensasi Terasa: ${feelsLike}°C`;
-                        if (elHumidity) elHumidity.textContent = `${humidity}%`;
-                        if (elWind) elWind.textContent = `${windSpeed} km/j`;
-                        if (elRainProb) elRainProb.textContent = `${rainProb}%`;
-                        
-                        let uvStatus = "Rendah";
-                        if (uvVal >= 3 && uvVal <= 5) uvStatus = "Sedang";
-                        else if (uvVal >= 6) uvStatus = "Tinggi";
-                        if (elUV) elUV.textContent = `${uvVal} (${uvStatus})`;
-
-                        renderHourly3hForecast(data);
-                    }
-                })
-                .catch(err => {
-                    clearTimeout(timeoutId);
-                    const container = document.getElementById('weather3hContainer');
-                    if (container) {
-                        container.innerHTML = `
-                            <div class="col-12 text-center py-4 text-danger">
-                                <i class="bi bi-exclamation-triangle-fill fs-3 mb-2 d-block"></i>
-                                <h6 class="fw-bold mb-1">Gagal Memuat Data Cuaca</h6>
-                                <small class="text-muted">Periksa koneksi internet Anda lalu muat ulang halaman.</small>
-                            </div>
-                        `;
-                    }
-                    const mDesc = document.getElementById('modalCurrentDesc');
-                    const wDesc = document.getElementById('weatherDesc');
-                    if (mDesc) mDesc.textContent = "Offline";
-                    if (wDesc) wDesc.textContent = "Offline";
-                });
-        }
-
-        function renderHourly3hForecast(data) {
-            const container = document.getElementById('weather3hContainer');
-            if (!container || !data.hourly) return;
-
-            container.innerHTML = '';
-            const targetHours = [6, 9, 12, 15, 18, 21];
-            
-            const times = data.hourly.time;
-            const temps = data.hourly.temperature_2m;
-            const codes = data.hourly.weather_code;
-            const rainProbs = data.hourly.precipitation_probability || [];
-            const winds = data.hourly.wind_speed_10m || [];
-
-            for (let i = 0; i < 24; i++) {
-                const timeStr = times[i];
-                const hourNum = parseInt(timeStr.split('T')[1].split(':')[0], 10);
-
-                if (targetHours.includes(hourNum)) {
-                    const temp = Math.round(temps[i]);
-                    const code = codes[i];
-                    const rainP = rainProbs[i] || 0;
-                    const windS = Math.round(winds[i] || 0);
-                    
-                    const isNightCard = (hourNum < 6 || hourNum >= 18);
-                    const weatherInfo = getWeatherDetails(code, isNightCard);
-
-                    const cardBgStyle = isNightCard 
-                        ? 'background: #0f172a; color: #ffffff; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 4px 12px rgba(0,0,0,0.2);' 
-                        : 'background: #f8fafc; color: #0f172a; border: 1px solid #e2e8f0;';
-
-                    const badgeHtml = isNightCard
-                        ? `<span class="badge rounded-pill px-2.5 py-1 small fw-bold mb-2" style="background-color: rgba(255,255,255,0.15); color: #ffffff;">${String(hourNum).padStart(2, '0')}:00 WIB</span>`
-                        : `<span class="badge bg-dark text-white rounded-pill px-2.5 py-1 small fw-bold mb-2">${String(hourNum).padStart(2, '0')}:00 WIB</span>`;
-
-                    const metricTextColor = isNightCard ? '#ffffff' : '#0f172a';
-
-                    const col = document.createElement('div');
-                    col.className = 'col-6 col-md-4 col-lg-2';
-                    col.innerHTML = `
-                        <div class="p-3 rounded-4 text-center transition-all h-100" style="${cardBgStyle}">
-                            ${badgeHtml}
-                            <div class="fs-2 my-1">
-                                <i class="bi ${weatherInfo.iconClass}"></i>
-                            </div>
-                            <div class="fw-extrabold fs-4 mb-0">${temp}°C</div>
-                            <small class="d-block fw-bold ${isNightCard ? 'text-white-50' : 'text-muted'} text-truncate" style="font-size: 0.74rem;">${weatherInfo.desc}</small>
-                            
-                            <div class="mt-2 pt-2 border-top border-secondary border-opacity-25 d-flex justify-content-around align-items-center fw-bold" style="font-size: 0.76rem;">
-                                <span title="Peluang Hujan" style="color: ${metricTextColor};"><i class="bi bi-cloud-rain-fill text-primary"></i> ${rainP}%</span>
-                                <span title="Kecepatan Angin" style="color: ${metricTextColor};"><i class="bi bi-wind text-warning"></i> ${windS}k/h</span>
-                            </div>
-                        </div>
-                    `;
-                    container.appendChild(col);
-                }
-            }
-        }
-
-        function toggleGenericPassword(inputId, iconId) {
-            const input = document.getElementById(inputId);
-            const icon = document.getElementById(iconId);
-            if (!input || !icon) return;
-
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.classList.remove('bi-eye-slash-fill');
-                icon.classList.add('bi-eye-fill');
-                icon.classList.remove('text-muted');
-                icon.classList.add('text-primary');
-            } else {
-                input.type = 'password';
-                icon.classList.remove('bi-eye-fill');
-                icon.classList.add('bi-eye-slash-fill');
-                icon.classList.remove('text-primary');
-                icon.classList.add('text-muted');
-            }
-        }
-
-        function toggleClassInInput(inputId, classCode, btnElement) {
-            const input = document.getElementById(inputId);
-            if (!input) return;
-
-            let curVal = input.value.trim();
-            let classes = curVal ? curVal.split(',').map(c => c.trim().toUpperCase()).filter(c => c && c !== '-') : [];
-
-            const idx = classes.indexOf(classCode);
-            if (idx > -1) {
-                classes.splice(idx, 1);
-                if (btnElement) btnElement.classList.remove('selected');
-            } else {
-                classes.push(classCode);
-                if (btnElement) btnElement.classList.add('selected');
-            }
-
-            input.value = classes.join(', ');
-        }
-
-        /* FILTER TAB GURU */
-        let activeGuruStatusFilter = 'all';
-
-        function filterTabelGuru() {
-            const query = document.getElementById('searchGuruInput').value.toLowerCase().trim();
-            const clearBtn = document.getElementById('clearSearchGuruBtn');
-            clearBtn.classList.toggle('d-none', query === '');
-
-            const rows = document.querySelectorAll('.guru-row');
-            let visibleCount = 0;
-
-            rows.forEach(row => {
-                const nama = row.getAttribute('data-nama') || '';
-                const username = row.getAttribute('data-username') || '';
-                const kelas = row.getAttribute('data-kelas') || '';
-                const rowStatus = row.getAttribute('data-status');
-
-                const matchQuery = (nama.includes(query) || username.includes(query) || kelas.includes(query));
-                const matchStatus = (activeGuruStatusFilter === 'all' || rowStatus === activeGuruStatusFilter);
-
-                if (matchQuery && matchStatus) {
-                    row.style.display = '';
-                    visibleCount++;
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-
-            const noMatch = document.getElementById('noMatchGuruAlert');
-            if (noMatch) {
-                noMatch.classList.toggle('d-none', visibleCount > 0 || rows.length === 0);
-            }
-        }
-
-        function clearSearchGuru() {
-            const input = document.getElementById('searchGuruInput');
-            input.value = '';
-            filterTabelGuru();
-            input.focus();
-        }
-
-        function setFilterGuruStatus(status, btnElement) {
-            const container = btnElement.parentElement;
-            if (container) {
-                container.querySelectorAll('.filter-pill').forEach(btn => btn.classList.remove('active'));
-            }
-            if (btnElement) btnElement.classList.add('active');
-            activeGuruStatusFilter = status;
-            filterTabelGuru();
-        }
-
-        /* FILTER TAB MURID */
-        let activeSiswaStatusFilter = 'all';
-        let activeSiswaLulusFilter = 'all';
-
-        function filterTabelSiswaAdmin() {
-            const query = document.getElementById('searchSiswaInput').value.toLowerCase().trim();
-            const selectedKelas = document.getElementById('filterKelasSiswaSelect').value;
-            const clearBtn = document.getElementById('clearSearchSiswaBtn');
-            clearBtn.classList.toggle('d-none', query === '');
-
-            const rows = document.querySelectorAll('.siswa-admin-row');
-            let visibleCount = 0;
-
-            rows.forEach(row => {
-                const nama = row.getAttribute('data-nama') || '';
-                const nisn = row.getAttribute('data-id') ? row.getAttribute('data-id').toLowerCase() : '';
-                const username = row.getAttribute('data-username') || '';
-                const kelas = row.getAttribute('data-kelas') || '';
-                const rowStatus = row.getAttribute('data-status');
-                const rowLulus = row.getAttribute('data-lulus');
-
-                const matchQuery = (nama.includes(query) || nisn.includes(query) || username.includes(query) || kelas.includes(query));
-                const matchKelas = (selectedKelas === 'all' || kelas === selectedKelas);
-                const matchStatus = (activeSiswaStatusFilter === 'all' || rowStatus === activeSiswaStatusFilter);
-                const matchLulus = (activeSiswaLulusFilter === 'all' || rowLulus === activeSiswaLulusFilter);
-
-                if (matchQuery && matchKelas && matchStatus && matchLulus) {
-                    row.style.display = '';
-                    visibleCount++;
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-
-            const noMatch = document.getElementById('noMatchSiswaAlert');
-            if (noMatch) {
-                noMatch.classList.toggle('d-none', visibleCount > 0 || rows.length === 0);
-            }
-        }
-
-        function clearSearchSiswaAdmin() {
-            const input = document.getElementById('searchSiswaInput');
-            input.value = '';
-            filterTabelSiswaAdmin();
-            input.focus();
-        }
-
-        function setFilterSiswaStatus(status, btnElement) {
-            const container = btnElement.parentElement;
-            if (container) {
-                container.querySelectorAll('.filter-pill').forEach(btn => btn.classList.remove('active'));
-            }
-            if (btnElement) btnElement.classList.add('active');
-            activeSiswaStatusFilter = status;
-            filterTabelSiswaAdmin();
-        }
-
-        function setFilterSiswaLulus(lulusStatus, btnElement) {
-            const container = btnElement.parentElement;
-            if (container) {
-                container.querySelectorAll('.filter-pill').forEach(btn => btn.classList.remove('active'));
-            }
-            if (btnElement) btnElement.classList.add('active');
-            activeSiswaLulusFilter = lulusStatus;
-            filterTabelSiswaAdmin();
-        }
-    </script>
-
-<!-- MODAL HAPUS MASSAL / RESET DATA -->
-<style>
-    .reset-option-card {
-        border: 1.5px solid #fecaca;
-        background: #ffffff;
-        border-radius: 14px;
-        padding: 14px 16px;
-        transition: all 0.2s ease;
-        color: #991b1b;
-    }
-    .reset-option-card:not(:disabled):hover {
-        background: #fef2f2;
-        border-color: #dc2626;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(220, 38, 38, 0.12);
-    }
-    .reset-option-card:disabled {
-        opacity: 0.55;
-        cursor: not-allowed;
-        background: #f8fafc;
-        border-color: #e2e8f0;
-        color: #64748b;
-    }
-    .reset-option-danger {
-        border: none;
-        background: linear-gradient(135deg, #dc2626, #b91c1c);
-        border-radius: 14px;
-        padding: 14px 16px;
-        transition: all 0.2s ease;
-        color: #ffffff;
-    }
-    .reset-option-danger:not(:disabled):hover {
-        background: linear-gradient(135deg, #b91c1c, #991b1b);
-        transform: translateY(-1px);
-        box-shadow: 0 6px 16px rgba(185, 28, 28, 0.25);
-    }
-    .reset-option-danger:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-    }
-</style>
-
-<div class="modal fade" id="modalResetDataAdmin" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg" style="border-radius: 22px; overflow: hidden;">
-            <div class="modal-header bg-danger text-white border-0 py-3 px-4">
-                <div class="d-flex align-items-center gap-2.5">
-                    <i class="bi bi-exclamation-triangle-fill fs-4"></i>
-                    <div>
-                        <h5 class="modal-title fw-bold mb-0 fs-6">Manajemen Hapus Massal & Reset Data</h5>
-                        <small class="text-white-50" style="font-size: 0.72rem;">Tindakan ini permanen dan tidak dapat dibatalkan</small>
-                    </div>
-                </div>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body p-4">
-                <div class="alert alert-warning border-0 rounded-3 small mb-3 d-flex align-items-start gap-2">
-                    <i class="bi bi-shield-exclamation fs-5 text-warning mt-0.5"></i>
-                    <div>
-                        Sebaiknya unduh <a href="{{ url_for('export.export_master_excel') }}" class="fw-bold text-dark text-decoration-underline">Rekap Master (.xlsx)</a> terlebih dahulu sebagai cadangan. Ketik kata <strong>HAPUS</strong> untuk membuka kunci tombol eksekusi.
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <div class="d-flex align-items-center justify-content-between mb-1">
-                        <label for="inputKonfirmasiHapus" class="form-label fw-bold small text-dark mb-0">Kata Kunci Konfirmasi</label>
-                        <span id="badgeStatusKunciHapus" class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 rounded-pill px-2.5 py-1" style="font-size: 0.7rem;">
-                            <i class="bi bi-lock-fill me-1"></i> Terkunci
-                        </span>
-                    </div>
-                    <input type="text" id="inputKonfirmasiHapus" class="form-control rounded-3 bg-light border fw-bold" placeholder="Ketik kata HAPUS di sini..." oninput="validasiKetikHapus()" autocomplete="off">
-                </div>
-
-                <div class="d-flex flex-column gap-2.5">
-                    <form action="{{ url_for('admin.hapus_semua_siswa') }}" method="POST" onsubmit="return syncKonfirmasiHapus(this)">
-                        <input type="hidden" name="konfirmasi">
-                        <button type="submit" class="reset-option-card btn-eksekusi-hapus w-100 text-start d-flex align-items-center justify-content-between gap-3" disabled>
-                            <div>
-                                <div class="fw-bold small">1. Hapus Semua Data Murid</div>
-                                <small class="text-muted d-block mt-0.5" style="font-size: 0.73rem;">Menghapus seluruh murid, setoran Tahsin/Tahfidz, dan akun wali murid</small>
-                            </div>
-                            <i class="bi bi-people-fill fs-4 flex-shrink-0"></i>
-                        </button>
-                    </form>
-
-                    <form action="{{ url_for('admin.hapus_semua_guru') }}" method="POST" onsubmit="return syncKonfirmasiHapus(this)">
-                        <input type="hidden" name="konfirmasi">
-                        <button type="submit" class="reset-option-card btn-eksekusi-hapus w-100 text-start d-flex align-items-center justify-content-between gap-3" disabled>
-                            <div>
-                                <div class="fw-bold small">2. Hapus Semua Data Guru & Musyrif</div>
-                                <small class="text-muted d-block mt-0.5" style="font-size: 0.73rem;">Menghapus seluruh akun guru (data murid dan admin tetap tersimpan)</small>
-                            </div>
-                            <i class="bi bi-person-badge-fill fs-4 flex-shrink-0"></i>
-                        </button>
-                    </form>
-
-                    <form action="{{ url_for('admin.hapus_semua_data') }}" method="POST" onsubmit="return syncKonfirmasiHapus(this)">
-                        <input type="hidden" name="konfirmasi">
-                        <button type="submit" class="reset-option-danger btn-eksekusi-hapus w-100 text-start d-flex align-items-center justify-content-between gap-3 shadow-sm" disabled>
-                            <div>
-                                <div class="fw-bold small">3. Reset Total Semua Data (Guru + Murid)</div>
-                                <small class="text-white text-opacity-75 d-block mt-0.5" style="font-size: 0.73rem;">Membersihkan seluruh data guru, murid, wali, dan riwayat setoran</small>
-                            </div>
-                            <i class="bi bi-arrow-counterclockwise fs-4 flex-shrink-0"></i>
-                        </button>
-                    </form>
-                </div>
-            </div>
-            <div class="modal-footer border-0 px-4 pb-4 pt-0">
-                <button type="button" class="btn btn-light border rounded-pill fw-bold px-4" data-bs-dismiss="modal">Batal</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-function validasiKetikHapus() {
-    const input = document.getElementById('inputKonfirmasiHapus');
-    const badge = document.getElementById('badgeStatusKunciHapus');
-    const btns = document.querySelectorAll('.btn-eksekusi-hapus');
-    if (!input) return;
-
-    const val = input.value.trim().toUpperCase();
-    const isUnlocked = (val === 'HAPUS');
-
-    btns.forEach(btn => { btn.disabled = !isUnlocked; });
-
-    if (badge) {
-        if (isUnlocked) {
-            badge.className = 'badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-2.5 py-1';
-            badge.innerHTML = '<i class="bi bi-unlock-fill me-1"></i> Siap Eksekusi';
-        } else {
-            badge.className = 'badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 rounded-pill px-2.5 py-1';
-            badge.innerHTML = '<i class="bi bi-lock-fill me-1"></i> Terkunci';
-        }
-    }
-}
-
-function syncKonfirmasiHapus(formEl) {
-    const input = document.getElementById('inputKonfirmasiHapus');
-    const val = (input?.value || '').trim().toUpperCase();
-    if (val !== 'HAPUS') {
-        input?.focus();
-        return false;
-    }
-    const hiddenInput = formEl.querySelector('input[name="konfirmasi"]');
-    if (hiddenInput) {
-        hiddenInput.value = val;
-    }
-    return true;
-}
-
-document.getElementById('modalResetDataAdmin')?.addEventListener('hidden.bs.modal', function () {
-    const input = document.getElementById('inputKonfirmasiHapus');
-    if (input) {
-        input.value = '';
-        validasiKetikHapus();
-    }
-});
-</script>
+    <script src="{{ url_for('static', filename='js/admin_dashboard.js') }}"></script>
 
 </body>
 </html>

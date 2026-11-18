@@ -1,0 +1,132 @@
+<!-- MODAL DETAIL CUACA LENGKAP & FORECAST 3 JAM -->
+<div class="modal fade" id="modalDetailCuaca" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg overflow-hidden">
+            <div class="modal-header bg-dark text-white border-0 py-3 px-4">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-cloud-sun-fill text-warning fs-4"></i>
+                    <div>
+                        <h5 class="modal-title fw-bold mb-0">Prakiraan Cuaca SDIT Bina Mulia</h5>
+                        <small class="text-white-50" style="font-size: 0.72rem;">Pasir Putih, Kec. Sawangan, Kota Depok</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body p-4">
+                <div id="weatherHeroBg" class="p-4 rounded-4 mb-4 position-relative overflow-hidden text-white" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3);">
+                    <div class="row align-items-center g-3">
+                        <div class="col-12 col-md-5">
+                            <span class="badge rounded-pill px-3 py-1.5 small fw-bold mb-2 d-inline-flex align-items-center gap-1.5" style="background-color: rgba(255, 255, 255, 0.15); color: #ffffff;" id="modalDayNightBadge">
+                                <i class="bi bi-sun-fill text-warning"></i> Suasana Siang Hari
+                            </span>
+                            <div class="d-flex align-items-baseline gap-2 mt-1">
+                                <h1 class="display-3 fw-extrabold mb-0 tracking-tight" id="modalCurrentTemp">--°C</h1>
+                            </div>
+                            <div class="mt-2">
+                                <span class="badge bg-warning text-dark fw-bold px-3 py-1.5 rounded-pill fs-6" id="modalCurrentDesc">Memuat...</span>
+                                <div class="small text-white-50 mt-2 fw-medium" id="modalFeelsLike">
+                                    <i class="bi bi-thermometer-half me-1 text-warning"></i>Sensasi Terasa: --°C
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-7">
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);">
+                                        <div class="small fw-semibold mb-1" style="color: #cbd5e1; font-size: 0.75rem;">
+                                            <i class="bi bi-droplet-fill text-info me-1"></i> Kelembaban
+                                        </div>
+                                        <div class="fw-extrabold fs-5 text-white" id="metricHumidity">--%</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);">
+                                        <div class="small fw-semibold mb-1" style="color: #cbd5e1; font-size: 0.75rem;">
+                                            <i class="bi bi-wind text-warning me-1"></i> Kecepatan Angin
+                                        </div>
+                                        <div class="fw-extrabold fs-5 text-white" id="metricWind">-- km/j</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);">
+                                        <div class="small fw-semibold mb-1" style="color: #cbd5e1; font-size: 0.75rem;">
+                                            <i class="bi bi-cloud-rain-fill text-primary me-1"></i> Peluang Hujan
+                                        </div>
+                                        <div class="fw-extrabold fs-5 text-white" id="metricRainProb">--%</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);">
+                                        <div class="small fw-semibold mb-1" style="color: #cbd5e1; font-size: 0.75rem;">
+                                            <i class="bi bi-sun-fill text-warning me-1"></i> Indeks UV
+                                        </div>
+                                        <div class="fw-extrabold fs-5 text-white" id="metricUV">--</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-between mb-3 px-1">
+                    <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+                        <i class="bi bi-clock-history text-primary"></i> Prediksi Jam per Jam (Sawangan)
+                    </h6>
+                    <span class="badge bg-light text-muted border px-2.5 py-1 rounded-pill" style="font-size: 0.7rem;">Pembaruan Otomatis</span>
+                </div>
+
+                <div class="row g-2.5" id="weather3hContainer">
+                    <div class="col-12 text-center py-4 text-muted">
+                        <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
+                        Sedang mengambil data cuaca terbaru...
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer border-0 p-4 pt-0">
+                <button type="button" class="btn btn-dark rounded-pill fw-bold px-4 ms-auto" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL KALENDER INTERAKTIF -->
+<div class="modal fade" id="modalKalender" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg overflow-hidden">
+            <div class="modal-header bg-dark text-white border-0 py-3 px-4">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-calendar-week-fill text-warning fs-4"></i>
+                    <div>
+                        <h5 class="modal-title fw-bold mb-0" id="calendarMonthTitle">Kalender Sistem</h5>
+                        <small class="text-white-50" style="font-size: 0.72rem;">Waktu Operasional SDIT Bina Mulia</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="text-center bg-success bg-opacity-10 border border-success border-opacity-25 rounded-4 p-3 mb-4">
+                    <span class="text-success fw-bold small text-uppercase d-block mb-1">Hari Ini</span>
+                    <h4 class="fw-bold text-dark mb-0" id="calendarTodayHeader">--</h4>
+                </div>
+
+                <div class="calendar-grid mb-2">
+                    <div class="calendar-day-header text-danger">Aha</div>
+                    <div class="calendar-day-header">Sen</div>
+                    <div class="calendar-day-header">Sel</div>
+                    <div class="calendar-day-header">Rab</div>
+                    <div class="calendar-day-header">Kam</div>
+                    <div class="calendar-day-header text-success">Jum</div>
+                    <div class="calendar-day-header">Sab</div>
+                </div>
+
+                <div class="calendar-grid" id="calendarDaysGrid"></div>
+            </div>
+            <div class="modal-footer border-0 p-4 pt-0">
+                <button type="button" class="btn btn-dark rounded-pill fw-bold px-4" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
