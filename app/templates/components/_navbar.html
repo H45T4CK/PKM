@@ -10,7 +10,7 @@
             </div>
         </a>
 
-        <!-- Header Jam Realtime & Cuaca Sawangan -->
+        <!-- Header Jam Realtime & Cuaca Sawangan (Desktop) -->
         <div class="d-none d-xl-flex align-items-center gap-2 mx-auto">
             <div class="widget-chip d-flex align-items-center gap-2" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modalKalender" title="Klik untuk membuka Kalender Interaktif">
                 <i class="bi bi-clock-history text-warning"></i>
@@ -18,12 +18,13 @@
                 <i class="bi bi-chevron-down chevron-arrow text-warning ms-1"></i>
             </div>
 
-            <div class="widget-chip d-flex align-items-center gap-2" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modalDetailCuaca" title="Klik untuk melihat Rincian Cuaca 3 Jam">
-                <span id="weatherIcon"><i class="bi bi-sun-fill text-warning"></i></span>
-                <span id="weatherTemp" class="fw-bold">--°C</span>
-                <span id="weatherDesc" class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25 rounded-pill px-2" style="font-size: 0.68rem;">Memuat...</span>
-                <small class="text-white text-opacity-75 ms-1" style="font-size: 0.72rem;"><i class="bi bi-geo-alt-fill text-danger me-1"></i>Sawangan</small>
-                <i class="bi bi-chevron-down chevron-arrow text-info ms-1"></i>
+            <div id="desktopWeatherChip" class="widget-chip weather-animated-chip weather-theme-sunny-day d-flex align-items-center gap-2" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modalDetailCuaca" title="Klik untuk melihat Rincian Cuaca Sawangan">
+                <span id="desktopWeatherSky" class="weather-sky-scene chip-sky" aria-hidden="true"></span>
+                <span id="weatherIcon" class="weather-chip-content"><i class="bi bi-sun-fill text-warning"></i></span>
+                <span id="weatherTemp" class="fw-bold text-white weather-chip-content">--°C</span>
+                <span id="weatherDesc" class="badge weather-pill-badge rounded-pill px-2 weather-chip-content" style="font-size: 0.68rem;">Memuat...</span>
+                <small class="text-white text-opacity-90 ms-1 weather-chip-content" style="font-size: 0.72rem;"><i class="bi bi-geo-alt-fill text-warning me-1"></i>Sawangan</small>
+                <i class="bi bi-chevron-down chevron-arrow text-white ms-1 weather-chip-content"></i>
             </div>
         </div>
 

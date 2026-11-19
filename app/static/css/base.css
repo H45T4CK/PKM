@@ -30,6 +30,13 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+/* Pelengkap Spacing Half-Step agar Widget Mobile & Badge Tetap Rapi */
+.gap-1\.5 { gap: 0.375rem !important; }
+.px-1\.5 { padding-left: 0.375rem !important; padding-right: 0.375rem !important; }
+.px-2\.5 { padding-left: 0.625rem !important; padding-right: 0.625rem !important; }
+.py-1\.5 { padding-top: 0.375rem !important; padding-bottom: 0.375rem !important; }
+.me-1\.5 { margin-right: 0.375rem !important; }
+
 @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(16px); }
     to { opacity: 1; transform: translateY(0); }
@@ -41,45 +48,344 @@ body {
 .delay-3 { animation-delay: 0.18s; }
 .delay-4 { animation-delay: 0.24s; }
 
-/* Widget Chips & Mobile Bar */
+/* Angka Jam Stabil Tanpa Geser */
+#liveClock,
+#liveClockMobile,
+#liveClockMobileTime,
+#calendarLiveClock {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Widget Chips (Desktop) & Mobile Cards */
 .widget-chip {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: 50rem;
     padding: 6px 16px;
     color: #ffffff;
     font-size: 0.8rem;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     user-select: none;
 }
 .widget-chip:hover {
     background: rgba(255, 255, 255, 0.22);
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-    border-color: rgba(255, 255, 255, 0.35);
+    border-color: rgba(255, 255, 255, 0.4);
 }
 .widget-chip .chevron-arrow {
     font-size: 0.75rem;
     transition: transform 0.2s ease;
-    opacity: 0.75;
+    opacity: 0.85;
 }
 .widget-chip:hover .chevron-arrow {
     transform: translateY(2px);
     opacity: 1;
 }
 
-.widget-mobile {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    padding: 10px 14px;
-    border-radius: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+/* Mobile 2-Column Compact Bar (Anti-Terpotong) */
+.mobile-widget-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
 }
-.widget-mobile:hover {
-    background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
-    border-color: rgba(255, 255, 255, 0.35);
+@media (max-width: 359.98px) {
+    .mobile-widget-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.widget-mobile-card {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    padding: 11px 13px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 6px 16px -4px rgba(15, 23, 42, 0.22);
+    color: #ffffff;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.widget-mobile-card:active {
+    transform: scale(0.985);
+}
+
+/* Chip & Card Cuaca Beranimasi */
+.weather-animated-chip {
+    position: relative !important;
+    overflow: hidden !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.28) !important;
+}
+.weather-chip-content {
+    position: relative;
+    z-index: 2;
+}
+.weather-pill-badge {
+    background: rgba(15, 23, 42, 0.34) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.26) !important;
+    font-weight: 700;
+}
+
+/* Micro-Animasi Ikon Cuaca */
+@keyframes sunSpinSlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+@keyframes cloudBob {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(2.5px); }
+}
+@keyframes rainPulse {
+    0%, 100% { transform: translateY(0); opacity: 1; }
+    50% { transform: translateY(1.5px); opacity: 0.82; }
+}
+.w-icon-sun { display: inline-block; animation: sunSpinSlow 18s linear infinite; }
+.w-icon-cloud { display: inline-block; animation: cloudBob 3.2s ease-in-out infinite; }
+.w-icon-rain { display: inline-block; animation: rainPulse 1.8s ease-in-out infinite; }
+
+/* =========================================================
+   6 TEMA LANGIT CUACA DINAMIS (CHIP, BAR MOBILE & MODAL)
+   ========================================================= */
+.weather-hero-card {
+    box-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.32);
+    transition: background 0.6s ease;
+}
+
+.weather-theme-sunny-day {
+    background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 55%, #38bdf8 100%) !important;
+}
+.weather-theme-cloudy-day {
+    background: linear-gradient(135deg, #334155 0%, #475569 50%, #64748b 100%) !important;
+}
+.weather-theme-rain-day {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 55%, #475569 100%) !important;
+}
+.weather-theme-clear-night {
+    background: linear-gradient(135deg, #070b14 0%, #0f172a 55%, #1e1b4b 100%) !important;
+}
+.weather-theme-cloudy-night {
+    background: linear-gradient(135deg, #090d16 0%, #1e293b 60%, #334155 100%) !important;
+}
+.weather-theme-rain-night {
+    background: linear-gradient(135deg, #050811 0%, #0f172a 55%, #1e293b 100%) !important;
+}
+
+.weather-metric-glass {
+    background: rgba(15, 23, 42, 0.26);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.weather-metric-val {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    font-weight: 800;
+    line-height: 1.25;
+    color: #ffffff;
+}
+
+.forecast-slot-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.forecast-slot-card:hover {
+    transform: translateY(-2px);
+}
+.forecast-status-slot {
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 6px;
+}
+
+.weather-sky-scene {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Matahari Terik */
+@keyframes sunGlowPulse {
+    0%, 100% { transform: scale(1); opacity: 0.95; }
+    50% { transform: scale(1.08); opacity: 1; }
+}
+.sky-sun-wrap {
+    position: absolute;
+    top: -24px;
+    right: 18px;
+    width: 118px;
+    height: 118px;
+}
+.sky-sun-rays {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(253, 224, 71, 0.45) 0%, rgba(250, 204, 21, 0.15) 52%, transparent 72%);
+    animation: sunGlowPulse 4s ease-in-out infinite;
+}
+.sky-sun-core {
+    position: absolute;
+    top: 26px;
+    left: 26px;
+    width: 66px;
+    height: 66px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fef08a 0%, #facc15 55%, #f59e0b 100%);
+    box-shadow: 0 0 32px rgba(253, 224, 71, 0.85), 0 0 64px rgba(245, 158, 11, 0.5);
+}
+
+.chip-sky .sky-sun-wrap {
+    top: -12px;
+    right: 6px;
+    width: 52px;
+    height: 52px;
+}
+.chip-sky .sky-sun-core {
+    top: 12px;
+    left: 12px;
+    width: 28px;
+    height: 28px;
+    box-shadow: 0 0 16px rgba(253, 224, 71, 0.9);
+}
+
+/* Bulan Sabit Malam */
+@keyframes moonFloat {
+    0%, 100% { transform: translateY(0) rotate(-14deg); }
+    50% { transform: translateY(-4px) rotate(-10deg); }
+}
+.sky-moon {
+    position: absolute;
+    top: 18px;
+    right: 34px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    box-shadow: -12px 8px 0 0 #fef9c3;
+    filter: drop-shadow(0 0 14px rgba(254, 240, 138, 0.65));
+    animation: moonFloat 6s ease-in-out infinite;
+}
+.chip-sky .sky-moon {
+    top: 4px;
+    right: 12px;
+    width: 24px;
+    height: 24px;
+    box-shadow: -6px 4px 0 0 #fef9c3;
+    filter: drop-shadow(0 0 7px rgba(254, 240, 138, 0.8));
+}
+
+/* Bintang Malam Berkelap-kelip */
+@keyframes starTwinkle {
+    0%, 100% { opacity: 0.2; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.25); }
+}
+.sky-star {
+    position: absolute;
+    background: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.85);
+    animation: starTwinkle var(--dur, 3s) ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+}
+
+/* Awan Melintas */
+@keyframes cloudDrift {
+    0% { transform: translateX(-140px); }
+    100% { transform: translateX(650px); }
+}
+.sky-cloud {
+    position: absolute;
+    left: 0;
+    background: rgba(255, 255, 255, var(--cloud-alpha, 0.35));
+    border-radius: 50rem;
+    filter: blur(0.4px);
+    animation: cloudDrift var(--dur, 26s) linear infinite;
+    animation-delay: var(--delay, 0s);
+}
+.sky-cloud::before,
+.sky-cloud::after {
+    content: '';
+    position: absolute;
+    background: inherit;
+    border-radius: 50%;
+}
+.sky-cloud::before {
+    width: 52%;
+    height: 155%;
+    top: -70%;
+    left: 16%;
+}
+.sky-cloud::after {
+    width: 40%;
+    height: 125%;
+    top: -50%;
+    right: 16%;
+}
+.sky-cloud.dark-cloud {
+    background: rgba(15, 23, 42, var(--cloud-alpha, 0.45));
+}
+
+/* Rintik Hujan Jatuh */
+@keyframes rainFall {
+    0% {
+        transform: translate3d(0, -25px, 0) rotate(14deg);
+        opacity: 0;
+    }
+    15% { opacity: 0.9; }
+    85% { opacity: 0.9; }
+    100% {
+        transform: translate3d(-38px, 280px, 0) rotate(14deg);
+        opacity: 0;
+    }
+}
+@keyframes rainFallMini {
+    0% {
+        transform: translate3d(0, -14px, 0) rotate(14deg);
+        opacity: 0;
+    }
+    20% { opacity: 0.95; }
+    85% { opacity: 0.95; }
+    100% {
+        transform: translate3d(-14px, 68px, 0) rotate(14deg);
+        opacity: 0;
+    }
+}
+.sky-rain-drop {
+    position: absolute;
+    top: -8px;
+    width: 1.8px;
+    height: var(--len, 18px);
+    border-radius: 50rem;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(186, 230, 253, 0.9));
+    animation: rainFall var(--dur, 0.9s) linear infinite;
+    animation-delay: var(--delay, 0s);
+}
+.chip-sky .sky-rain-drop {
+    width: 1.5px;
+    height: 11px;
+    animation-name: rainFallMini;
+}
+
+/* Kilat Petir Halus Saat Hujan Badai */
+@keyframes lightningFlash {
+    0%, 92%, 96%, 100% { opacity: 0; }
+    93% { opacity: 0.42; }
+    94.5% { opacity: 0.08; }
+    95% { opacity: 0.5; }
+}
+.sky-lightning {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 72% 20%, rgba(254, 249, 195, 0.95), rgba(147, 197, 253, 0.35) 55%, transparent 80%);
+    opacity: 0;
+    animation: lightningFlash 6.5s infinite;
 }
 
 /* Kalender Modal */

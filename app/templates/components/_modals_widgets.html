@@ -1,4 +1,4 @@
-<!-- MODAL DETAIL CUACA LENGKAP & FORECAST 3 JAM -->
+<!-- MODAL DETAIL CUACA LENGKAP & FORECAST HARIAN -->
 <div class="modal fade" id="modalDetailCuaca" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 shadow-lg overflow-hidden">
@@ -13,20 +13,31 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
 
-            <div class="modal-body p-4">
-                <div id="weatherHeroBg" class="p-4 rounded-4 mb-4 position-relative overflow-hidden text-white" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3);">
-                    <div class="row align-items-center g-3">
-                        <div class="col-12 col-md-5">
-                            <span class="badge rounded-pill px-3 py-1.5 small fw-bold mb-2 d-inline-flex align-items-center gap-1.5" style="background-color: rgba(255, 255, 255, 0.15); color: #ffffff;" id="modalDayNightBadge">
-                                <i class="bi bi-sun-fill text-warning"></i> Suasana Siang Hari
-                            </span>
-                            <div class="d-flex align-items-baseline gap-2 mt-1">
-                                <h1 class="display-3 fw-extrabold mb-0 tracking-tight" id="modalCurrentTemp">--°C</h1>
+            <div class="modal-body p-3 p-sm-4">
+                <div id="weatherHeroBg" class="weather-hero-card weather-theme-sunny-day p-3 p-sm-4 rounded-4 mb-4 position-relative overflow-hidden text-white">
+                    <!-- LAYER ANIMASI LANGIT DINAMIS -->
+                    <div id="weatherSkyScene" class="weather-sky-scene" aria-hidden="true"></div>
+
+                    <!-- KONTEN UTAMA CUACA -->
+                    <div class="row align-items-center g-3 position-relative" style="z-index: 2;">
+                        <div class="col-12 col-md-5 d-flex flex-column justify-content-center">
+                            <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                                <span class="badge rounded-pill px-3 py-1 small fw-bold d-inline-flex align-items-center gap-1" style="background-color: rgba(15, 23, 42, 0.32); backdrop-filter: blur(6px); border: 1px solid rgba(255, 255, 255, 0.24); color: #ffffff;" id="modalDayNightBadge">
+                                    <i class="bi bi-sun-fill text-warning"></i> Suasana Siang Hari
+                                </span>
+                                <span class="badge rounded-pill px-3 py-1 small fw-bold" style="background-color: rgba(15, 23, 42, 0.32); border: 1px solid rgba(255, 255, 255, 0.24); color: #fef08a;" id="modalTempRange" title="Suhu Min - Maks Hari Ini">
+                                    --°C – --°C
+                                </span>
                             </div>
+
+                            <div class="d-flex align-items-baseline gap-2 my-1">
+                                <h1 class="display-3 fw-extrabold mb-0 tracking-tight lh-1" style="text-shadow: 0 2px 12px rgba(15, 23, 42, 0.28);" id="modalCurrentTemp">--°C</h1>
+                            </div>
+
                             <div class="mt-2">
-                                <span class="badge bg-warning text-dark fw-bold px-3 py-1.5 rounded-pill fs-6" id="modalCurrentDesc">Memuat...</span>
-                                <div class="small text-white-50 mt-2 fw-medium" id="modalFeelsLike">
-                                    <i class="bi bi-thermometer-half me-1 text-warning"></i>Sensasi Terasa: --°C
+                                <span class="badge bg-warning text-dark fw-bold px-3 py-1 rounded-pill fs-6 shadow-sm" id="modalCurrentDesc">Memuat...</span>
+                                <div class="small mt-2 fw-semibold" style="color: rgba(255, 255, 255, 0.94); text-shadow: 0 1px 4px rgba(15, 23, 42, 0.35);" id="modalFeelsLike">
+                                    <i class="bi bi-thermometer-half me-1 text-warning"></i>Terasa --°C • Awan --%
                                 </div>
                             </div>
                         </div>
@@ -34,50 +45,58 @@
                         <div class="col-12 col-md-7">
                             <div class="row g-2">
                                 <div class="col-6">
-                                    <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);">
-                                        <div class="small fw-semibold mb-1" style="color: #cbd5e1; font-size: 0.75rem;">
+                                    <div class="p-2 p-sm-3 rounded-3 weather-metric-glass h-100">
+                                        <div class="small fw-semibold mb-1" style="color: #e2e8f0; font-size: 0.74rem;">
                                             <i class="bi bi-droplet-fill text-info me-1"></i> Kelembaban
                                         </div>
-                                        <div class="fw-extrabold fs-5 text-white" id="metricHumidity">--%</div>
+                                        <div class="weather-metric-val" id="metricHumidity">--%</div>
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);">
-                                        <div class="small fw-semibold mb-1" style="color: #cbd5e1; font-size: 0.75rem;">
+                                    <div class="p-2 p-sm-3 rounded-3 weather-metric-glass h-100">
+                                        <div class="small fw-semibold mb-1" style="color: #e2e8f0; font-size: 0.74rem;">
                                             <i class="bi bi-wind text-warning me-1"></i> Kecepatan Angin
                                         </div>
-                                        <div class="fw-extrabold fs-5 text-white" id="metricWind">-- km/j</div>
+                                        <div class="weather-metric-val" id="metricWind">-- km/j</div>
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);">
-                                        <div class="small fw-semibold mb-1" style="color: #cbd5e1; font-size: 0.75rem;">
-                                            <i class="bi bi-cloud-rain-fill text-primary me-1"></i> Peluang Hujan
+                                    <div class="p-2 p-sm-3 rounded-3 weather-metric-glass h-100">
+                                        <div class="small fw-semibold mb-1" style="color: #e2e8f0; font-size: 0.74rem;">
+                                            <i class="bi bi-cloud-rain-fill me-1" style="color: #7dd3fc;"></i> Peluang & Curah
                                         </div>
-                                        <div class="fw-extrabold fs-5 text-white" id="metricRainProb">--%</div>
+                                        <div class="weather-metric-val" id="metricRainProb">--% (-- mm)</div>
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);">
-                                        <div class="small fw-semibold mb-1" style="color: #cbd5e1; font-size: 0.75rem;">
+                                    <div class="p-2 p-sm-3 rounded-3 weather-metric-glass h-100">
+                                        <div class="small fw-semibold mb-1" style="color: #e2e8f0; font-size: 0.74rem;">
                                             <i class="bi bi-sun-fill text-warning me-1"></i> Indeks UV
                                         </div>
-                                        <div class="fw-extrabold fs-5 text-white" id="metricUV">--</div>
+                                        <div class="weather-metric-val" id="metricUV">--</div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- REKOMENDASI SEKOLAH & ANTAR-JEMPUT -->
+                        <div class="col-12 mt-3">
+                            <div class="px-3 py-2 rounded-3 weather-metric-glass d-flex align-items-start align-items-sm-center gap-2 small fw-semibold text-white" style="font-size: 0.78rem; line-height: 1.45;" id="modalWeatherAdvisory">
+                                <i class="bi bi-info-circle-fill text-warning flex-shrink-0 mt-0.5 mt-sm-0"></i>
+                                <span>Memuat rekomendasi cuaca sekolah...</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="d-flex align-items-center justify-content-between mb-3 px-1">
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3 px-1">
                     <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
-                        <i class="bi bi-clock-history text-primary"></i> Prediksi Jam per Jam (Sawangan)
+                        <i class="bi bi-clock-history text-primary"></i> Jadwal Prakiraan Harian (Sawangan)
                     </h6>
-                    <span class="badge bg-light text-muted border px-2.5 py-1 rounded-pill" style="font-size: 0.7rem;">Pembaruan Otomatis</span>
+                    <span class="badge bg-light text-muted border px-3 py-1 rounded-pill" style="font-size: 0.7rem;">Pembaruan Otomatis</span>
                 </div>
 
-                <div class="row g-2.5" id="weather3hContainer">
+                <div class="row g-2" id="weather3hContainer">
                     <div class="col-12 text-center py-4 text-muted">
                         <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
                         Sedang mengambil data cuaca terbaru...
@@ -85,7 +104,7 @@
                 </div>
             </div>
 
-            <div class="modal-footer border-0 p-4 pt-0">
+            <div class="modal-footer border-0 px-3 px-sm-4 pb-3 pb-sm-4 pt-0">
                 <button type="button" class="btn btn-dark rounded-pill fw-bold px-4 ms-auto" data-bs-dismiss="modal">Tutup</button>
             </div>
         </div>
@@ -109,7 +128,8 @@
             <div class="modal-body p-4">
                 <div class="text-center bg-success bg-opacity-10 border border-success border-opacity-25 rounded-4 p-3 mb-4">
                     <span class="text-success fw-bold small text-uppercase d-block mb-1">Hari Ini</span>
-                    <h4 class="fw-bold text-dark mb-0" id="calendarTodayHeader">--</h4>
+                    <h4 class="fw-bold text-dark mb-1" id="calendarTodayHeader">--</h4>
+                    <span class="badge bg-dark text-warning rounded-pill px-3 py-1 fw-bold" id="calendarLiveClock">--:--:-- WIB</span>
                 </div>
 
                 <div class="calendar-grid mb-2">

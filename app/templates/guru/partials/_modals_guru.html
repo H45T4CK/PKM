@@ -3,7 +3,7 @@
     <div class="modal fade eval-modal" id="modalTahsin{{ s.id }}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg">
-                <form action="/catat_tahsin/{{ s.id }}" method="POST">
+                <form action="/catat_tahsin/{{ s.id }}" method="POST" onsubmit="return syncMateriModal(this, 'tahsin')">
                     <div class="modal-header text-white border-0 py-3 px-4" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
                         <div class="d-flex align-items-center gap-3">
                             <div class="modal-header-icon">
@@ -11,10 +11,10 @@
                             </div>
                             <div>
                                 <h5 class="modal-title fw-bold mb-0" style="font-size: 1.05rem;">Input Penilaian Tahsin Murid</h5>
-                                <small class="text-white-50 d-block" style="font-size: 0.76rem;">Evaluasi bacaan Wafa / Al-Qur'an &amp; Tajwid</small>
+                                <small class="text-white-50 d-block" style="font-size: 0.76rem;">Evaluasi bacaan Metode Ummi / Al-Qur'an &amp; Tajwid</small>
                             </div>
                         </div>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Tutup"></button>
                     </div>
 
                     <div class="modal-body p-4">
@@ -86,37 +86,69 @@
                                             <div class="fw-bold text-dark" style="font-size: 0.9rem;">Grade C</div>
                                             <small class="text-muted" style="font-size: 0.72rem;">Bimbingan • <strong>Maqbul</strong></small>
                                         </div>
-                                        <span class="grade-check-circle"><i class="bi bi-check-lg"></i></span>
+                                        <span class="grade-check-circle"><i class="bi bi-x-lg"></i></span>
                                     </label>
                                 </div>
                             </div>
                             <small class="text-muted d-block mt-2" style="font-size: 0.73rem;">
-                                <i class="bi bi-info-circle me-1"></i> Standar ketuntasan minimal SDIT: <strong>Grade B</strong> (jika mendapat Grade C sebanyak 5x otomatis Tidak Lulus)
+                                <i class="bi bi-info-circle me-1"></i> Batas maksimal kesalahan bacaan 4× untuk naik halaman (≥ 5× kesalahan mendapat Grade C / mengulang).
                             </small>
                         </div>
 
+                        <!-- Dual Smart Combobox: Jilid Ummi & Halaman (1–40) -->
                         <div class="mb-3">
                             <label class="form-label fw-bold text-dark mb-1" style="font-size: 0.82rem;">
-                                <i class="bi bi-bookmark text-primary me-1"></i> Halaman / Jilid Akhir
+                                <i class="bi bi-bookmark text-primary me-1"></i> Jilid Ummi &amp; Halaman (1–40)
                             </label>
-                            <input type="text" id="inputMateriTahsin{{ s.id }}" name="halaman_akhir" class="form-control rounded-3 bg-light border" placeholder="Contoh: Wafa Jilid 3 Hal. 15 / Al-Qur'an Juz 1" required>
-                            <div class="d-flex flex-wrap gap-2 mt-2">
-                                <button type="button" class="quick-chip-btn" onclick="fillQuickInput('inputMateriTahsin{{ s.id }}', 'Wafa Jilid 1 Hal. ')">+ Wafa Jilid 1</button>
-                                <button type="button" class="quick-chip-btn" onclick="fillQuickInput('inputMateriTahsin{{ s.id }}', 'Wafa Jilid 2 Hal. ')">+ Wafa Jilid 2</button>
-                                <button type="button" class="quick-chip-btn" onclick="fillQuickInput('inputMateriTahsin{{ s.id }}', 'Wafa Jilid 3 Hal. ')">+ Wafa Jilid 3</button>
-                                <button type="button" class="quick-chip-btn" onclick="fillQuickInput('inputMateriTahsin{{ s.id }}', 'Al-Qur\'an Juz 1 Hal. ')">+ Al-Qur'an Juz 1</button>
+                            <input type="hidden" name="halaman_akhir" class="materi-hidden-value">
+                            <div class="row g-2">
+                                <div class="col-12 col-sm-5">
+                                    <div class="smart-combo-wrap combo-sky" data-combo-type="jilid">
+                                        <div class="smart-combo-box">
+                                            <input type="text" class="smart-combo-input fw-semibold materi-prefix-input" placeholder="Pilih / ketik jilid..." autocomplete="off" required>
+                                            <button type="button" class="smart-combo-clear" tabindex="-1" title="Hapus pilihan" aria-label="Hapus">
+                                                <i class="bi bi-x-lg"></i>
+                                            </button>
+                                            <button type="button" class="smart-combo-toggle" tabindex="-1" aria-label="Pilih jilid">
+                                                <i class="bi bi-chevron-down"></i>
+                                            </button>
+                                        </div>
+                                        <div class="smart-combo-menu shadow-lg"></div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-7">
+                                    <div class="smart-combo-wrap combo-sky" data-combo-type="tahsin">
+                                        <div class="smart-combo-box">
+                                            <input type="text" class="smart-combo-input materi-detail-input" placeholder="Pilih / ketik hal. 1–40..." autocomplete="off" required>
+                                            <button type="button" class="smart-combo-clear" tabindex="-1" title="Hapus pilihan" aria-label="Hapus">
+                                                <i class="bi bi-x-lg"></i>
+                                            </button>
+                                            <button type="button" class="smart-combo-toggle" tabindex="-1" aria-label="Pilih halaman">
+                                                <i class="bi bi-chevron-down"></i>
+                                            </button>
+                                        </div>
+                                        <div class="smart-combo-menu shadow-lg"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
+                        <!-- Smart Combobox Catatan Tajwid -->
                         <div class="mb-1">
                             <label class="form-label fw-bold text-dark mb-1" style="font-size: 0.82rem;">
                                 <i class="bi bi-chat-square-text text-primary me-1"></i> Catatan Tajwid &amp; Makhorijul Huruf
                             </label>
-                            <textarea id="inputCatatanTahsin{{ s.id }}" name="catatan" class="form-control rounded-3 bg-light border" rows="2" placeholder="Tulis evaluasi bacaan murid atau pilih template di bawah..."></textarea>
-                            <div class="d-flex flex-wrap gap-2 mt-2">
-                                <button type="button" class="quick-chip-btn" onclick="appendQuickNote('inputCatatanTahsin{{ s.id }}', 'Fasih &amp; tepat sesuai kaidah tajwid.')">Fasih &amp; tepat</button>
-                                <button type="button" class="quick-chip-btn" onclick="appendQuickNote('inputCatatanTahsin{{ s.id }}', 'Perhatikan panjang pendek mad &amp; gunnah.')">Perhatikan mad &amp; gunnah</button>
-                                <button type="button" class="quick-chip-btn" onclick="appendQuickNote('inputCatatanTahsin{{ s.id }}', 'Perlu muroja\'ah kembali di rumah.')">Perlu muroja'ah</button>
+                            <div class="smart-combo-wrap combo-sky" data-combo-type="catatan-tahsin">
+                                <div class="smart-combo-box">
+                                    <input type="text" name="catatan" class="smart-combo-input" placeholder="Pilih / ketik catatan tajwid..." autocomplete="off">
+                                    <button type="button" class="smart-combo-clear" tabindex="-1" title="Kosongkan catatan" aria-label="Kosongkan">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                    <button type="button" class="smart-combo-toggle" tabindex="-1" aria-label="Pilih catatan">
+                                        <i class="bi bi-chevron-down"></i>
+                                    </button>
+                                </div>
+                                <div class="smart-combo-menu shadow-lg"></div>
                             </div>
                         </div>
                     </div>
@@ -132,11 +164,11 @@
         </div>
     </div>
 
-    <!-- 2. MODAL INPUT SETORAN TAHFIDZ -->
+    <!-- 2. MODAL INPUT SETORAN TAHFIDZ (TRIPLE COMBOBOX: JUZ, 114 SURAH & AYAT) -->
     <div class="modal fade eval-modal" id="modalTahfidz{{ s.id }}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg">
-                <form action="/catat_tahfidz/{{ s.id }}" method="POST">
+                <form action="/catat_tahfidz/{{ s.id }}" method="POST" onsubmit="return syncMateriModal(this, 'tahfidz')">
                     <div class="modal-header text-white border-0 py-3 px-4" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">
                         <div class="d-flex align-items-center gap-3">
                             <div class="modal-header-icon">
@@ -144,10 +176,10 @@
                             </div>
                             <div>
                                 <h5 class="modal-title fw-bold mb-0" style="font-size: 1.05rem;">Input Setoran Tahfidz Murid</h5>
-                                <small class="text-white-50 d-block" style="font-size: 0.76rem;">Pencatatan hafalan surah &amp; kelancaran mutqin</small>
+                                <small class="text-white-50 d-block" style="font-size: 0.76rem;">Pencatatan hafalan 114 surah &amp; kelancaran mutqin</small>
                             </div>
                         </div>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Tutup"></button>
                     </div>
 
                     <div class="modal-body p-4">
@@ -219,7 +251,7 @@
                                             <div class="fw-bold text-dark" style="font-size: 0.9rem;">Grade C</div>
                                             <small class="text-muted" style="font-size: 0.72rem;">Bimbingan • <strong>Maqbul</strong></small>
                                         </div>
-                                        <span class="grade-check-circle"><i class="bi bi-check-lg"></i></span>
+                                        <span class="grade-check-circle"><i class="bi bi-x-lg"></i></span>
                                     </label>
                                 </div>
                             </div>
@@ -228,28 +260,72 @@
                             </small>
                         </div>
 
+                        <!-- Triple Smart Combobox: Juz (1–30), 114 Surah & Ayat Otomatis -->
                         <div class="mb-3">
                             <label class="form-label fw-bold text-dark mb-1" style="font-size: 0.82rem;">
-                                <i class="bi bi-bookmark text-success me-1"></i> Surah / Ayat Terakhir
+                                <i class="bi bi-bookmark text-success me-1"></i> Juz, Surah &amp; Ayat Terakhir (114 Surah)
                             </label>
-                            <input type="text" id="inputMateriTahfidz{{ s.id }}" name="hafalan_terakhir" class="form-control rounded-3 bg-light border" placeholder="Contoh: Juz 30 - Surah An-Naba' Ayat 1–20" required>
-                            <div class="d-flex flex-wrap gap-2 mt-2">
-                                <button type="button" class="quick-chip-btn" onclick="fillQuickInput('inputMateriTahfidz{{ s.id }}', 'Juz 30 - Surah An-Naba\' Ayat ')">+ An-Naba'</button>
-                                <button type="button" class="quick-chip-btn" onclick="fillQuickInput('inputMateriTahfidz{{ s.id }}', 'Juz 30 - Surah An-Nazi\'at Ayat ')">+ An-Nazi'at</button>
-                                <button type="button" class="quick-chip-btn" onclick="fillQuickInput('inputMateriTahfidz{{ s.id }}', 'Juz 30 - Surah \'Abasa Ayat ')">+ 'Abasa</button>
-                                <button type="button" class="quick-chip-btn" onclick="fillQuickInput('inputMateriTahfidz{{ s.id }}', 'Juz 29 - Surah Al-Mulk Ayat ')">+ Al-Mulk</button>
+                            <input type="hidden" name="hafalan_terakhir" class="materi-hidden-value">
+                            <div class="row g-2 mb-2">
+                                <div class="col-12 col-sm-4">
+                                    <div class="smart-combo-wrap combo-emerald" data-combo-type="juz">
+                                        <div class="smart-combo-box">
+                                            <input type="text" class="smart-combo-input fw-semibold materi-prefix-input" placeholder="Pilih / ketik Juz (1–30)..." autocomplete="off">
+                                            <button type="button" class="smart-combo-clear" tabindex="-1" title="Hapus pilihan" aria-label="Hapus">
+                                                <i class="bi bi-x-lg"></i>
+                                            </button>
+                                            <button type="button" class="smart-combo-toggle" tabindex="-1" aria-label="Pilih juz">
+                                                <i class="bi bi-chevron-down"></i>
+                                            </button>
+                                        </div>
+                                        <div class="smart-combo-menu shadow-lg"></div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-8">
+                                    <div class="smart-combo-wrap combo-emerald" data-combo-type="tahfidz">
+                                        <div class="smart-combo-box">
+                                            <input type="text" class="smart-combo-input materi-detail-input" placeholder="Pilih / ketik 114 surah..." autocomplete="off" required>
+                                            <button type="button" class="smart-combo-clear" tabindex="-1" title="Hapus pilihan" aria-label="Hapus">
+                                                <i class="bi bi-x-lg"></i>
+                                            </button>
+                                            <button type="button" class="smart-combo-toggle" tabindex="-1" aria-label="Pilih surah">
+                                                <i class="bi bi-chevron-down"></i>
+                                            </button>
+                                        </div>
+                                        <div class="smart-combo-menu shadow-lg"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="smart-combo-wrap combo-emerald" data-combo-type="ayat">
+                                <div class="smart-combo-box">
+                                    <input type="text" class="smart-combo-input materi-ayat-input" placeholder="Pilih / ketik ayat (misal 1-10 / Khatam)..." autocomplete="off">
+                                    <button type="button" class="smart-combo-clear" tabindex="-1" title="Hapus ayat" aria-label="Hapus">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                    <button type="button" class="smart-combo-toggle" tabindex="-1" aria-label="Pilih ayat">
+                                        <i class="bi bi-chevron-down"></i>
+                                    </button>
+                                </div>
+                                <div class="smart-combo-menu shadow-lg"></div>
                             </div>
                         </div>
 
+                        <!-- Smart Combobox Catatan Kelancaran -->
                         <div class="mb-1">
                             <label class="form-label fw-bold text-dark mb-1" style="font-size: 0.82rem;">
                                 <i class="bi bi-chat-square-text text-success me-1"></i> Catatan Kelancaran &amp; Mutqin
                             </label>
-                            <textarea id="inputCatatanTahfidz{{ s.id }}" name="catatan" class="form-control rounded-3 bg-light border" rows="2" placeholder="Tulis evaluasi hafalan murid atau pilih template di bawah..."></textarea>
-                            <div class="d-flex flex-wrap gap-2 mt-2">
-                                <button type="button" class="quick-chip-btn" onclick="appendQuickNote('inputCatatanTahfidz{{ s.id }}', 'Hafalan lancar, mutqin, dan tartil.')">Lancar &amp; mutqin</button>
-                                <button type="button" class="quick-chip-btn" onclick="appendQuickNote('inputCatatanTahfidz{{ s.id }}', 'Perhatikan kelancaran sambungan antar ayat.')">Perhatikan sambungan ayat</button>
-                                <button type="button" class="quick-chip-btn" onclick="appendQuickNote('inputCatatanTahfidz{{ s.id }}', 'Perlu muroja\'ah ulang sebelum lanjut ayat baru.')">Muroja'ah ulang</button>
+                            <div class="smart-combo-wrap combo-emerald" data-combo-type="catatan-tahfidz">
+                                <div class="smart-combo-box">
+                                    <input type="text" name="catatan" class="smart-combo-input" placeholder="Pilih / ketik catatan kelancaran..." autocomplete="off">
+                                    <button type="button" class="smart-combo-clear" tabindex="-1" title="Kosongkan catatan" aria-label="Kosongkan">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                    <button type="button" class="smart-combo-toggle" tabindex="-1" aria-label="Pilih catatan">
+                                        <i class="bi bi-chevron-down"></i>
+                                    </button>
+                                </div>
+                                <div class="smart-combo-menu shadow-lg"></div>
                             </div>
                         </div>
                     </div>
@@ -531,7 +607,7 @@
                                 </div>
                                 <h6 class="fw-bold text-dark mb-1">Belum Ada Riwayat Penilaian Tahsin</h6>
                                 <p class="text-muted small mb-3 mx-auto" style="max-width: 380px;">
-                                    Catatan bacaan jilid Wafa atau Al-Qur'an untuk <strong>{{ s.nama }}</strong> akan muncul secara kronologis di sini.
+                                    Catatan bacaan jilid Ummi atau Al-Qur'an untuk <strong>{{ s.nama }}</strong> akan muncul secara kronologis di sini.
                                 </p>
                                 <button type="button" class="btn btn-tahsin-sky btn-sm rounded-pill px-4 py-2 fw-bold shadow-sm" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalTahsin{{ s.id }}">
                                     <i class="bi bi-plus-circle me-1"></i> Input Penilaian Tahsin Pertama
