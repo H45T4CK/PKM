@@ -210,8 +210,6 @@
     display: none;
     overscroll-behavior: contain;
 }
-
-/* Kolom kanan (114 Surah & Halaman Ummi) rata kanan agar tidak keluar tepi modal */
 @media (min-width: 576px) {
     .smart-combo-wrap[data-combo-type="tahfidz"] .smart-combo-menu,
     .smart-combo-wrap[data-combo-type="tahsin"] .smart-combo-menu {
@@ -220,8 +218,6 @@
         min-width: 315px;
     }
 }
-
-/* Combobox 1 baris penuh (Ayat & Catatan) mengikuti lebar input */
 .smart-combo-wrap[data-combo-type="ayat"] .smart-combo-menu,
 .smart-combo-wrap[data-combo-type="catatan-tahsin"] .smart-combo-menu,
 .smart-combo-wrap[data-combo-type="catatan-tahfidz"] .smart-combo-menu {
@@ -408,20 +404,22 @@
     border-color: #94a3b8;
 }
 
-/* Modal Histori (Segmented Tabs & Timeline) */
+/* Modal Histori (Stat Cards, Segmented Tabs & Timeline Modern) */
 .histori-stat-box {
     border-radius: 16px;
     padding: 14px 16px;
     background: #ffffff;
     border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
     display: flex;
     align-items: center;
     gap: 12px;
     height: 100%;
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .histori-stat-box:hover {
     transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
 }
 .histori-stat-icon {
     width: 42px;
@@ -433,13 +431,36 @@
     font-size: 1.2rem;
     flex-shrink: 0;
 }
+.histori-stat-label {
+    display: block;
+    font-size: 0.67rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.45px;
+    color: #64748b;
+    line-height: 1.25;
+}
+.histori-stat-value {
+    font-size: 1.18rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.25;
+    margin-top: 2px;
+    white-space: nowrap;
+}
+.histori-stat-sub {
+    display: block;
+    font-size: 0.72rem;
+    line-height: 1.3;
+    margin-top: 2px;
+}
 
 .segmented-tabs-wrap {
     background: #e2e8f0;
     padding: 5px;
     border-radius: 14px;
     display: inline-flex;
-    flex-wrap: wrap;
+    align-items: center;
     gap: 4px;
 }
 .segmented-tabs-wrap .nav-link {
@@ -448,11 +469,12 @@
     color: #475569;
     font-weight: 700;
     font-size: 0.82rem;
-    padding: 8px 16px;
+    padding: 8px 14px;
     border-radius: 10px;
     display: inline-flex;
     align-items: center;
     gap: 7px;
+    white-space: nowrap;
     transition: all 0.2s ease;
 }
 .segmented-tabs-wrap .nav-link:hover { color: #0f172a; }
@@ -465,29 +487,29 @@
 .timeline-wrapper {
     position: relative;
     padding-left: 28px;
-    max-height: 430px;
+    max-height: 440px;
     overflow-y: auto;
-    padding-right: 6px;
+    padding-right: 4px;
 }
 .timeline-wrapper::before {
     content: '';
     position: absolute;
     left: 9px;
-    top: 8px;
-    bottom: 8px;
+    top: 10px;
+    bottom: 10px;
     width: 2px;
     background: linear-gradient(180deg, #cbd5e1 0%, #e2e8f0 100%);
     border-radius: 2px;
 }
 .timeline-entry {
     position: relative;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
 }
 .timeline-entry:last-child { margin-bottom: 0; }
 .timeline-node {
     position: absolute;
     left: -27px;
-    top: 16px;
+    top: 18px;
     width: 18px;
     height: 18px;
     border-radius: 50%;
@@ -504,17 +526,61 @@
     border-color: #e11d48;
     box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.18);
 }
+
 .timeline-card {
     background: #ffffff;
     border: 1px solid #e2e8f0;
+    border-left: 4px solid #cbd5e1;
     border-radius: 16px;
-    padding: 16px 18px;
+    padding: 16px 20px;
     box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
     transition: all 0.2s ease;
 }
+.timeline-card.accent-sky { border-left-color: #0284c7; }
+.timeline-card.accent-emerald { border-left-color: #059669; }
+.timeline-card.accent-fail { border-left-color: #e11d48; }
 .timeline-card:hover {
     border-color: #cbd5e1;
     box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+
+.timeline-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+.timeline-grade-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+.timeline-grade-info {
+    text-align: right;
+}
+
+.eval-note-box {
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    height: 100%;
+}
+.ortu-response-box {
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.ortu-response-box.has-note {
+    background: #fffbeb;
+    border-color: #fde68a;
 }
 
 .empty-state-modern {
@@ -533,4 +599,66 @@
     justify-content: center;
     font-size: 1.85rem;
     margin-bottom: 14px;
+}
+
+/* Responsif Layar HP (< 768px) */
+@media (max-width: 767.98px) {
+    .histori-stat-box {
+        padding: 11px 12px;
+        gap: 9px;
+        border-radius: 14px;
+    }
+    .histori-stat-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        font-size: 1rem;
+    }
+    .histori-stat-value {
+        font-size: 1.02rem;
+    }
+    .segmented-tabs-wrap {
+        width: 100%;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .segmented-tabs-wrap::-webkit-scrollbar {
+        display: none;
+    }
+    .segmented-tabs-wrap .nav-link {
+        font-size: 0.78rem;
+        padding: 7px 11px;
+    }
+    .timeline-wrapper {
+        padding-left: 22px;
+        max-height: none;
+    }
+    .timeline-wrapper::before {
+        left: 7px;
+    }
+    .timeline-node {
+        left: -21px;
+        width: 14px;
+        height: 14px;
+        border-width: 3px;
+    }
+    .timeline-card {
+        padding: 14px;
+        border-radius: 14px;
+    }
+    .timeline-card-top {
+        flex-direction: column;
+        gap: 8px;
+    }
+    .timeline-grade-actions {
+        width: 100%;
+        justify-content: space-between;
+        padding-top: 8px;
+        border-top: 1px dashed #e2e8f0;
+    }
+    .timeline-grade-info {
+        text-align: left;
+    }
 }

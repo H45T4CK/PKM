@@ -1,34 +1,644 @@
+<style>
+/* =====================================================================
+   HISTORI MODAL V5 — MODERN STUDENT PASS & SPLIT DASHBOARD
+   ===================================================================== */
+.modal-histori-v2 {
+    position: fixed !important;
+    inset: 0 !important;
+    overflow: hidden !important;
+    overscroll-behavior: none !important;
+    padding: 0 !important;
+}
+.modal-histori-v2 .modal-dialog {
+    width: min(1040px, calc(100vw - 32px));
+    max-width: none !important;
+    height: min(820px, calc(100dvh - 32px));
+    max-height: calc(100dvh - 32px);
+    margin: 16px auto !important;
+    display: flex;
+    align-items: stretch;
+}
+.hm5-shell {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 24px !important;
+    background: #f4f7f6;
+    position: relative;
+}
+
+/* =====================================================================
+   DESKTOP SPLIT LAYOUT (>= 992px)
+   ===================================================================== */
+@media (min-width: 992px) {
+    .hm5-mobile-hero {
+        display: none !important;
+    }
+    .hm5-mobile-dock {
+        display: none !important;
+    }
+    .hm5-workspace {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: 320px minmax(0, 1fr);
+        overflow: hidden;
+    }
+    .hm5-sidebar {
+        background: linear-gradient(165deg, #042f2e 0%, #064e3b 52%, #0f172a 100%);
+        color: #ffffff;
+        padding: 24px 22px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 18px;
+        overflow-y: auto;
+        border-right: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .hm5-main {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        min-height: 0;
+        background: #f4f7f6;
+    }
+    .hm5-main-topbar {
+        flex: 0 0 auto;
+        background: #ffffff;
+        border-bottom: 1px solid #e2e8f0;
+        padding: 14px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+    .hm5-desktop-close {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 1px solid #e2e8f0;
+        background: #f8fafc;
+        color: #334155;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.92rem;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: all 0.16s ease;
+    }
+    .hm5-desktop-close:hover {
+        background: #0f172a;
+        border-color: #0f172a;
+        color: #ffffff;
+    }
+}
+
+/* Sidebar Elements (Desktop) */
+.hm5-side-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 15px;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.35), rgba(5, 150, 105, 0.18));
+    border: 1.5px solid rgba(110, 231, 183, 0.45);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.hm5-bento-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+.hm5-bento-item {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    padding: 12px;
+    min-width: 0;
+}
+.hm5-bento-kicker {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.45px;
+    color: rgba(255, 255, 255, 0.68);
+}
+.hm5-bento-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.hm5-bento-val {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin-top: 4px;
+    line-height: 1.2;
+}
+.hm5-bento-sub {
+    display: block;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.65);
+    margin-top: 2px;
+}
+.hm5-side-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+.hm5-side-btn-rapor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #ffffff !important;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none !important;
+    transition: background-color 0.16s ease;
+}
+.hm5-side-btn-rapor:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* =====================================================================
+   TABS & SCROLLABLE FEED (SHARED DESKTOP + MOBILE)
+   ===================================================================== */
+.hm5-tabs {
+    background: #f1f5f9;
+    border-radius: 12px;
+    padding: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.hm5-tabs .nav-link {
+    border: none;
+    background: transparent;
+    color: #64748b;
+    font-size: 0.81rem;
+    font-weight: 700;
+    padding: 7px 14px;
+    border-radius: 9px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    white-space: nowrap;
+    transition: all 0.16s ease;
+}
+.hm5-tabs .nav-link:hover {
+    color: #0f172a;
+}
+.hm5-tabs .nav-link.active {
+    background: #ffffff;
+    color: #0f172a;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+}
+.hm5-tab-pill {
+    font-size: 0.68rem;
+    font-weight: 800;
+    padding: 1px 7px;
+    border-radius: 99px;
+    background: rgba(15, 23, 42, 0.07);
+    color: #475569;
+}
+.hm5-tabs .nav-link.active .hm5-tab-pill {
+    background: #064e3b;
+    color: #ffffff;
+}
+
+.hm5-scroll-area {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding: 20px 24px 28px 24px;
+}
+.hm5-scroll-area::-webkit-scrollbar {
+    width: 6px;
+}
+.hm5-scroll-area::-webkit-scrollbar-track {
+    background: transparent;
+}
+.hm5-scroll-area::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 99px;
+}
+
+/* EDITORIAL RECORD CARD (CLEAN, NO NESTED BOX CLUTTER) */
+.hm5-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+.hm5-entry {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 18px 20px;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.hm5-entry:hover {
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+}
+.hm5-entry-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+.hm5-entry-identity {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    min-width: 0;
+    flex: 1 1 auto;
+}
+.hm5-grade-squircle {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.98rem;
+    flex-shrink: 0;
+    letter-spacing: -0.3px;
+}
+.hm5-grade-squircle.is-sky {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+.hm5-grade-squircle.is-emerald {
+    background: #dcfce7;
+    color: #047857;
+}
+.hm5-grade-squircle.is-fail {
+    background: #ffe4e6;
+    color: #be123c;
+}
+.hm5-entry-title {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 3px 0;
+    line-height: 1.38;
+}
+.hm5-entry-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: #64748b;
+}
+.hm5-entry-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+.hm5-status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.hm5-status-chip.pass {
+    background: #f0fdf4;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+.hm5-status-chip.fail {
+    background: #fff1f2;
+    color: #be123c;
+    border: 1px solid #fecdd3;
+}
+.hm5-trash-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    color: #94a3b8 !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    text-decoration: none !important;
+    transition: all 0.15s ease;
+}
+.hm5-trash-icon:hover {
+    background: #fff1f2;
+    color: #e11d48 !important;
+}
+
+/* Clean Left-Border Editorial Quote (No Inner Box!) */
+.hm5-eval-quote {
+    margin-top: 13px;
+    padding-left: 12px;
+    border-left: 2.5px solid #cbd5e1;
+    font-size: 0.86rem;
+    color: #334155;
+    line-height: 1.55;
+}
+.hm5-eval-quote.sky-line { border-left-color: #38bdf8; }
+.hm5-eval-quote.emerald-line { border-left-color: #34d399; }
+.hm5-eval-quote.fail-line { border-left-color: #fb7185; }
+
+.hm5-entry-foot {
+    margin-top: 13px;
+    padding-top: 10px;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 0.76rem;
+}
+.hm5-ortu-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.71rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 99px;
+}
+.hm5-ortu-badge.verified {
+    background: #dcfce7;
+    color: #15803d;
+}
+.hm5-ortu-badge.pending {
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+/* =====================================================================
+   MOBILE & TABLET APP SHEET (< 992px)
+   ===================================================================== */
+@media (max-width: 991.98px) {
+    .modal-histori-v2 .modal-dialog {
+        width: 100vw !important;
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        margin: 0 !important;
+    }
+    .hm5-shell {
+        border-radius: 0 !important;
+    }
+    .hm5-sidebar {
+        display: none !important;
+    }
+    .hm5-workspace {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    .hm5-main {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    /* Unified Student Pass Hero Header */
+    .hm5-mobile-hero {
+        flex: 0 0 auto;
+        background: linear-gradient(155deg, #042f2e 0%, #064e3b 58%, #0f172a 100%);
+        color: #ffffff;
+        padding: 12px 16px 14px 16px;
+        box-shadow: 0 6px 20px rgba(4, 47, 46, 0.18);
+        z-index: 15;
+    }
+    .hm5-m-toprow {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+    .hm5-m-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        background: rgba(16, 185, 129, 0.28);
+        border: 1px solid rgba(110, 231, 183, 0.45);
+        color: #ffffff;
+        font-weight: 800;
+        font-size: 0.98rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .hm5-m-iconbtn {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.1);
+        color: #ffffff !important;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        text-decoration: none !important;
+        flex-shrink: 0;
+    }
+
+    /* Glass 2x2 Scoreboard Inside Hero */
+    .hm5-m-glass-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+    }
+    .hm5-m-glass-cell {
+        background: rgba(255, 255, 255, 0.09);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 12px;
+        padding: 8px 11px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+        min-width: 0;
+    }
+    .hm5-m-cell-label {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 0.6rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.35px;
+        color: rgba(255, 255, 255, 0.72);
+    }
+    .hm5-m-cell-val {
+        font-size: 0.9rem;
+        font-weight: 800;
+        color: #ffffff;
+        line-height: 1.2;
+        margin-top: 2px;
+    }
+    .hm5-m-cell-tag {
+        font-size: 0.64rem;
+        font-weight: 700;
+        padding: 2px 7px;
+        border-radius: 99px;
+        background: rgba(255, 255, 255, 0.12);
+        color: rgba(255, 255, 255, 0.9);
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    .hm5-m-cell-tag.is-pass {
+        background: rgba(16, 185, 129, 0.28);
+        color: #a7f3d0;
+    }
+    .hm5-m-cell-tag.is-fail {
+        background: rgba(244, 63, 94, 0.32);
+        color: #fecdd3;
+    }
+
+    /* Sticky Segmented Tab Bar */
+    .hm5-main-topbar {
+        flex: 0 0 auto;
+        background: #ffffff;
+        border-bottom: 1px solid #e2e8f0;
+        padding: 9px 14px;
+    }
+    .hm5-desktop-close {
+        display: none !important;
+    }
+    .hm5-tabs {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .hm5-tabs .nav-link {
+        justify-content: center;
+        font-size: 0.76rem;
+        padding: 7px 4px;
+        gap: 5px;
+    }
+
+    /* Feed Area */
+    .hm5-scroll-area {
+        padding: 14px 14px calc(76px + env(safe-area-inset-bottom, 0px)) 14px;
+    }
+    .hm5-feed {
+        gap: 11px;
+    }
+    .hm5-entry {
+        padding: 15px 15px;
+        border-radius: 16px;
+    }
+    .hm5-grade-squircle {
+        width: 38px;
+        height: 38px;
+        border-radius: 11px;
+        font-size: 0.9rem;
+    }
+    .hm5-entry-title {
+        font-size: 0.94rem;
+    }
+    .hm5-eval-quote {
+        margin-top: 11px;
+        font-size: 0.83rem;
+    }
+
+    /* Slim Bottom Action Dock */
+    .hm5-mobile-dock {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 16;
+        padding: 10px 14px calc(12px + env(safe-area-inset-bottom, 0px)) 14px;
+        background: rgba(255, 255, 255, 0.94);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-top: 1px solid #e2e8f0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    .hm5-mobile-dock .btn {
+        border-radius: 12px !important;
+        padding: 9px 12px;
+        font-size: 0.8rem;
+        width: 100%;
+    }
+}
+</style>
+
 {% for s in siswa_list %}
+    <!-- Hitung akurat jumlah respon/paraf orang tua untuk sinkronisasi badge & daftar -->
+    {% set ns_ortu = namespace(count=0) %}
+    {% for t in s.tahsin %}
+        {% if t.catatan_ortu or t.ceklist_ortu %}{% set ns_ortu.count = ns_ortu.count + 1 %}{% endif %}
+    {% endfor %}
+    {% for f in s.tahfidz %}
+        {% if f.catatan_ortu or f.ceklist_ortu %}{% set ns_ortu.count = ns_ortu.count + 1 %}{% endif %}
+    {% endfor %}
+
     <!-- 1. MODAL INPUT PREDIKAT TAHSIN (JILID & HALAMAN -> GRADE) -->
     <div class="modal fade eval-modal" id="modalTahsin{{ s.id }}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg">
                 <form action="/catat_tahsin/{{ s.id }}" method="POST" onsubmit="return syncMateriModal(this, 'tahsin')">
-                    <div class="modal-header text-white border-0 py-3 px-4" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
-                        <div class="d-flex align-items-center gap-3">
+                    <div class="modal-header modal-header-tahsin text-white border-0 py-3 px-4">
+                        <div class="d-flex align-items-center gap-3 min-w-0">
                             <div class="modal-header-icon">
                                 <i class="bi bi-book-half"></i>
                             </div>
-                            <div>
-                                <h5 class="modal-title fw-bold mb-0" style="font-size: 1.05rem;">Input Penilaian Tahsin Murid</h5>
-                                <small class="text-white-50 d-block" style="font-size: 0.76rem;">Evaluasi bacaan Metode Ummi / Al-Qur'an &amp; Tajwid</small>
+                            <div class="min-w-0">
+                                <h5 class="modal-title fw-bold mb-0 text-truncate" style="font-size: 1.05rem;">Input Penilaian Tahsin Murid</h5>
+                                <small class="text-white-50 d-block text-truncate" style="font-size: 0.76rem;">Evaluasi bacaan Metode Ummi / Al-Qur'an &amp; Tajwid</small>
                             </div>
                         </div>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                        <button type="button" class="btn-close btn-close-white flex-shrink-0" data-bs-dismiss="modal" aria-label="Tutup"></button>
                     </div>
 
                     <div class="modal-body p-4">
                         <div class="d-flex align-items-center justify-content-between p-3 rounded-4 mb-3" style="background: #f0f9ff; border: 1px solid #bae6fd;">
-                            <div class="d-flex align-items-center gap-3">
+                            <div class="d-flex align-items-center gap-3 min-w-0">
                                 <div class="student-avatar-box" style="background: #0284c7;">
                                     {{ s.nama[0]|upper if s.nama else 'M' }}
                                 </div>
-                                <div>
-                                    <div class="fw-bold text-dark" style="font-size: 0.92rem;">{{ s.nama }}</div>
-                                    <small class="text-muted" style="font-size: 0.76rem;">NISN: <strong>{{ s.id }}</strong> • Kelas <strong>{{ s.kelas }}</strong></small>
+                                <div class="min-w-0">
+                                    <div class="fw-bold text-dark text-truncate" style="font-size: 0.92rem;">{{ s.nama }}</div>
+                                    <small class="text-muted d-block text-truncate" style="font-size: 0.76rem;">NISN: <strong>{{ s.id }}</strong> • Kelas <strong>{{ s.kelas }}</strong></small>
                                 </div>
                             </div>
-                            <span class="badge bg-white text-dark border rounded-pill px-3 py-1 fw-semibold" style="font-size: 0.72rem;">Setoran Baru</span>
+                            <span class="badge bg-white text-dark border rounded-pill px-3 py-1 fw-semibold flex-shrink-0" style="font-size: 0.72rem;">Setoran Baru</span>
                         </div>
 
                         <div class="mb-3">
@@ -156,7 +766,7 @@
 
                     <div class="modal-footer border-0 px-4 pb-4 pt-1 d-flex justify-content-end gap-2">
                         <button type="button" class="btn btn-light border rounded-pill fw-bold px-4" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn text-white rounded-pill fw-bold px-4 shadow-sm" style="background: #0284c7;">
+                        <button type="submit" class="btn btn-tahsin-sky rounded-pill fw-bold px-4 shadow-sm">
                             <i class="bi bi-check-circle me-1"></i> Simpan Predikat Tahsin
                         </button>
                     </div>
@@ -170,31 +780,31 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg">
                 <form action="/catat_tahfidz/{{ s.id }}" method="POST" onsubmit="return syncMateriModal(this, 'tahfidz')">
-                    <div class="modal-header text-white border-0 py-3 px-4" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">
-                        <div class="d-flex align-items-center gap-3">
+                    <div class="modal-header modal-header-tahfidz text-white border-0 py-3 px-4">
+                        <div class="d-flex align-items-center gap-3 min-w-0">
                             <div class="modal-header-icon">
                                 <i class="bi bi-journal-bookmark-fill"></i>
                             </div>
-                            <div>
-                                <h5 class="modal-title fw-bold mb-0" style="font-size: 1.05rem;">Input Setoran Tahfidz Murid</h5>
-                                <small class="text-white-50 d-block" style="font-size: 0.76rem;">Pencatatan hafalan 114 surah &amp; kelancaran mutqin</small>
+                            <div class="min-w-0">
+                                <h5 class="modal-title fw-bold mb-0 text-truncate" style="font-size: 1.05rem;">Input Setoran Tahfidz Murid</h5>
+                                <small class="text-white-50 d-block text-truncate" style="font-size: 0.76rem;">Pencatatan hafalan 114 surah &amp; kelancaran mutqin</small>
                             </div>
                         </div>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                        <button type="button" class="btn-close btn-close-white flex-shrink-0" data-bs-dismiss="modal" aria-label="Tutup"></button>
                     </div>
 
                     <div class="modal-body p-4">
                         <div class="d-flex align-items-center justify-content-between p-3 rounded-4 mb-3" style="background: #ecfdf5; border: 1px solid #a7f3d0;">
-                            <div class="d-flex align-items-center gap-3">
+                            <div class="d-flex align-items-center gap-3 min-w-0">
                                 <div class="student-avatar-box" style="background: #059669;">
                                     {{ s.nama[0]|upper if s.nama else 'M' }}
                                 </div>
-                                <div>
-                                    <div class="fw-bold text-dark" style="font-size: 0.92rem;">{{ s.nama }}</div>
-                                    <small class="text-muted" style="font-size: 0.76rem;">NISN: <strong>{{ s.id }}</strong> • Kelas <strong>{{ s.kelas }}</strong></small>
+                                <div class="min-w-0">
+                                    <div class="fw-bold text-dark text-truncate" style="font-size: 0.92rem;">{{ s.nama }}</div>
+                                    <small class="text-muted d-block text-truncate" style="font-size: 0.76rem;">NISN: <strong>{{ s.id }}</strong> • Kelas <strong>{{ s.kelas }}</strong></small>
                                 </div>
                             </div>
-                            <span class="badge bg-white text-success border border-success border-opacity-25 rounded-pill px-3 py-1 fw-semibold" style="font-size: 0.72rem;">Setoran Baru</span>
+                            <span class="badge bg-white text-success border border-success border-opacity-25 rounded-pill px-3 py-1 fw-semibold flex-shrink-0" style="font-size: 0.72rem;">Setoran Baru</span>
                         </div>
 
                         <div class="mb-3">
@@ -334,7 +944,7 @@
 
                     <div class="modal-footer border-0 px-4 pb-4 pt-1 d-flex justify-content-end gap-2">
                         <button type="button" class="btn btn-light border rounded-pill fw-bold px-4" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-success text-white rounded-pill fw-bold px-4 shadow-sm">
+                        <button type="submit" class="btn btn-tahfidz-emerald rounded-pill fw-bold px-4 shadow-sm">
                             <i class="bi bi-check-circle me-1"></i> Simpan Predikat Tahfidz
                         </button>
                     </div>
@@ -346,7 +956,7 @@
     <!-- 3. MODAL EDIT DATA MURID & USERNAME -->
     <div class="modal fade" id="modalEditMurid{{ s.id }}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg overflow-hidden">
+            <div class="modal-content border-0 shadow-lg overflow-hidden" style="border-radius: 20px;">
                 <form action="/edit_siswa/{{ s.id }}" method="POST">
                     <div class="modal-header modal-header-histori text-white border-0 py-3 px-4">
                         <div class="d-flex align-items-center gap-3">
@@ -354,7 +964,7 @@
                                 <i class="bi bi-pencil-square fs-5 text-warning"></i>
                             </div>
                             <div>
-                                <h5 class="modal-title fw-bold mb-0 fs-6">Ubah Data Murid & Akun Login</h5>
+                                <h5 class="modal-title fw-bold mb-0 fs-6">Ubah Data Murid &amp; Akun Login</h5>
                                 <small class="text-white-50" style="font-size: 0.72rem;">NISN / ID: {{ s.id }}</small>
                             </div>
                         </div>
@@ -397,401 +1007,447 @@
         </div>
     </div>
 
-    <!-- 4. MODAL HISTORI EVALUASI & CATATAN -->
-    <div class="modal fade" id="modalHistori{{ s.id }}" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
-            <div class="modal-content border-0 shadow-lg overflow-hidden">
-                <div class="modal-header modal-header-histori text-white border-0 py-3.5 px-4">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="avatar-circle" style="width: 46px; height: 46px; font-size: 1.1rem; border: 2px solid rgba(255,255,255,0.25);">
-                            {{ s.nama[0]|upper }}
-                        </div>
-                        <div>
-                            <div class="d-flex flex-wrap align-items-center gap-2">
-                                <h5 class="modal-title fw-extrabold mb-0">{{ s.nama }}</h5>
-                                <span class="badge rounded-pill px-2.5 py-0.5 fw-bold" style="background: rgba(255,255,255,0.15); font-size: 0.72rem;">
-                                    Kelas {{ s.kelas }}
-                                </span>
+    <!-- 4. MODAL HISTORI V5 (STUDENT PASS + DESKTOP SPLIT DASHBOARD) -->
+    <div class="modal fade modal-histori-v2" id="modalHistori{{ s.id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content border-0 shadow-lg hm5-shell">
+                <!-- MOBILE & TABLET HERO PASS (< 992px) -->
+                <div class="hm5-mobile-hero">
+                    <div class="hm5-m-toprow">
+                        <div class="d-flex align-items-center gap-2 flex-grow-1 min-w-0">
+                            <div class="hm5-m-avatar">{{ s.nama[0]|upper }}</div>
+                            <div class="min-w-0 flex-grow-1">
+                                <div class="d-flex align-items-center gap-2 min-w-0">
+                                    <h5 class="fw-bold mb-0 text-truncate" style="font-size: 0.96rem;">{{ s.nama }}</h5>
+                                    <span class="badge rounded-pill px-2 py-1 fw-bold flex-shrink-0" style="background: rgba(255,255,255,0.16); font-size: 0.66rem;">{{ s.kelas }}</span>
+                                </div>
+                                <small class="text-white-50 d-block text-truncate" style="font-size: 0.7rem;">
+                                    NISN <strong class="text-white">{{ s.id }}</strong> • Rekam Tahsin &amp; Tahfidz
+                                </small>
                             </div>
-                            <small class="text-white-50 d-block mt-0.5" style="font-size: 0.75rem;">
-                                <i class="bi bi-person-vcard me-1"></i>NISN: <strong class="text-white">{{ s.id }}</strong> • Riwayat Capaian Tahsin, Tahfidz & Paraf Orang Tua
-                            </small>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                            <a href="/cetak_hafalan/{{ s.id }}" target="_blank" class="hm5-m-iconbtn" title="Cetak Rapor PDF" aria-label="Cetak Rapor PDF">
+                                <i class="bi bi-printer-fill"></i>
+                            </a>
+                            <button type="button" class="hm5-m-iconbtn" data-bs-dismiss="modal" title="Tutup" aria-label="Tutup">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
                         </div>
                     </div>
-                    <div class="d-flex align-items-center gap-2 ms-auto me-2">
-                        <a href="/cetak_hafalan/{{ s.id }}" target="_blank" class="btn btn-sm btn-light rounded-pill px-3 py-1.5 fw-bold text-dark d-none d-md-inline-flex align-items-center gap-1.5 shadow-sm">
-                            <i class="bi bi-printer-fill text-success"></i> Cetak Rapor PDF
-                        </a>
+
+                    <!-- 2x2 Glass Scoreboard -->
+                    <div class="hm5-m-glass-grid">
+                        <div class="hm5-m-glass-cell">
+                            <div class="min-w-0">
+                                <span class="hm5-m-cell-label">
+                                    <span class="hm5-bento-dot" style="background: #38bdf8;"></span> Tahsin
+                                </span>
+                                <div class="hm5-m-cell-val text-truncate">
+                                    {{ 'Grade ' + s.grade_tahsin if s.grade_tahsin != '-' else 'Belum Ada' }}
+                                </div>
+                            </div>
+                            <span class="hm5-m-cell-tag">{{ s.tahsin|length }}×</span>
+                        </div>
+
+                        <div class="hm5-m-glass-cell">
+                            <div class="min-w-0">
+                                <span class="hm5-m-cell-label">
+                                    <span class="hm5-bento-dot" style="background: #34d399;"></span> Tahfidz
+                                </span>
+                                <div class="hm5-m-cell-val text-truncate">
+                                    {{ 'Grade ' + s.grade_tahfidz if s.grade_tahfidz != '-' else 'Belum Ada' }}
+                                </div>
+                            </div>
+                            <span class="hm5-m-cell-tag">{{ s.tahfidz|length }}×</span>
+                        </div>
+
+                        <div class="hm5-m-glass-cell">
+                            <div class="min-w-0">
+                                <span class="hm5-m-cell-label">
+                                    <span class="hm5-bento-dot" style="background: #c084fc;"></span> Akhir
+                                </span>
+                                <div class="hm5-m-cell-val text-truncate">
+                                    {{ 'Grade ' + s.grade_rata_rata if s.grade_rata_rata != '-' else 'Belum Ada' }}
+                                </div>
+                            </div>
+                            <span class="hm5-m-cell-tag {{ 'is-pass' if s.status_kelulusan_rata_rata == 'Lulus' else ('is-fail' if s.status_kelulusan_rata_rata == 'Tidak Lulus' else '') }}">
+                                {{ s.status_kelulusan_rata_rata }}
+                            </span>
+                        </div>
+
+                        <div class="hm5-m-glass-cell">
+                            <div class="min-w-0">
+                                <span class="hm5-m-cell-label">
+                                    <span class="hm5-bento-dot" style="background: #fbbf24;"></span> Ortu
+                                </span>
+                                <div class="hm5-m-cell-val text-truncate">{{ ns_ortu.count }} Respon</div>
+                            </div>
+                            <span class="hm5-m-cell-tag">Paraf</span>
+                        </div>
                     </div>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
 
-                <div class="modal-body p-4" style="background: #f8fafc;">
-                    <div class="row g-2.5 mb-4">
-                        <div class="col-6 col-lg-3">
-                            <div class="histori-stat-box">
-                                <div class="histori-stat-icon" style="background: #e0f2fe; color: #0284c7;">
-                                    <i class="bi bi-book-half"></i>
-                                </div>
-                                <div>
-                                    <span class="text-muted fw-bold text-uppercase d-block" style="font-size: 0.68rem; letter-spacing: 0.4px;">Predikat Tahsin</span>
-                                    <div class="fs-5 fw-extrabold text-dark lh-sm">
-                                        {{ 'Grade ' + s.grade_tahsin if s.grade_tahsin != '-' else '-' }}
-                                    </div>
-                                    <small class="text-muted" style="font-size: 0.71rem;">{{ s.tahsin|length }} kali setoran</small>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-6 col-lg-3">
-                            <div class="histori-stat-box">
-                                <div class="histori-stat-icon" style="background: #dcfce7; color: #059669;">
-                                    <i class="bi bi-journal-bookmark-fill"></i>
-                                </div>
-                                <div>
-                                    <span class="text-muted fw-bold text-uppercase d-block" style="font-size: 0.68rem; letter-spacing: 0.4px;">Predikat Tahfidz</span>
-                                    <div class="fs-5 fw-extrabold text-dark lh-sm">
-                                        {{ 'Grade ' + s.grade_tahfidz if s.grade_tahfidz != '-' else '-' }}
-                                    </div>
-                                    <small class="text-muted" style="font-size: 0.71rem;">{{ s.tahfidz|length }} kali setoran</small>
+                <!-- MAIN WORKSPACE (DESKTOP 2-COLUMN / MOBILE FEED) -->
+                <div class="hm5-workspace">
+                    <!-- DESKTOP LEFT PROFILE & SCOREBOARD SIDEBAR (>= 992px) -->
+                    <aside class="hm5-sidebar">
+                        <div>
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <div class="hm5-side-avatar">{{ s.nama[0]|upper }}</div>
+                                <div class="min-w-0">
+                                    <span class="badge rounded-pill px-2 py-1 fw-bold mb-1" style="background: rgba(16, 185, 129, 0.24); color: #a7f3d0; font-size: 0.68rem;">
+                                        Kelas {{ s.kelas }} • NISN {{ s.id }}
+                                    </span>
+                                    <h5 class="fw-bold mb-0 text-white" style="font-size: 1.05rem; line-height: 1.3;">{{ s.nama }}</h5>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="col-6 col-lg-3">
-                            <div class="histori-stat-box">
-                                <div class="histori-stat-icon" style="background: #ede9fe; color: #7c3aed;">
-                                    <i class="bi bi-award-fill"></i>
+                            <!-- 2x2 Glass Bento -->
+                            <div class="hm5-bento-grid mb-3">
+                                <div class="hm5-bento-item">
+                                    <span class="hm5-bento-kicker">
+                                        <span class="hm5-bento-dot" style="background: #38bdf8;"></span> Tahsin
+                                    </span>
+                                    <div class="hm5-bento-val">{{ 'Grade ' + s.grade_tahsin if s.grade_tahsin != '-' else '-' }}</div>
+                                    <small class="hm5-bento-sub">{{ s.tahsin|length }}× setoran</small>
                                 </div>
-                                <div>
-                                    <span class="text-muted fw-bold text-uppercase d-block" style="font-size: 0.68rem; letter-spacing: 0.4px;">Predikat Akhir</span>
-                                    <div class="d-flex align-items-center gap-1.5">
-                                        <span class="fs-5 fw-extrabold text-dark lh-sm">{{ 'Grade ' + s.grade_rata_rata if s.grade_rata_rata != '-' else '-' }}</span>
-                                    </div>
-                                    <small class="fw-bold {{ 'text-success' if s.status_kelulusan_rata_rata == 'Lulus' else ('text-danger' if s.status_kelulusan_rata_rata == 'Tidak Lulus' else 'text-muted') }}" style="font-size: 0.71rem;">
-                                        {{ s.status_kelulusan_rata_rata }}
+
+                                <div class="hm5-bento-item">
+                                    <span class="hm5-bento-kicker">
+                                        <span class="hm5-bento-dot" style="background: #34d399;"></span> Tahfidz
+                                    </span>
+                                    <div class="hm5-bento-val">{{ 'Grade ' + s.grade_tahfidz if s.grade_tahfidz != '-' else '-' }}</div>
+                                    <small class="hm5-bento-sub">{{ s.tahfidz|length }}× setoran</small>
+                                </div>
+
+                                <div class="hm5-bento-item">
+                                    <span class="hm5-bento-kicker">
+                                        <span class="hm5-bento-dot" style="background: #c084fc;"></span> Akhir
+                                    </span>
+                                    <div class="hm5-bento-val">{{ 'Grade ' + s.grade_rata_rata if s.grade_rata_rata != '-' else '-' }}</div>
+                                    <small class="hm5-bento-sub {{ 'text-warning' if s.status_kelulusan_rata_rata == 'Tidak Lulus' else '' }}">
+                                        {{ s.status_kelulusan_rata_rata }}{% if s.jumlah_c > 0 %} ({{ s.jumlah_c }}× C){% endif %}
                                     </small>
                                 </div>
-                            </div>
-                        </div>
 
-                        <div class="col-6 col-lg-3">
-                            <div class="histori-stat-box">
-                                <div class="histori-stat-icon" style="background: #fef3c7; color: #d97706;">
-                                    <i class="bi bi-chat-heart-fill"></i>
-                                </div>
-                                <div>
-                                    <span class="text-muted fw-bold text-uppercase d-block" style="font-size: 0.68rem; letter-spacing: 0.4px;">Respon Orang Tua</span>
-                                    <div class="fs-5 fw-extrabold text-dark lh-sm">{{ s.total_catatan_ortu }}</div>
-                                    <small class="text-muted" style="font-size: 0.71rem;">Catatan / Paraf Rumah</small>
+                                <div class="hm5-bento-item">
+                                    <span class="hm5-bento-kicker">
+                                        <span class="hm5-bento-dot" style="background: #fbbf24;"></span> Ortu
+                                    </span>
+                                    <div class="hm5-bento-val">{{ ns_ortu.count }}</div>
+                                    <small class="hm5-bento-sub">Paraf &amp; catatan</small>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
-                        <ul class="nav segmented-tabs-wrap" role="tablist">
-                            <li class="nav-item">
-                                <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-histori-tahsin-{{ s.id }}" type="button">
-                                    <i class="bi bi-book text-primary"></i> Riwayat Tahsin
-                                    <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill">{{ s.tahsin|length }}</span>
-                                </button>
-                            </li>
-                            <li class="nav-item">
-                                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-histori-tahfidz-{{ s.id }}" type="button">
-                                    <i class="bi bi-journal-bookmark-fill text-success"></i> Riwayat Tahfidz
-                                    <span class="badge bg-success bg-opacity-10 text-success rounded-pill">{{ s.tahfidz|length }}</span>
-                                </button>
-                            </li>
-                            <li class="nav-item">
-                                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-histori-ortu-{{ s.id }}" type="button">
-                                    <i class="bi bi-chat-heart-fill text-warning"></i> Catatan & Paraf Ortu
-                                    <span class="badge bg-warning bg-opacity-25 text-dark rounded-pill">{{ s.total_catatan_ortu }}</span>
-                                </button>
-                            </li>
-                        </ul>
-
-                        <div class="d-flex gap-2">
-                            <button type="button" class="btn btn-sm btn-tahsin-sky rounded-pill px-3 fw-bold" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalTahsin{{ s.id }}">
-                                <i class="bi bi-plus-lg"></i> Tahsin
+                        <div class="hm5-side-actions">
+                            <button type="button" class="btn btn-tahsin-sky rounded-3 py-2 fw-bold shadow-sm w-100" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalTahsin{{ s.id }}">
+                                <i class="bi bi-plus-lg me-1"></i> Input Setoran Tahsin
                             </button>
-                            <button type="button" class="btn btn-sm btn-tahfidz-emerald rounded-pill px-3 fw-bold" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalTahfidz{{ s.id }}">
-                                <i class="bi bi-plus-lg"></i> Tahfidz
+                            <button type="button" class="btn btn-tahfidz-emerald rounded-3 py-2 fw-bold shadow-sm w-100" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalTahfidz{{ s.id }}">
+                                <i class="bi bi-plus-lg me-1"></i> Input Setoran Tahfidz
+                            </button>
+                            <a href="/cetak_hafalan/{{ s.id }}" target="_blank" class="hm5-side-btn-rapor">
+                                <i class="bi bi-printer-fill text-warning"></i> Cetak Rapor PDF
+                            </a>
+                        </div>
+                    </aside>
+
+                    <!-- RIGHT MAIN FEED PANEL -->
+                    <div class="hm5-main">
+                        <div class="hm5-main-topbar">
+                            <ul class="nav hm5-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-histori-tahsin-{{ s.id }}" type="button">
+                                        <span>Tahsin</span>
+                                        <span class="hm5-tab-pill">{{ s.tahsin|length }}</span>
+                                    </button>
+                                </li>
+                                <li class="nav-item">
+                                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-histori-tahfidz-{{ s.id }}" type="button">
+                                        <span>Tahfidz</span>
+                                        <span class="hm5-tab-pill">{{ s.tahfidz|length }}</span>
+                                    </button>
+                                </li>
+                                <li class="nav-item">
+                                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-histori-ortu-{{ s.id }}" type="button">
+                                        <span>Paraf Ortu</span>
+                                        <span class="hm5-tab-pill">{{ ns_ortu.count }}</span>
+                                    </button>
+                                </li>
+                            </ul>
+
+                            <button type="button" class="hm5-desktop-close" data-bs-dismiss="modal" title="Tutup" aria-label="Tutup">
+                                <i class="bi bi-x-lg"></i>
                             </button>
                         </div>
-                    </div>
 
-                    <div class="tab-content">
-                        <!-- TAB 1: RIWAYAT TAHSIN -->
-                        <div class="tab-pane fade show active" id="tab-histori-tahsin-{{ s.id }}">
-                            {% if s.tahsin %}
-                            <div class="timeline-wrapper">
-                                {% for t in s.tahsin|reverse %}
-                                {% set t_grade = (t.grade or 'A')|upper %}
-                                {% set t_lulus = t_grade in ['A', 'B+', 'B'] %}
-                                <div class="timeline-entry">
-                                    <div class="timeline-node {{ 'node-sky' if t_lulus else 'node-fail' }}"></div>
-                                    <div class="timeline-card">
-                                        <div class="d-flex flex-wrap align-items-start justify-content-between gap-2 mb-2">
-                                            <div>
-                                                <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
-                                                    <span class="badge bg-light text-dark border rounded-pill px-2.5 py-1 fw-semibold" style="font-size: 0.72rem;">
-                                                        <i class="bi bi-calendar3 text-primary me-1"></i>{{ t.tanggal|date_dmy }}
-                                                    </span>
-                                                    {% if t.penilai %}
-                                                        <span class="text-muted small" style="font-size: 0.74rem;">
-                                                            <i class="bi bi-person-check me-1"></i>Oleh: <strong class="text-dark">{{ t.penilai }}</strong>
-                                                        </span>
-                                                    {% endif %}
+                        <div class="tab-content hm5-scroll-area">
+                            <!-- TAB 1: RIWAYAT TAHSIN -->
+                            <div class="tab-pane fade show active" id="tab-histori-tahsin-{{ s.id }}">
+                                {% if s.tahsin %}
+                                <div class="hm5-feed">
+                                    {% set total_t = s.tahsin|length %}
+                                    {% for t in s.tahsin|reverse %}
+                                    {% set t_grade = (t.grade or 'A')|upper %}
+                                    {% set t_lulus = t_grade in ['A', 'B+', 'B'] %}
+                                    {% set materi_t = (t.halaman_akhir or '')|trim %}
+                                    {% if materi_t.endswith(' Hal.') %}{% set materi_t = materi_t[:-5] %}{% endif %}
+                                    <div class="hm5-entry">
+                                        <div class="hm5-entry-header">
+                                            <div class="hm5-entry-identity">
+                                                <div class="hm5-grade-squircle {{ 'is-sky' if t_lulus else 'is-fail' }}">
+                                                    {{ t_grade }}
                                                 </div>
-                                                <h6 class="fw-extrabold text-dark mb-0">{{ t.halaman_akhir }}</h6>
+                                                <div class="min-w-0 flex-grow-1">
+                                                    <h6 class="hm5-entry-title">{{ materi_t }}</h6>
+                                                    <div class="hm5-entry-meta">
+                                                        <span class="fw-bold text-dark">#{{ total_t - loop.index0 }}</span>
+                                                        <span>•</span>
+                                                        <span>{{ t.tanggal|date_dmy }}</span>
+                                                        {% if t.penilai %}
+                                                            <span>•</span>
+                                                            <span>{{ t.penilai }}</span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
                                             </div>
 
-                                            <div class="d-flex align-items-center gap-2">
-                                                <div class="text-end">
-                                                    <span class="badge {{ 'bg-success' if t_lulus else 'bg-danger' }} text-white rounded-pill px-3 py-1.5 fw-bold" style="font-size: 0.76rem;">
-                                                        Grade {{ t_grade }} • {{ 'LULUS' if t_lulus else 'PERLU BIMBINGAN' }}
-                                                    </span>
-                                                    <small class="text-muted d-block mt-0.5" style="font-size: 0.68rem;">{{ predikat_label_map.get(t_grade, '') }}</small>
-                                                </div>
+                                            <div class="hm5-entry-actions">
+                                                <span class="hm5-status-chip {{ 'pass' if t_lulus else 'fail' }}">
+                                                    {{ 'Lulus' if t_lulus else 'Bimbingan' }}
+                                                </span>
                                                 <a href="{{ url_for('guru.hapus_tahsin', rec_id=t.id) }}"
-                                                   class="btn btn-sm btn-outline-danger rounded-circle p-1 d-inline-flex align-items-center justify-content-center"
-                                                   style="width: 30px; height: 30px;"
-                                                   data-confirm="Apakah Anda yakin ingin menghapus catatan penilaian Tahsin <strong>{{ t.halaman_akhir }}</strong> ({{ t.tanggal|date_dmy }})?"
+                                                   class="hm5-trash-icon"
+                                                   data-confirm="Apakah Anda yakin ingin menghapus catatan penilaian Tahsin <strong>{{ materi_t }}</strong> ({{ t.tanggal|date_dmy }})?"
                                                    data-confirm-title="Hapus Catatan Tahsin?"
                                                    data-confirm-ok="Ya, Hapus"
                                                    data-confirm-type="danger"
                                                    title="Hapus Catatan">
-                                                    <i class="bi bi-trash"></i>
+                                                    <i class="bi bi-trash3"></i>
                                                 </a>
                                             </div>
                                         </div>
 
-                                        <div class="row g-2 mt-1 pt-2 border-top">
-                                            <div class="col-12 col-md-7">
-                                                <div class="p-2.5 rounded-3 bg-light border h-100">
-                                                    <small class="fw-bold text-primary d-block mb-0.5" style="font-size: 0.72rem;">
-                                                        <i class="bi bi-chat-quote-fill me-1"></i>Evaluasi Musyrif:
-                                                    </small>
-                                                    <span class="text-dark small">{{ t.catatan or 'Bacaan fasih, makharijul huruf dan tajwid baik.' }}</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 col-md-5">
-                                                <div class="p-2.5 rounded-3 border h-100 d-flex flex-column justify-content-center {{ 'bg-warning bg-opacity-10 border-warning border-opacity-25' if t.catatan_ortu else 'bg-white' }}">
-                                                    <div class="d-flex align-items-center justify-content-between mb-1">
-                                                        <small class="fw-bold text-muted" style="font-size: 0.7rem;">Respon Orang Tua:</small>
-                                                        {% if t.ceklist_ortu %}
-                                                            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-2 py-0.5" style="font-size: 0.68rem;">
-                                                                <i class="bi bi-check-circle-fill me-1"></i>Sudah Diparaf
-                                                            </span>
-                                                        {% else %}
-                                                            <span class="badge bg-light text-muted border rounded-pill px-2 py-0.5" style="font-size: 0.68rem;">
-                                                                <i class="bi bi-clock me-1"></i>Menunggu Paraf
-                                                            </span>
-                                                        {% endif %}
-                                                    </div>
-                                                    {% if t.catatan_ortu %}
-                                                        <div class="text-dark fst-italic" style="font-size: 0.76rem;">"{{ t.catatan_ortu }}"</div>
-                                                    {% else %}
-                                                        <small class="text-muted" style="font-size: 0.72rem;">Tidak ada catatan tambahan.</small>
-                                                    {% endif %}
-                                                </div>
-                                            </div>
+                                        <div class="hm5-eval-quote {{ 'sky-line' if t_lulus else 'fail-line' }}">
+                                            {{ t.catatan or 'Bacaan fasih, makharijul huruf dan tajwid baik.' }}
+                                        </div>
+
+                                        <div class="hm5-entry-foot">
+                                            <span class="text-muted">
+                                                {% if t.catatan_ortu %}
+                                                    <i class="bi bi-chat-left-quote text-warning me-1"></i>
+                                                    <span class="text-dark fst-italic">"{{ t.catatan_ortu }}"</span>
+                                                {% else %}
+                                                    Belum ada catatan orang tua
+                                                {% endif %}
+                                            </span>
+                                            {% if t.ceklist_ortu %}
+                                                <span class="hm5-ortu-badge verified">
+                                                    <i class="bi bi-check-circle-fill"></i> Sudah Diparaf
+                                                </span>
+                                            {% else %}
+                                                <span class="hm5-ortu-badge pending">
+                                                    <i class="bi bi-clock"></i> Menunggu Paraf
+                                                </span>
+                                            {% endif %}
                                         </div>
                                     </div>
+                                    {% endfor %}
                                 </div>
-                                {% endfor %}
-                            </div>
-                            {% else %}
-                            <div class="empty-state-modern">
-                                <div class="empty-state-icon mx-auto" style="background: #e0f2fe; color: #0284c7;">
-                                    <i class="bi bi-book-half"></i>
+                                {% else %}
+                                <div class="empty-state-modern">
+                                    <div class="empty-state-icon mx-auto" style="background: #e0f2fe; color: #0284c7;">
+                                        <i class="bi bi-book-half"></i>
+                                    </div>
+                                    <h6 class="fw-bold text-dark mb-1">Belum Ada Riwayat Penilaian Tahsin</h6>
+                                    <p class="text-muted small mb-3 mx-auto" style="max-width: 360px;">
+                                        Catatan bacaan jilid Ummi atau Al-Qur'an untuk <strong>{{ s.nama }}</strong> akan muncul di sini.
+                                    </p>
+                                    <button type="button" class="btn btn-tahsin-sky btn-sm rounded-pill px-4 py-2 fw-bold shadow-sm" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalTahsin{{ s.id }}">
+                                        <i class="bi bi-plus-circle me-1"></i> Input Penilaian Tahsin Pertama
+                                    </button>
                                 </div>
-                                <h6 class="fw-bold text-dark mb-1">Belum Ada Riwayat Penilaian Tahsin</h6>
-                                <p class="text-muted small mb-3 mx-auto" style="max-width: 380px;">
-                                    Catatan bacaan jilid Ummi atau Al-Qur'an untuk <strong>{{ s.nama }}</strong> akan muncul secara kronologis di sini.
-                                </p>
-                                <button type="button" class="btn btn-tahsin-sky btn-sm rounded-pill px-4 py-2 fw-bold shadow-sm" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalTahsin{{ s.id }}">
-                                    <i class="bi bi-plus-circle me-1"></i> Input Penilaian Tahsin Pertama
-                                </button>
+                                {% endif %}
                             </div>
-                            {% endif %}
-                        </div>
 
-                        <!-- TAB 2: RIWAYAT TAHFIDZ -->
-                        <div class="tab-pane fade" id="tab-histori-tahfidz-{{ s.id }}">
-                            {% if s.tahfidz %}
-                            <div class="timeline-wrapper">
-                                {% for f in s.tahfidz|reverse %}
-                                {% set f_grade = (f.grade or 'A')|upper %}
-                                {% set f_lulus = f_grade in ['A', 'B+', 'B'] %}
-                                <div class="timeline-entry">
-                                    <div class="timeline-node {{ '' if f_lulus else 'node-fail' }}"></div>
-                                    <div class="timeline-card">
-                                        <div class="d-flex flex-wrap align-items-start justify-content-between gap-2 mb-2">
-                                            <div>
-                                                <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
-                                                    <span class="badge bg-light text-dark border rounded-pill px-2.5 py-1 fw-semibold" style="font-size: 0.72rem;">
-                                                        <i class="bi bi-calendar3 text-success me-1"></i>{{ f.tanggal|date_dmy }}
-                                                    </span>
-                                                    {% if f.penilai %}
-                                                        <span class="text-muted small" style="font-size: 0.74rem;">
-                                                            <i class="bi bi-person-check me-1"></i>Oleh: <strong class="text-dark">{{ f.penilai }}</strong>
-                                                        </span>
-                                                    {% endif %}
+                            <!-- TAB 2: RIWAYAT TAHFIDZ -->
+                            <div class="tab-pane fade" id="tab-histori-tahfidz-{{ s.id }}">
+                                {% if s.tahfidz %}
+                                <div class="hm5-feed">
+                                    {% set total_f = s.tahfidz|length %}
+                                    {% for f in s.tahfidz|reverse %}
+                                    {% set f_grade = (f.grade or 'A')|upper %}
+                                    {% set f_lulus = f_grade in ['A', 'B+', 'B'] %}
+                                    {% set materi_f = (f.hafalan_terakhir or '')|trim %}
+                                    {% if materi_f.endswith(' Ayat') %}{% set materi_f = materi_f[:-5] %}{% endif %}
+                                    <div class="hm5-entry">
+                                        <div class="hm5-entry-header">
+                                            <div class="hm5-entry-identity">
+                                                <div class="hm5-grade-squircle {{ 'is-emerald' if f_lulus else 'is-fail' }}">
+                                                    {{ f_grade }}
                                                 </div>
-                                                <h6 class="fw-extrabold text-dark mb-0">{{ f.hafalan_terakhir }}</h6>
+                                                <div class="min-w-0 flex-grow-1">
+                                                    <h6 class="hm5-entry-title">{{ materi_f }}</h6>
+                                                    <div class="hm5-entry-meta">
+                                                        <span class="fw-bold text-dark">#{{ total_f - loop.index0 }}</span>
+                                                        <span>•</span>
+                                                        <span>{{ f.tanggal|date_dmy }}</span>
+                                                        {% if f.penilai %}
+                                                            <span>•</span>
+                                                            <span>{{ f.penilai }}</span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
                                             </div>
 
-                                            <div class="d-flex align-items-center gap-2">
-                                                <div class="text-end">
-                                                    <span class="badge {{ 'bg-success' if f_lulus else 'bg-danger' }} text-white rounded-pill px-3 py-1.5 fw-bold" style="font-size: 0.76rem;">
-                                                        Grade {{ f_grade }} • {{ 'LULUS' if f_lulus else 'PERLU BIMBINGAN' }}
-                                                    </span>
-                                                    <small class="text-muted d-block mt-0.5" style="font-size: 0.68rem;">{{ predikat_label_map.get(f_grade, '') }}</small>
-                                                </div>
+                                            <div class="hm5-entry-actions">
+                                                <span class="hm5-status-chip {{ 'pass' if f_lulus else 'fail' }}">
+                                                    {{ 'Lulus' if f_lulus else 'Bimbingan' }}
+                                                </span>
                                                 <a href="{{ url_for('guru.hapus_tahfidz', rec_id=f.id) }}"
-                                                   class="btn btn-sm btn-outline-danger rounded-circle p-1 d-inline-flex align-items-center justify-content-center"
-                                                   style="width: 30px; height: 30px;"
-                                                   data-confirm="Apakah Anda yakin ingin menghapus catatan setoran Tahfidz <strong>{{ f.hafalan_terakhir }}</strong> ({{ f.tanggal|date_dmy }})?"
+                                                   class="hm5-trash-icon"
+                                                   data-confirm="Apakah Anda yakin ingin menghapus catatan setoran Tahfidz <strong>{{ materi_f }}</strong> ({{ f.tanggal|date_dmy }})?"
                                                    data-confirm-title="Hapus Setoran Tahfidz?"
                                                    data-confirm-ok="Ya, Hapus"
                                                    data-confirm-type="danger"
                                                    title="Hapus Setoran">
-                                                    <i class="bi bi-trash"></i>
+                                                    <i class="bi bi-trash3"></i>
                                                 </a>
                                             </div>
                                         </div>
 
-                                        <div class="row g-2 mt-1 pt-2 border-top">
-                                            <div class="col-12 col-md-7">
-                                                <div class="p-2.5 rounded-3 bg-light border h-100">
-                                                    <small class="fw-bold text-success d-block mb-0.5" style="font-size: 0.72rem;">
-                                                        <i class="bi bi-chat-quote-fill me-1"></i>Evaluasi Musyrif:
-                                                    </small>
-                                                    <span class="text-dark small">{{ f.catatan or 'Hafalan lancar, mutqin, tajwid dan tartil terjaga.' }}</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 col-md-5">
-                                                <div class="p-2.5 rounded-3 border h-100 d-flex flex-column justify-content-center {{ 'bg-warning bg-opacity-10 border-warning border-opacity-25' if f.catatan_ortu else 'bg-white' }}">
-                                                    <div class="d-flex align-items-center justify-content-between mb-1">
-                                                        <small class="fw-bold text-muted" style="font-size: 0.7rem;">Respon Orang Tua:</small>
-                                                        {% if f.ceklist_ortu %}
-                                                            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-2 py-0.5" style="font-size: 0.68rem;">
-                                                                <i class="bi bi-check-circle-fill me-1"></i>Sudah Diparaf
-                                                            </span>
-                                                        {% else %}
-                                                            <span class="badge bg-light text-muted border rounded-pill px-2 py-0.5" style="font-size: 0.68rem;">
-                                                                <i class="bi bi-clock me-1"></i>Menunggu Paraf
-                                                            </span>
-                                                        {% endif %}
+                                        <div class="hm5-eval-quote {{ 'emerald-line' if f_lulus else 'fail-line' }}">
+                                            {{ f.catatan or 'Hafalan lancar, mutqin, tajwid dan tartil terjaga.' }}
+                                        </div>
+
+                                        <div class="hm5-entry-foot">
+                                            <span class="text-muted">
+                                                {% if f.catatan_ortu %}
+                                                    <i class="bi bi-chat-left-quote text-warning me-1"></i>
+                                                    <span class="text-dark fst-italic">"{{ f.catatan_ortu }}"</span>
+                                                {% else %}
+                                                    Belum ada catatan orang tua
+                                                {% endif %}
+                                            </span>
+                                            {% if f.ceklist_ortu %}
+                                                <span class="hm5-ortu-badge verified">
+                                                    <i class="bi bi-check-circle-fill"></i> Sudah Diparaf
+                                                </span>
+                                            {% else %}
+                                                <span class="hm5-ortu-badge pending">
+                                                    <i class="bi bi-clock"></i> Menunggu Paraf
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                <div class="empty-state-modern">
+                                    <div class="empty-state-icon mx-auto" style="background: #dcfce7; color: #059669;">
+                                        <i class="bi bi-journal-bookmark-fill"></i>
+                                    </div>
+                                    <h6 class="fw-bold text-dark mb-1">Belum Ada Riwayat Setoran Tahfidz</h6>
+                                    <p class="text-muted small mb-3 mx-auto" style="max-width: 360px;">
+                                        Progres hafalan surah dan ayat Al-Qur'an untuk <strong>{{ s.nama }}</strong> akan tercatat rapi di sini.
+                                    </p>
+                                    <button type="button" class="btn btn-tahfidz-emerald btn-sm rounded-pill px-4 py-2 fw-bold shadow-sm" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalTahfidz{{ s.id }}">
+                                        <i class="bi bi-plus-circle me-1"></i> Input Setoran Tahfidz Pertama
+                                    </button>
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- TAB 3: KUMPULAN CATATAN & PARAF ORANG TUA -->
+                            <div class="tab-pane fade" id="tab-histori-ortu-{{ s.id }}">
+                                {% if ns_ortu.count > 0 %}
+                                <div class="hm5-feed">
+                                    {% for t in s.tahsin|reverse %}
+                                        {% if t.catatan_ortu or t.ceklist_ortu %}
+                                        {% set materi_t = (t.halaman_akhir or '')|trim %}
+                                        {% if materi_t.endswith(' Hal.') %}{% set materi_t = materi_t[:-5] %}{% endif %}
+                                        <div class="hm5-entry">
+                                            <div class="hm5-entry-header">
+                                                <div class="hm5-entry-identity">
+                                                    <div class="hm5-grade-squircle is-sky">
+                                                        <i class="bi bi-book-half"></i>
                                                     </div>
-                                                    {% if f.catatan_ortu %}
-                                                        <div class="text-dark fst-italic" style="font-size: 0.76rem;">"{{ f.catatan_ortu }}"</div>
-                                                    {% else %}
-                                                        <small class="text-muted" style="font-size: 0.72rem;">Tidak ada catatan tambahan.</small>
-                                                    {% endif %}
+                                                    <div class="min-w-0 flex-grow-1">
+                                                        <h6 class="hm5-entry-title">{{ materi_t }}</h6>
+                                                        <div class="hm5-entry-meta">
+                                                            <span class="fw-bold text-primary">Tahsin</span>
+                                                            <span>•</span>
+                                                            <span>{{ t.tanggal|date_dmy }}</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
+                                                <span class="hm5-ortu-badge {{ 'verified' if t.ceklist_ortu else 'pending' }}">
+                                                    <i class="bi bi-patch-check-fill"></i> {{ 'Terverifikasi' if t.ceklist_ortu else 'Belum Paraf' }}
+                                                </span>
+                                            </div>
+                                            <div class="hm5-eval-quote sky-line">
+                                                {{ t.catatan_ortu or 'Paraf muroja\'ah rumah terkonfirmasi tanpa catatan tambahan.' }}
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            </div>
-                            {% else %}
-                            <div class="empty-state-modern">
-                                <div class="empty-state-icon mx-auto" style="background: #dcfce7; color: #059669;">
-                                    <i class="bi bi-journal-bookmark-fill"></i>
-                                </div>
-                                <h6 class="fw-bold text-dark mb-1">Belum Ada Riwayat Setoran Tahfidz</h6>
-                                <p class="text-muted small mb-3 mx-auto" style="max-width: 380px;">
-                                    Progres hafalan surah dan ayat Al-Qur'an untuk <strong>{{ s.nama }}</strong> akan tercatat rapi di linimasa ini.
-                                </p>
-                                <button type="button" class="btn btn-tahfidz-emerald btn-sm rounded-pill px-4 py-2 fw-bold shadow-sm" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalTahfidz{{ s.id }}">
-                                    <i class="bi bi-plus-circle me-1"></i> Input Setoran Tahfidz Pertama
-                                </button>
-                            </div>
-                            {% endif %}
-                        </div>
+                                        {% endif %}
+                                    {% endfor %}
 
-                        <!-- TAB 3: KUMPULAN CATATAN & PARAF ORANG TUA -->
-                        <div class="tab-pane fade" id="tab-histori-ortu-{{ s.id }}">
-                            {% if s.has_catatan_ortu or s.has_paraf_ortu %}
-                            <div class="row g-3" style="max-height: 430px; overflow-y: auto;">
-                                {% for t in s.tahsin|reverse %}
-                                    {% if t.catatan_ortu or t.ceklist_ortu %}
-                                    <div class="col-12 col-md-6">
-                                        <div class="timeline-card h-100">
-                                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                                <span class="badge rounded-pill px-2.5 py-1 fw-bold" style="background: #e0f2fe; color: #0369a1; font-size: 0.72rem;">
-                                                    <i class="bi bi-book me-1"></i>Tahsin
+                                    {% for f in s.tahfidz|reverse %}
+                                        {% if f.catatan_ortu or f.ceklist_ortu %}
+                                        {% set materi_f = (f.hafalan_terakhir or '')|trim %}
+                                        {% if materi_f.endswith(' Ayat') %}{% set materi_f = materi_f[:-5] %}{% endif %}
+                                        <div class="hm5-entry">
+                                            <div class="hm5-entry-header">
+                                                <div class="hm5-entry-identity">
+                                                    <div class="hm5-grade-squircle is-emerald">
+                                                        <i class="bi bi-journal-bookmark-fill"></i>
+                                                    </div>
+                                                    <div class="min-w-0 flex-grow-1">
+                                                        <h6 class="hm5-entry-title">{{ materi_f }}</h6>
+                                                        <div class="hm5-entry-meta">
+                                                            <span class="fw-bold text-success">Tahfidz</span>
+                                                            <span>•</span>
+                                                            <span>{{ f.tanggal|date_dmy }}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <span class="hm5-ortu-badge {{ 'verified' if f.ceklist_ortu else 'pending' }}">
+                                                    <i class="bi bi-patch-check-fill"></i> {{ 'Terverifikasi' if f.ceklist_ortu else 'Belum Paraf' }}
                                                 </span>
-                                                <small class="text-muted fw-semibold"><i class="bi bi-calendar3 me-1"></i>{{ t.tanggal|date_dmy }}</small>
                                             </div>
-                                            <div class="fw-bold text-dark small mb-2">{{ t.halaman_akhir }}</div>
-                                            <div class="p-2.5 bg-light rounded-3 border small mb-2">
-                                                <strong class="text-dark d-block mb-0.5" style="font-size: 0.73rem;">
-                                                    <i class="bi bi-chat-left-quote-fill me-1 text-primary"></i>Catatan Wali Murid:
-                                                </strong>
-                                                {{ t.catatan_ortu or '(Paraf muroja\'ah rumah terkonfirmasi tanpa catatan tambahan)' }}
-                                            </div>
-                                            <div class="text-end">
-                                                <span class="badge {{ 'bg-success' if t.ceklist_ortu else 'bg-secondary' }} rounded-pill px-2.5 py-1" style="font-size: 0.7rem;">
-                                                    <i class="bi bi-patch-check-fill me-1"></i>{{ 'Paraf Terverifikasi' if t.ceklist_ortu else 'Belum Paraf' }}
-                                                </span>
+                                            <div class="hm5-eval-quote emerald-line">
+                                                {{ f.catatan_ortu or 'Paraf muroja\'ah rumah terkonfirmasi tanpa catatan tambahan.' }}
                                             </div>
                                         </div>
-                                    </div>
-                                    {% endif %}
-                                {% endfor %}
-
-                                {% for f in s.tahfidz|reverse %}
-                                    {% if f.catatan_ortu or f.ceklist_ortu %}
-                                    <div class="col-12 col-md-6">
-                                        <div class="timeline-card h-100">
-                                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-2.5 py-1 fw-bold" style="font-size: 0.72rem;">
-                                                    <i class="bi bi-journal-bookmark-fill me-1"></i>Tahfidz
-                                                </span>
-                                                <small class="text-muted fw-semibold"><i class="bi bi-calendar3 me-1"></i>{{ f.tanggal|date_dmy }}</small>
-                                            </div>
-                                            <div class="fw-bold text-dark small mb-2">{{ f.hafalan_terakhir }}</div>
-                                            <div class="p-2.5 bg-light rounded-3 border small mb-2">
-                                                <strong class="text-dark d-block mb-0.5" style="font-size: 0.73rem;">
-                                                    <i class="bi bi-chat-left-quote-fill me-1 text-success"></i>Catatan Wali Murid:
-                                                </strong>
-                                                {{ f.catatan_ortu or '(Paraf muroja\'ah rumah terkonfirmasi tanpa catatan tambahan)' }}
-                                            </div>
-                                            <div class="text-end">
-                                                <span class="badge {{ 'bg-success' if f.ceklist_ortu else 'bg-secondary' }} rounded-pill px-2.5 py-1" style="font-size: 0.7rem;">
-                                                    <i class="bi bi-patch-check-fill me-1"></i>{{ 'Paraf Terverifikasi' if f.ceklist_ortu else 'Belum Paraf' }}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                            {% else %}
-                            <div class="empty-state-modern">
-                                <div class="empty-state-icon mx-auto" style="background: #fef3c7; color: #d97706;">
-                                    <i class="bi bi-chat-square-heart"></i>
+                                        {% endif %}
+                                    {% endfor %}
                                 </div>
-                                <h6 class="fw-bold text-dark mb-1">Belum Ada Catatan atau Paraf Orang Tua</h6>
-                                <p class="text-muted small mb-0 mx-auto" style="max-width: 400px;">
-                                    Setelah orang tua memeriksa setoran dan memberikan paraf muroja'ah melalui Portal Wali Murid, responnya akan tampil di sini.
-                                </p>
+                                {% else %}
+                                <div class="empty-state-modern">
+                                    <div class="empty-state-icon mx-auto" style="background: #fef3c7; color: #d97706;">
+                                        <i class="bi bi-chat-square-heart"></i>
+                                    </div>
+                                    <h6 class="fw-bold text-dark mb-1">Belum Ada Catatan atau Paraf Orang Tua</h6>
+                                    <p class="text-muted small mb-0 mx-auto" style="max-width: 380px;">
+                                        Setelah orang tua memeriksa setoran dan memberikan paraf muroja'ah melalui Portal Wali Murid, responnya akan tampil di sini.
+                                    </p>
+                                </div>
+                                {% endif %}
                             </div>
-                            {% endif %}
                         </div>
                     </div>
                 </div>
 
-                <div class="modal-footer border-0 px-4 py-3 d-flex justify-content-between align-items-center" style="background: #f8fafc;">
-                    <a href="/cetak_hafalan/{{ s.id }}" target="_blank" class="btn btn-outline-success btn-sm rounded-pill px-3 fw-bold d-md-none">
-                        <i class="bi bi-printer-fill me-1"></i> Cetak Rapor
-                    </a>
-                    <button type="button" class="btn btn-dark rounded-pill px-4 fw-bold shadow-sm ms-auto" data-bs-dismiss="modal">Tutup</button>
+                <!-- MOBILE BOTTOM ACTION DOCK (< 992px) -->
+                <div class="hm5-mobile-dock">
+                    <button type="button" class="btn btn-tahsin-sky fw-bold shadow-sm" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalTahsin{{ s.id }}">
+                        <i class="bi bi-plus-lg me-1"></i> Input Tahsin
+                    </button>
+                    <button type="button" class="btn btn-tahfidz-emerald fw-bold shadow-sm" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalTahfidz{{ s.id }}">
+                        <i class="bi bi-plus-lg me-1"></i> Input Tahfidz
+                    </button>
                 </div>
             </div>
         </div>
@@ -801,7 +1457,7 @@
 <!-- MODAL TAMBAH MURID MANUAL -->
 <div class="modal fade" id="modalTambahSiswa" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg overflow-hidden">
+        <div class="modal-content border-0 shadow-lg overflow-hidden" style="border-radius: 20px;">
             <form action="/tambah_siswa" method="POST">
                 <div class="modal-header modal-header-tahfidz text-white border-0 py-3 px-4">
                     <div class="d-flex align-items-center gap-3">
@@ -862,7 +1518,7 @@
 <!-- MODAL IMPORT EXCEL MURID (.XLSX) -->
 <div class="modal fade" id="modalImportExcel" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg overflow-hidden">
+        <div class="modal-content border-0 shadow-lg overflow-hidden" style="border-radius: 20px;">
             <form action="/import_excel" method="POST" enctype="multipart/form-data">
                 <div class="modal-header modal-header-tahfidz text-white border-0 py-3 px-4">
                     <div class="d-flex align-items-center gap-3">
@@ -877,7 +1533,7 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-light rounded-4 border">
+                    <div class="d-flex justify-content-between align-items-center gap-3 mb-3 p-3 bg-light rounded-4 border">
                         <div>
                             <h6 class="fw-bold mb-0 text-dark small">Template Resmi Excel Murid (.xlsx)</h6>
                             <small class="text-muted" style="font-size: 0.72rem;">Header baris ke-6: No, NISN, Nama Murid, Kelas, Jenis Kelamin, Status</small>
@@ -895,7 +1551,7 @@
                 <div class="modal-footer border-0 px-4 pb-4 pt-0 gap-2">
                     <button type="button" class="btn btn-light border rounded-pill fw-bold px-4" data-bs-dismiss="modal">Batal</button>
                     <button type="submit" class="btn btn-tahfidz-emerald rounded-pill fw-bold px-4 shadow-sm">
-                        <i class="bi bi-cloud-arrow-up-fill me-1"></i> Upload & Proses
+                        <i class="bi bi-cloud-arrow-up-fill me-1"></i> Upload &amp; Proses
                     </button>
                 </div>
             </form>
@@ -909,11 +1565,11 @@
         <div class="modal-content border-0 shadow-lg" style="border-radius: 22px; overflow: hidden;">
             <form action="{{ url_for('guru.hapus_semua_siswa') }}" method="POST" onsubmit="return syncKonfirmasiHapusGuru(this)">
                 <div class="modal-header bg-danger text-white border-0 py-3 px-4">
-                    <div class="d-flex align-items-center gap-2.5">
+                    <div class="d-flex align-items-center gap-3">
                         <i class="bi bi-exclamation-triangle-fill fs-4"></i>
                         <div>
                             <h5 class="modal-title fw-bold mb-0 fs-6">Hapus Massal Data Murid</h5>
-                            <small class="text-white-50" style="font-size: 0.72rem;">Menghapus murid, akun wali, & riwayat Tahsin/Tahfidz</small>
+                            <small class="text-white-50" style="font-size: 0.72rem;">Menghapus murid, akun wali, &amp; riwayat Tahsin/Tahfidz</small>
                         </div>
                     </div>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
@@ -921,7 +1577,7 @@
 
                 <div class="modal-body p-4">
                     <div class="alert alert-warning border-0 rounded-3 small mb-3 d-flex align-items-start gap-2">
-                        <i class="bi bi-shield-exclamation fs-5 text-warning mt-0.5"></i>
+                        <i class="bi bi-shield-exclamation fs-5 text-warning"></i>
                         <div>
                             Tindakan ini permanen dan tidak dapat dibatalkan. Disarankan mengunduh <strong>Rekap Excel (.xlsx)</strong> terlebih dahulu sebagai cadangan.
                         </div>
@@ -944,7 +1600,7 @@
                     <div class="mb-1">
                         <div class="d-flex align-items-center justify-content-between mb-1">
                             <label for="inputKonfirmasiHapusGuru" class="form-label fw-bold small text-dark mb-0">Ketik kata <strong>HAPUS</strong> untuk konfirmasi</label>
-                            <span id="badgeKunciHapusGuru" class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 rounded-pill px-2.5 py-1" style="font-size: 0.7rem;">
+                            <span id="badgeKunciHapusGuru" class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 rounded-pill px-3 py-1" style="font-size: 0.7rem;">
                                 <i class="bi bi-lock-fill me-1"></i> Terkunci
                             </span>
                         </div>
@@ -952,7 +1608,7 @@
                     </div>
                 </div>
 
-                <div class="modal-footer border-0 px-4 pb-4 pt-0">
+                <div class="modal-footer border-0 px-4 pb-4 pt-0 gap-2">
                     <button type="button" class="btn btn-light border rounded-pill fw-bold px-4" data-bs-dismiss="modal">Batal</button>
                     <button type="submit" id="btnEksekusiHapusGuru" class="btn btn-danger rounded-pill fw-bold px-4 shadow-sm" disabled>
                         <i class="bi bi-trash3-fill me-1"></i> Hapus Semua Murid
@@ -962,3 +1618,14 @@
         </div>
     </div>
 </div>
+
+<script>
+// Kunci sentuhan scroll di luar area daftar riwayat pada perangkat layar sentuh
+document.addEventListener('touchmove', function (e) {
+    const activeModal = e.target.closest('.modal-histori-v2.show');
+    if (!activeModal) return;
+    if (!e.target.closest('.hm5-scroll-area')) {
+        e.preventDefault();
+    }
+}, { passive: false });
+</script>
