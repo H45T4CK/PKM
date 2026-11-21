@@ -198,7 +198,9 @@
     position: absolute;
     top: calc(100% + 6px);
     left: 0;
-    right: 0;
+    min-width: min(265px, calc(100vw - 48px));
+    width: max-content;
+    max-width: min(360px, calc(100vw - 48px));
     max-height: 215px;
     overflow-y: auto;
     background: #ffffff;
@@ -207,6 +209,24 @@
     z-index: 1090;
     display: none;
     overscroll-behavior: contain;
+}
+
+/* Kolom kanan (114 Surah & Halaman Ummi) rata kanan agar tidak keluar tepi modal */
+@media (min-width: 576px) {
+    .smart-combo-wrap[data-combo-type="tahfidz"] .smart-combo-menu,
+    .smart-combo-wrap[data-combo-type="tahsin"] .smart-combo-menu {
+        left: auto;
+        right: 0;
+        min-width: 315px;
+    }
+}
+
+/* Combobox 1 baris penuh (Ayat & Catatan) mengikuti lebar input */
+.smart-combo-wrap[data-combo-type="ayat"] .smart-combo-menu,
+.smart-combo-wrap[data-combo-type="catatan-tahsin"] .smart-combo-menu,
+.smart-combo-wrap[data-combo-type="catatan-tahfidz"] .smart-combo-menu {
+    width: 100%;
+    max-width: 100%;
 }
 .smart-combo-menu.drop-up {
     top: auto;

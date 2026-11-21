@@ -62,8 +62,8 @@ class Siswa(db.Model):
         grades = cls._extract_grades(records)
         if not grades:
             return '-'
-        # Aturan kelulusan: jika mendapat nilai C sebanyak 5 kali atau lebih, otomatis C (Tidak Lulus)
-        if grades.count('C') >= 5:
+        # Aturan kelulusan: jika mendapat nilai C sebanyak 4 kali atau lebih, otomatis C (Tidak Lulus)
+        if grades.count('C') >= 4:
             return 'C'
         weights = [GRADE_WEIGHTS.get(g, 1.0) for g in grades]
         avg = sum(weights) / len(weights)

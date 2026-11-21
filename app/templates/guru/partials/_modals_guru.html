@@ -1,5 +1,5 @@
 {% for s in siswa_list %}
-    <!-- 1. MODAL INPUT PREDIKAT TAHSIN -->
+    <!-- 1. MODAL INPUT PREDIKAT TAHSIN (JILID & HALAMAN -> GRADE) -->
     <div class="modal fade eval-modal" id="modalTahsin{{ s.id }}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg">
@@ -38,6 +38,45 @@
                             <input type="date" name="tanggal" class="form-control rounded-3 bg-light border" value="{{ now_date }}" required>
                         </div>
 
+                        <!-- STEP 1 TAHSIN: Jilid Ummi & Halaman (1–40) -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark mb-1" style="font-size: 0.82rem;">
+                                <i class="bi bi-bookmark text-primary me-1"></i> Jilid Ummi &amp; Halaman (1–40)
+                            </label>
+                            <input type="hidden" name="halaman_akhir" class="materi-hidden-value">
+                            <div class="row g-2">
+                                <div class="col-12 col-sm-5">
+                                    <div class="smart-combo-wrap combo-sky" data-combo-type="jilid">
+                                        <div class="smart-combo-box">
+                                            <input type="text" class="smart-combo-input fw-semibold materi-prefix-input" placeholder="Pilih / ketik jilid..." autocomplete="off" required>
+                                            <button type="button" class="smart-combo-clear" tabindex="-1" title="Hapus pilihan" aria-label="Hapus">
+                                                <i class="bi bi-x-lg"></i>
+                                            </button>
+                                            <button type="button" class="smart-combo-toggle" tabindex="-1" aria-label="Pilih jilid">
+                                                <i class="bi bi-chevron-down"></i>
+                                            </button>
+                                        </div>
+                                        <div class="smart-combo-menu shadow-lg"></div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-7">
+                                    <div class="smart-combo-wrap combo-sky" data-combo-type="tahsin">
+                                        <div class="smart-combo-box">
+                                            <input type="text" class="smart-combo-input materi-detail-input" placeholder="Pilih / ketik hal. 1–40..." autocomplete="off" required>
+                                            <button type="button" class="smart-combo-clear" tabindex="-1" title="Hapus pilihan" aria-label="Hapus">
+                                                <i class="bi bi-x-lg"></i>
+                                            </button>
+                                            <button type="button" class="smart-combo-toggle" tabindex="-1" aria-label="Pilih halaman">
+                                                <i class="bi bi-chevron-down"></i>
+                                            </button>
+                                        </div>
+                                        <div class="smart-combo-menu shadow-lg"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- STEP 2 TAHSIN: Pilih Predikat (Grade) -->
                         <div class="mb-3">
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <label class="form-label fw-bold text-dark mb-0" style="font-size: 0.82rem;">
@@ -91,49 +130,11 @@
                                 </div>
                             </div>
                             <small class="text-muted d-block mt-2" style="font-size: 0.73rem;">
-                                <i class="bi bi-info-circle me-1"></i> Batas maksimal kesalahan bacaan 4× untuk naik halaman (≥ 5× kesalahan mendapat Grade C / mengulang).
+                                <i class="bi bi-info-circle me-1"></i> Standar ketuntasan minimal SDIT: <strong>Grade B</strong> (jika mendapat Grade C sebanyak <strong>4×</strong> otomatis Tidak Lulus).
                             </small>
                         </div>
 
-                        <!-- Dual Smart Combobox: Jilid Ummi & Halaman (1–40) -->
-                        <div class="mb-3">
-                            <label class="form-label fw-bold text-dark mb-1" style="font-size: 0.82rem;">
-                                <i class="bi bi-bookmark text-primary me-1"></i> Jilid Ummi &amp; Halaman (1–40)
-                            </label>
-                            <input type="hidden" name="halaman_akhir" class="materi-hidden-value">
-                            <div class="row g-2">
-                                <div class="col-12 col-sm-5">
-                                    <div class="smart-combo-wrap combo-sky" data-combo-type="jilid">
-                                        <div class="smart-combo-box">
-                                            <input type="text" class="smart-combo-input fw-semibold materi-prefix-input" placeholder="Pilih / ketik jilid..." autocomplete="off" required>
-                                            <button type="button" class="smart-combo-clear" tabindex="-1" title="Hapus pilihan" aria-label="Hapus">
-                                                <i class="bi bi-x-lg"></i>
-                                            </button>
-                                            <button type="button" class="smart-combo-toggle" tabindex="-1" aria-label="Pilih jilid">
-                                                <i class="bi bi-chevron-down"></i>
-                                            </button>
-                                        </div>
-                                        <div class="smart-combo-menu shadow-lg"></div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-7">
-                                    <div class="smart-combo-wrap combo-sky" data-combo-type="tahsin">
-                                        <div class="smart-combo-box">
-                                            <input type="text" class="smart-combo-input materi-detail-input" placeholder="Pilih / ketik hal. 1–40..." autocomplete="off" required>
-                                            <button type="button" class="smart-combo-clear" tabindex="-1" title="Hapus pilihan" aria-label="Hapus">
-                                                <i class="bi bi-x-lg"></i>
-                                            </button>
-                                            <button type="button" class="smart-combo-toggle" tabindex="-1" aria-label="Pilih halaman">
-                                                <i class="bi bi-chevron-down"></i>
-                                            </button>
-                                        </div>
-                                        <div class="smart-combo-menu shadow-lg"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Smart Combobox Catatan Tajwid -->
+                        <!-- STEP 3 TAHSIN: Catatan Tajwid -->
                         <div class="mb-1">
                             <label class="form-label fw-bold text-dark mb-1" style="font-size: 0.82rem;">
                                 <i class="bi bi-chat-square-text text-primary me-1"></i> Catatan Tajwid &amp; Makhorijul Huruf
@@ -164,7 +165,7 @@
         </div>
     </div>
 
-    <!-- 2. MODAL INPUT SETORAN TAHFIDZ (TRIPLE COMBOBOX: JUZ, 114 SURAH & AYAT) -->
+    <!-- 2. MODAL INPUT SETORAN TAHFIDZ (JUZ, SURAH & AYAT -> GRADE) -->
     <div class="modal fade eval-modal" id="modalTahfidz{{ s.id }}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg">
@@ -203,6 +204,57 @@
                             <input type="date" name="tanggal" class="form-control rounded-3 bg-light border" value="{{ now_date }}" required>
                         </div>
 
+                        <!-- STEP 1 TAHFIDZ: Juz (1–30), 114 Surah & Ayat Terakhir -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark mb-1" style="font-size: 0.82rem;">
+                                <i class="bi bi-bookmark text-success me-1"></i> Juz, Surah &amp; Ayat Terakhir (114 Surah)
+                            </label>
+                            <input type="hidden" name="hafalan_terakhir" class="materi-hidden-value">
+                            <div class="row g-2 mb-2">
+                                <div class="col-12 col-sm-5">
+                                    <div class="smart-combo-wrap combo-emerald" data-combo-type="juz">
+                                        <div class="smart-combo-box">
+                                            <input type="text" class="smart-combo-input fw-semibold materi-prefix-input" placeholder="Pilih / ketik Juz..." autocomplete="off">
+                                            <button type="button" class="smart-combo-clear" tabindex="-1" title="Hapus pilihan" aria-label="Hapus">
+                                                <i class="bi bi-x-lg"></i>
+                                            </button>
+                                            <button type="button" class="smart-combo-toggle" tabindex="-1" aria-label="Pilih juz">
+                                                <i class="bi bi-chevron-down"></i>
+                                            </button>
+                                        </div>
+                                        <div class="smart-combo-menu shadow-lg"></div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-7">
+                                    <div class="smart-combo-wrap combo-emerald" data-combo-type="tahfidz">
+                                        <div class="smart-combo-box">
+                                            <input type="text" class="smart-combo-input materi-detail-input" placeholder="Pilih / ketik 114 surah..." autocomplete="off" required>
+                                            <button type="button" class="smart-combo-clear" tabindex="-1" title="Hapus pilihan" aria-label="Hapus">
+                                                <i class="bi bi-x-lg"></i>
+                                            </button>
+                                            <button type="button" class="smart-combo-toggle" tabindex="-1" aria-label="Pilih surah">
+                                                <i class="bi bi-chevron-down"></i>
+                                            </button>
+                                        </div>
+                                        <div class="smart-combo-menu shadow-lg"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="smart-combo-wrap combo-emerald" data-combo-type="ayat">
+                                <div class="smart-combo-box">
+                                    <input type="text" class="smart-combo-input materi-ayat-input" placeholder="Pilih / ketik ayat (misal 1-10 / Khatam)..." autocomplete="off">
+                                    <button type="button" class="smart-combo-clear" tabindex="-1" title="Hapus ayat" aria-label="Hapus">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                    <button type="button" class="smart-combo-toggle" tabindex="-1" aria-label="Pilih ayat">
+                                        <i class="bi bi-chevron-down"></i>
+                                    </button>
+                                </div>
+                                <div class="smart-combo-menu shadow-lg"></div>
+                            </div>
+                        </div>
+
+                        <!-- STEP 2 TAHFIDZ: Pilih Predikat (Grade) -->
                         <div class="mb-3">
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <label class="form-label fw-bold text-dark mb-0" style="font-size: 0.82rem;">
@@ -256,61 +308,11 @@
                                 </div>
                             </div>
                             <small class="text-muted d-block mt-2" style="font-size: 0.73rem;">
-                                <i class="bi bi-info-circle me-1"></i> Standar ketuntasan minimal SDIT: <strong>Grade B</strong> (jika mendapat Grade C sebanyak 5x otomatis Tidak Lulus)
+                                <i class="bi bi-info-circle me-1"></i> Standar ketuntasan minimal SDIT: <strong>Grade B</strong> (jika mendapat Grade C sebanyak <strong>4×</strong> otomatis Tidak Lulus).
                             </small>
                         </div>
 
-                        <!-- Triple Smart Combobox: Juz (1–30), 114 Surah & Ayat Otomatis -->
-                        <div class="mb-3">
-                            <label class="form-label fw-bold text-dark mb-1" style="font-size: 0.82rem;">
-                                <i class="bi bi-bookmark text-success me-1"></i> Juz, Surah &amp; Ayat Terakhir (114 Surah)
-                            </label>
-                            <input type="hidden" name="hafalan_terakhir" class="materi-hidden-value">
-                            <div class="row g-2 mb-2">
-                                <div class="col-12 col-sm-4">
-                                    <div class="smart-combo-wrap combo-emerald" data-combo-type="juz">
-                                        <div class="smart-combo-box">
-                                            <input type="text" class="smart-combo-input fw-semibold materi-prefix-input" placeholder="Pilih / ketik Juz (1–30)..." autocomplete="off">
-                                            <button type="button" class="smart-combo-clear" tabindex="-1" title="Hapus pilihan" aria-label="Hapus">
-                                                <i class="bi bi-x-lg"></i>
-                                            </button>
-                                            <button type="button" class="smart-combo-toggle" tabindex="-1" aria-label="Pilih juz">
-                                                <i class="bi bi-chevron-down"></i>
-                                            </button>
-                                        </div>
-                                        <div class="smart-combo-menu shadow-lg"></div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-8">
-                                    <div class="smart-combo-wrap combo-emerald" data-combo-type="tahfidz">
-                                        <div class="smart-combo-box">
-                                            <input type="text" class="smart-combo-input materi-detail-input" placeholder="Pilih / ketik 114 surah..." autocomplete="off" required>
-                                            <button type="button" class="smart-combo-clear" tabindex="-1" title="Hapus pilihan" aria-label="Hapus">
-                                                <i class="bi bi-x-lg"></i>
-                                            </button>
-                                            <button type="button" class="smart-combo-toggle" tabindex="-1" aria-label="Pilih surah">
-                                                <i class="bi bi-chevron-down"></i>
-                                            </button>
-                                        </div>
-                                        <div class="smart-combo-menu shadow-lg"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="smart-combo-wrap combo-emerald" data-combo-type="ayat">
-                                <div class="smart-combo-box">
-                                    <input type="text" class="smart-combo-input materi-ayat-input" placeholder="Pilih / ketik ayat (misal 1-10 / Khatam)..." autocomplete="off">
-                                    <button type="button" class="smart-combo-clear" tabindex="-1" title="Hapus ayat" aria-label="Hapus">
-                                        <i class="bi bi-x-lg"></i>
-                                    </button>
-                                    <button type="button" class="smart-combo-toggle" tabindex="-1" aria-label="Pilih ayat">
-                                        <i class="bi bi-chevron-down"></i>
-                                    </button>
-                                </div>
-                                <div class="smart-combo-menu shadow-lg"></div>
-                            </div>
-                        </div>
-
-                        <!-- Smart Combobox Catatan Kelancaran -->
+                        <!-- STEP 3 TAHFIDZ: Catatan Kelancaran -->
                         <div class="mb-1">
                             <label class="form-label fw-bold text-dark mb-1" style="font-size: 0.82rem;">
                                 <i class="bi bi-chat-square-text text-success me-1"></i> Catatan Kelancaran &amp; Mutqin

@@ -377,9 +377,12 @@ def toggle_status_siswa(id_siswa):
 @role_required('guru')
 def catat_tahsin(id_siswa):
     s = Siswa.query.get_or_404(id_siswa)
-    juz_pilihan = request.form.get('juz', '')
-    surat_ayat = request.form.get('halaman_akhir', '-').strip()
-    gabungan_halaman = f"{juz_pilihan} - {surat_ayat}" if juz_pilihan else surat_ayat
+    juz_pilihan = request.form.get('juz', '').strip()
+    surat_ayat = request.form.get('halaman_akhir', '-').strip() or '-'
+    if juz_pilihan and not surat_ayat.lower().startswith(juz_pilihan.lower()):
+        gabungan_halaman = f"{juz_pilihan} - {surat_ayat}"
+    else:
+        gabungan_halaman = surat_ayat
 
     grade_raw = request.form.get('grade', 'A').strip()
     grade = 'B+' if grade_raw.upper() == 'B+' else grade_raw.upper()
@@ -398,7 +401,7 @@ def catat_tahsin(id_siswa):
         siswa_id=s.id,
         tanggal=tgl_simpan,
         halaman_akhir=gabungan_halaman,
-        catatan=request.form.get('catatan', ''),
+        catatan=request.form.get('catatan', '').strip(),
         grade=grade,
         nilai=default_nilai,
         status_lulus=status_lulus,
@@ -421,9 +424,12 @@ def catat_tahsin(id_siswa):
 @role_required('guru')
 def catat_tahfidz(id_siswa):
     s = Siswa.query.get_or_404(id_siswa)
-    juz_pilihan = request.form.get('juz', '')
-    surat_ayat = request.form.get('hafalan_terakhir', '-').strip()
-    gabungan_hafalan = f"{juz_pilihan} - {surat_ayat}" if juz_pilihan else surat_ayat
+    juz_pilihan = request.form.get('juz', '').strip()
+    surat_ayat = request.form.get('hafalan_terakhir', '-').strip() or '-'
+    if juz_pilihan and not surat_ayat.lower().startswith(juz_pilihan.lower()):
+        gabungan_hafalan = f"{juz_pilihan} - {surat_ayat}"
+    else:
+        gabungan_hafalan = surat_ayat
 
     grade_raw = request.form.get('grade', 'A').strip()
     grade = 'B+' if grade_raw.upper() == 'B+' else grade_raw.upper()
@@ -442,7 +448,7 @@ def catat_tahfidz(id_siswa):
         siswa_id=s.id,
         tanggal=tgl_simpan,
         hafalan_terakhir=gabungan_hafalan,
-        catatan=request.form.get('catatan', ''),
+        catatan=request.form.get('catatan', '').strip(),
         grade=grade,
         nilai=default_nilai,
         status_lulus=status_lulus,

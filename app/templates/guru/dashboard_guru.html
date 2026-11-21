@@ -94,7 +94,7 @@
                     </div>
                     <h3 class="fw-bold text-dark mb-1">Ahlan wa Sahlan, {{ session.get('user', 'Ustadz / Ustadzah') }}! 🌟</h3>
                     <p class="text-muted mb-0 small">
-                        Pencatatan setoran Tahsin & Tahfidz menggunakan sistem predikat huruf (<strong class="text-success">A, B+, B: Lulus</strong> • <strong class="text-danger">C / 5x Grade C: Perlu Bimbingan</strong>) untuk kelas binaan <strong class="text-dark">{{ session.get('kelas', '1A') }}</strong>.
+                        Pencatatan setoran Tahsin & Tahfidz menggunakan sistem predikat huruf (<strong class="text-success">A, B+, B: Lulus</strong> • <strong class="text-danger">C / 4x Grade C: Perlu Bimbingan</strong>) untuk kelas binaan <strong class="text-dark">{{ session.get('kelas', '1A') }}</strong>.
                     </p>
                 </div>
                 <div class="col-12 col-lg-5 text-lg-end">
@@ -197,7 +197,7 @@
                             </div>
                             <small class="{{ 'text-danger fw-bold' if belum_cnt > 0 else 'text-muted' }} d-block mt-1" style="font-size: 0.74rem;">
                                 <i class="bi {{ 'bi-exclamation-triangle-fill text-danger' if belum_cnt > 0 else 'bi-check-all text-success' }} me-1"></i>
-                                {{ belum_cnt }} Murid Perlu Bimbingan (Grade C / ≥5x C)
+                                {{ belum_cnt }} Murid Perlu Bimbingan (Grade C / ≥4x C)
                             </small>
                         </div>
                         <div class="kpi-icon-wrap bg-warning bg-opacity-10 text-warning">
@@ -217,7 +217,7 @@
                             <h6 class="fw-bold mb-0 text-dark d-flex align-items-center gap-2">
                                 <i class="bi bi-bar-chart-line-fill text-success"></i> Grafik Distribusi Predikat & Kelulusan Murid
                             </h6>
-                            <small class="text-muted">Grade A, B+, B: Lulus • Grade C (atau ≥5x nilai C): Perlu Bimbingan (Tidak Lulus)</small>
+                            <small class="text-muted">Grade A, B+, B: Lulus • Grade C (atau ≥4x nilai C): Perlu Bimbingan (Tidak Lulus)</small>
                         </div>
                         <span class="badge bg-light text-dark border">
                             {{ total_siswa }} Data Murid
