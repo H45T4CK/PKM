@@ -9,7 +9,7 @@ auth_bp = Blueprint('auth', __name__)
 @auth_bp.route('/')
 def index():
     if session.get('role') == 'admin':
-        return redirect(url_for('admin.dashboard'))
+        return redirect(url_for('admin.dashboard_admin'))
     elif session.get('role') == 'guru':
         return redirect(url_for('guru.dashboard'))
     elif session.get('role') == 'ortu':
@@ -58,10 +58,9 @@ def login():
                     session['kelas'] = siswa.kelas
                 return redirect(url_for('ortu.dashboard'))
 
-        # 2. Cek apakah login menggunakan NISN atau Nama Siswa untuk akun Orang Tua / Wali
+        # 2. Fallback: Cek login menggunakan Nama Siswa (bukan NISN) untuk akun Orang Tua / Wali
         siswa = Siswa.query.filter(
-            (db.func.lower(Siswa.id) == username.lower()) |
-            (db.func.lower(Siswa.nama) == username.lower())
+            db.func.lower(Siswa.nama) == username.lower()
         ).first()
 
         if siswa:
